@@ -1,0 +1,39 @@
+
+ SYMBOL
+   NAME 'circle'
+   TYPE ELLIPSE
+   Filled TRUE
+   POINTS 1 1 END
+ END
+
+
+ SYMBOL
+   TYPE vector
+   POINTS
+    0 0
+    6 6
+   END
+ END
+
+SYMBOL
+  NAME "triangle"
+  TYPE vector
+  POINTS
+    0 4
+    2 0
+    4 4
+    0 4
+  END
+END
+
+SYMBOL
+  NAME "tornado"
+  TYPE vector
+  FILLED TRUE
+  POINTS
+   0 0
+   2 4
+   4 0
+   0 0
+  END
+END			

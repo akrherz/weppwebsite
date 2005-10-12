@@ -1,0 +1,582 @@
+# 9 May 2003	The only! .map file for the WEPP project....
+#
+#
+NAME wepp
+STATUS ON
+SIZE 640 480
+#SYMBOLSET symbols/symbol.sym
+FONTSET "../fonts/fonts.list"
+# Iowa
+#EXTENT 200000 4400000 710000 4900000
+# 4x3  640x480
+EXTENT 160000 4424687.5 760000 4875312.5
+# Washington County
+#EXTENT 567973 4537344 647029 4616582
+UNITS METERS
+SHAPEPATH "/home/akrherz/projects/weppwebsite/data/gis"
+SYMBOLSET "../symbols/stations.sym"
+IMAGECOLOR 255 255 255
+IMAGETYPE PNG
+TRANSPARENT off
+INTERLACE off
+
+OUTPUTFORMAT
+        NAME png
+        MIMETYPE "image/png"
+        DRIVER "GD/PNG"
+        IMAGEMODE PC256
+        TRANSPARENT OFF
+END
+OUTPUTFORMAT
+        NAME png24
+        MIMETYPE "image/png"
+        DRIVER "GD/PNG"
+        IMAGEMODE RGB
+        TRANSPARENT OFF
+END
+
+#
+# Projection definition, consult the PROJ.4 documentation for parameter discussion
+#
+PROJECTION
+  "init=epsg:26915"
+END
+
+#
+# Start of web interface definition
+#
+WEB
+  #HEADER q_header.html
+  TEMPLATE bogus.html
+  #FOOTER q_footer.html
+  MINSCALE 90000
+  MAXSCALE 2000000
+  IMAGEPATH "/var/www/htdocs/tmp/"
+  IMAGEURL "/tmp/"
+  LOG "/var/www/htdocs/tmp/fancy.log"
+END
+
+REFERENCE
+  COLOR -1 -1 -1
+  EXTENT 154000 4420187.5 766000 4879812.5
+  IMAGE "../keys/iowa.png"
+  STATUS ON
+  SIZE 140 105
+  OUTLINECOLOR 250 0 0
+END
+
+
+SCALEBAR
+  IMAGECOLOR 255 255 255
+  LABEL
+    COLOR 0 0 0
+    SIZE tiny
+  END
+  STYLE 1
+  SIZE 50 2
+  COLOR 0 0 0
+  UNITS MILES
+  INTERVALS 1
+  TRANSPARENT TRUE
+  STATUS TRUE
+END
+
+LAYER
+  NAME background
+  DATA images/26915/iatopo2.png
+  TYPE RASTER
+  PROJECTION
+   "init=epsg:26915"
+  END
+  STATUS ON
+  MINSCALE 400000
+END
+
+LAYER
+  NAME counties
+  STATUS ON
+  TYPE LINE
+  DATA "shape/26915/iowa/iacounties.shp"
+  PROJECTION
+   "init=epsg:26915"
+  END
+  CLASS
+    MAXSCALE 350001
+    STYLE
+      COLOR 20 20 20
+      SYMBOL 'circle'
+      SIZE 3
+    END
+    STYLE
+      COLOR 255 255 0
+      SYMBOL 'circle'
+      SIZE 1
+    END
+  END
+  CLASS
+    MINSCALE 350001
+    STYLE
+      COLOR  0 0 0
+      SYMBOL 'circle'
+      SIZE 1
+    END
+  END
+END
+
+LAYER
+  NAME states
+  STATUS ON
+  TYPE POLYGON
+  DATA "shape/26915/usa/states.shp"
+  PROJECTION
+   "init=epsg:26915"
+  END
+  CLASS
+   EXPRESSION ([STATE_FIPS] != 19)
+   OUTLINECOLOR 0 0 0
+   #COLOR 107 137 87
+   COLOR 183 183 183
+  END
+END
+
+LAYER
+  NAME rainfall
+  STATUS ON
+  TYPE POINT
+  DATA /home/wepp/GIS/raindata/20030505.shp
+  PROJECTION
+   "proj=latlong"
+  END
+#  TRANSPARENCY 90
+END
+
+LAYER
+  CONNECTIONTYPE postgis
+  NAME iatwp
+  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  DATA "the_geom from (select model_twp, oid, the_geom from iatwp) as foo using unique oid using srid=26915"
+  STATUS ON
+  TYPE POLYGON
+  TEMPLATE q_template.html
+  LABELITEM "MODEL_TWP"
+  PROJECTION
+    "init=epsg:26915"
+  END
+  LABELCACHE ON
+  LABELMAXSCALE 400000
+  MAXSCALE 400000
+  CLASS
+    OUTLINECOLOR 0 0 0
+    LABEL
+      COLOR 0 0 0
+      TYPE BITMAP
+      SIZE medium
+    END
+  END
+END
+
+LAYER
+  CONNECTIONTYPE postgis
+  NAME daily_rainfall
+  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  DATA  "the_geom from (select d.oid as oid, d.rainfall / 25.4 as da, h.the_geom from daily_rainfall_2003 d left join hrap_polygons h using (hrap_i) WHERE d.valid = '2003-05-04') as foo using unique oid using srid=26915" 
+  STATUS ON
+  TYPE POLYGON
+  PROJECTION
+    "init=epsg:26915"
+  END
+  CLASSITEM "da"
+END
+
+
+LAYER
+  CONNECTIONTYPE postgis
+  NAME monthly_rainfall
+  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  DATA  "the_geom from (select d.oid as oid, d.rainfall / 25.4 as da, h.the_geom from daily_rainfall_2003 d left join hrap_polygons h using (hrap_i) WHERE d.valid = '2003-05-04') as foo using unique oid using srid=26915" 
+  STATUS ON
+  TYPE POLYGON
+  PROJECTION
+    "init=epsg:26915"
+  END
+  CLASSITEM "da"
+END
+
+
+LAYER
+  CONNECTIONTYPE postgis
+  NAME erosion
+  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+#  DATA "the_geom from (select t.model_twp as model_twp, t.oid as oid, max(r.runoff) as runoff, t.the_geom as the_geom from results r, combos c, iatwp t WHERE r.valid = '2003-04-30' and r.run_id = c.id and c.model_twp = t.model_twp GROUP by t.the_geom, t.oid) as foo using unique oid using srid=26915"
+  DATA "the_geom from (select t.model_twp as model_twp, t.oid as oid, r.avg_precip as val, t.the_geom as the_geom from results_by_twp r LEFT OUTER JOIN iatwp t on (t.model_twp = r.model_twp) WHERE r.valid = '2003-05-04') as foo using unique oid using srid=26915"
+  STATUS ON
+  TYPE POLYGON
+  PROJECTION
+    "init=epsg:26915"
+  END
+  #TRANSPARENCY 90
+  #LABELITEM "[MODEL_TWP]"
+END
+
+LAYER
+  NAME credits
+  TYPE POINT
+  STATUS default
+  TRANSFORM FALSE
+  LABELCACHE OFF
+  CLASS
+    NAME 'credits'
+    LABEL
+      COLOR 250 250 250
+      BACKGROUNDCOLOR 0 0 200
+      SHADOWSIZE 1 1
+      SHADOWCOLOR 0 0 0
+      BACKGROUNDSHADOWCOLOR 0 0 0
+      BACKGROUNDSHADOWSIZE 1 1
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
+      POSITION CR
+      FORCE TRUE
+      PARTIALS TRUE
+    END
+  END
+  CLASS
+	NAME 'smalltxt'
+	LABEL
+      COLOR 250 250 250
+      BACKGROUNDCOLOR 0 0 0
+      SHADOWSIZE 1 1
+      SHADOWCOLOR 0 0 0
+      BACKGROUNDSHADOWCOLOR 0 0 0
+      BACKGROUNDSHADOWSIZE 1 1
+      TYPE BITMAP
+	  SIZE MEDIUM
+      POSITION CR
+      FORCE TRUE
+      PARTIALS TRUE
+	END
+  END
+END
+
+LAYER
+  NAME singlebox
+  TYPE POLYGON
+  STATUS ON
+  TRANSFORM FALSE
+  LABELCACHE OFF
+  #TRANSPARENCY 80
+  #CLASS
+  #  STYLE
+  #    COLOR 0 0 0
+  #    OUTLINECOLOR 250 250 250
+  #  END
+  #  LABEL
+  #    COLOR 250 250 250
+  #    TYPE BITMAP
+  #    SIZE LARGE
+  #    POSITION LR
+  #    OFFSET 15 5
+  #  END
+  #END
+END
+
+LAYER
+  NAME wmsback
+  STATUS ON
+  CONNECTIONTYPE WMS
+  TYPE RASTER
+#  CONNECTION "http://komodo.gis.iastate.edu/server.cgi/14906.jpg?format=png&wmtver=1.0.0&request=map&servicename=iowa&layers=relief&"
+  CONNECTION "http://cairo.gis.iastate.edu/cgi-bin/server.cgi?format=jpeg&wmtver=1.0.0&request=map&servicename=GetMap&layers=doqqs"
+  PROJECTION
+    "init=epsg:26915"
+  END
+END
+
+LAYER
+  TYPE POLYGON
+  NAME rect
+  STATUS ON
+  PROJECTION
+    "init=epsg:26915"
+  END
+  CLASS
+    COLOR -1 -1 -1
+    OUTLINECOLOR 255 255 255   
+    LABEL
+      COLOR  255 255 255
+      OUTLINECOLOR 0 0 0 
+      SHADOWCOLOR 0 0 0
+      SHADOWSIZE 1 2
+      SIZE 8
+      MINSIZE 4
+      MAXSIZE 18
+      TYPE TRUETYPE
+      FONT arialblk
+      ANTIALIAS false
+      BUFFER 0
+      FORCE true
+      POSITION LL
+    END
+  END
+END
+
+LAYER
+  NAME interstates
+  TYPE LINE
+  STATUS OFF
+  PROJECTION
+   "init=epsg:26915"
+  END
+  DATA shape/26915/iowa/nhpn_roads.shp
+  CLASSITEM "SIGNT1"
+  CLASS
+        EXPRESSION /I/
+    COLOR 255 0 0
+    SYMBOL 'circle'
+    SIZE 4
+    OVERLAYSYMBOL 'circle'
+    OVERLAYSIZE 2
+    OVERLAYCOLOR 0 0 0
+  END
+END
+ 
+LAYER
+  NAME interstates_label
+  TYPE ANNOTATION
+  STATUS OFF
+  PROJECTION
+   "init=epsg:26915"
+  END
+  LABELITEM "SIGNN1"
+  CLASSITEM "SIGNT1"
+  DATA shape/26915/iowa/nhpn_roads.shp
+  CLASS
+    EXPRESSION /I/
+    COLOR -1 -1 -1
+    SYMBOL 'interstate_shield'
+    LABEL
+      TYPE TRUETYPE
+      FONT arialblk
+      POSITION CC
+      MINDISTANCE 100
+      MINFEATURESIZE 10
+      SIZE 6
+      COLOR 255 255 255
+      PARTIALS FALSE
+    END
+  END
+END
+LAYER
+  NAME roads
+  STATUS OFF
+  TYPE LINE
+  DATA "shape/26915/iowa/nhpn_roads.shp"
+  CLASSITEM "SIGNT1"
+  MAXSCALE 1000000
+  PROJECTION
+    "init=epsg:26915"
+  END
+  CLASS
+    EXPRESSION /U/
+    SYMBOL "circle"
+    COLOR 0 0 0
+    SIZE 3
+    OVERLAYSYMBOL "circle"
+    OVERLAYCOLOR 250 250 250
+    OVERLAYSIZE 1
+  END
+  CLASS
+    EXPRESSION /C|S/
+    SYMBOL "circle"
+    COLOR 0 0 0
+    SIZE 1
+    #OVERLAYSYMBOL "circle"
+    #OVERLAYCOLOR 250 250 250
+    #OVERLAYSIZE 1
+  END
+END
+
+LAYER
+  NAME roads_label
+  TYPE ANNOTATION
+  STATUS OFF
+  LABELITEM SIGNN1
+  MAXSCALE 1000000
+  DATA "shape/26915/iowa/nhpn_roads.shp"
+  CLASSITEM "SIGNT1"
+  LABELCACHE ON
+  CLASS
+    EXPRESSION /U/
+    COLOR -1 -1 -1
+    SYMBOL 'us_highway_shield'
+    LABEL
+      TYPE BITMAP
+     # FONT arial
+      POSITION CC
+      MINDISTANCE 100
+      MINFEATURESIZE 30
+      SIZE TINY
+      BUFFER 20
+      COLOR 0 0 0
+      PARTIALS FALSE
+    END
+  END
+  CLASS
+    EXPRESSION /S/
+    COLOR -1 -1 -1
+    SYMBOL 'state_highway_shield'
+    LABEL
+      TYPE BITMAP
+     # FONT arial
+      POSITION CC
+      MINDISTANCE 100
+      MINFEATURESIZE 30
+      SIZE TINY
+      BUFFER 20
+      COLOR 0 0 0
+      PARTIALS FALSE
+    END
+  END
+                                                                                
+END
+
+
+LAYER
+  NAME iards
+  TYPE LINE
+  STATUS ON
+  PROJECTION
+   "proj=latlong"
+  END
+  DATA /mesonet/data/gis/shape/unproj/iowa/interstates.shp
+  CLASS
+    SYMBOL "circle"
+    COLOR 0 0 0
+    SIZE 4
+    OVERLAYSYMBOL "circle"
+    OVERLAYCOLOR 105 105 105
+    OVERLAYSIZE 2
+    LABEL
+      ANGLE AUTO
+      TYPE TRUETYPE
+      ANTIALIAS TRUE
+      FONT "kcci"
+      MINDISTANCE 300
+      MINFEATURESIZE 10
+      BUFFER 4
+      SIZE 8
+      POSITION AUTO
+      OFFSET 0 3
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 204
+    END
+  END
+END
+
+LAYER
+  NAME iards_label
+  TYPE ANNOTATION
+  STATUS ON
+  PROJECTION
+   "proj=latlong"
+  END
+  LABELITEM HWYNAME
+  DATA /mesonet/data/gis/shape/unproj/iowa/interstates.shp
+  CLASS
+    EXPRESSION ([HWYNAME] < 100)
+    COLOR -1 -1 -1
+    SYMBOL 'interstate_shield'
+    LABEL
+      TYPE TRUETYPE
+      FONT arialblk
+      POSITION CC
+      MINDISTANCE 100
+      MINFEATURESIZE 10
+      SIZE 8
+      COLOR 255 255 255
+      PARTIALS FALSE
+    END
+  END
+END
+
+LAYER
+  NAME bars
+  TYPE POLYGON
+  TRANSFORM FALSE
+  STATUS ON
+  FEATURE
+    POINTS 0 0 0 40 640 40 640 0 0 0 END
+    POINTS 0 480 0 440 640 440 640 480 0 480 END
+  END
+  #TRANSPARENCY 70
+  LABELCACHE FALSE
+  CLASS
+    COLOR 0 0 0
+  END
+END
+LAYER
+  NAME bar
+  TYPE POLYGON
+  TRANSFORM FALSE
+  STATUS ON
+  #TRANSPARENCY 70
+  LABELCACHE FALSE
+  CLASS
+    COLOR 0 0 0
+  END
+END
+
+
+LAYER
+  NAME unavailable
+  TYPE POINT
+  TRANSFORM FALSE
+  STATUS ON
+  FEATURE
+    POINTS 300 250 END
+  END
+  TRANSPARENCY 30
+  LABELCACHE FALSE
+  CLASS
+    TEXT "UNAVAILABLE"
+    LABEL
+      FORCE TRUE
+      POSITION CC
+      TYPE TRUETYPE
+      FONT 'arial'
+      SIZE 60
+      ANGLE -30
+      COLOR 255 255 255
+      OUTLINECOLOR 0 0 0
+    END
+  END
+END
+
+LAYER
+  NAME inprogress
+  TYPE POINT
+  TRANSFORM FALSE
+  STATUS ON
+  FEATURE
+    POINTS 150 140 END
+  END
+  #TRANSPARENCY 30
+  LABELCACHE FALSE
+  CLASS
+    TEXT "PROCESSING"
+    LABEL
+      FORCE TRUE
+      POSITION CC
+      TYPE TRUETYPE
+      FONT 'arial'
+      SIZE 30
+      #ANGLE -30
+      COLOR 255 255 255
+      OUTLINECOLOR 0 0 0
+    END
+  END
+END
+
+
+END

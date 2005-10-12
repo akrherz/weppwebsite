@@ -1,0 +1,25 @@
+
+ [x] Hall of Fame page for interesting cases.  Probably 5 per day
+ [x] Add NSERL to the main page
+ [x] Add three cached images at once to the mainpage with a control to 
+     advance around in dates
+ [x] Move erosion/runoff/rainfall buttons to the top of the page
+ [x] Create two levels of data interface.  An overview one and then a 'Detailed'     version.
+ [x] Get other ortho data sources on the Ortho map.
+ [x] Slope length is in feet!
+ [x] Sorting is not working on the output pages
+ [N] Only show values > 0 on the basic view, detailed view shows more
+ [N] Place the yearly total at the top of the page
+ [ ] Show the township on a localized map for the township data
+ [ ] Buttons to move one day at a time
+ [ ] Use 'Standard Deviation' instead of 'Variance Estimator'
+ [ ] Hmm, make shaded relief in gray..
+ [ ] Again, two levels of methodology.  More simple and then detailed.
+ [ ] variance is tons/acre ^2
+ [ ] Clean up the township selector.  First level should have county names
+     and the first click will zoom you down to the County level.
+ [ ] Save function for capturing GIS data of what you are viewing
+ [ ] Interface for the climate data.
+ [ ] Get rid of the bar on the mainpage.
+ [ ] Time interval option for Runoff and Loss plots
+ [ ] Year to date plots

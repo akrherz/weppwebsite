@@ -1,0 +1,24 @@
+<?php
+include("../../etc/config.inc.php");
+$uri = "management.phtml";
+?>
+<?php
+  include("../../include/header.phtml");
+  $side_erosion = 1; include("../../include/side.phtml");
+?>
+ 
+<!-- content BEGIN -->
+<div id="wepp-middle-two">
+<div id="wepp-content">
+<div id="page-main">
+<?php
+  $man_id = $_GET["man_id"];
+  if (! isset($man_id) ) die ("You did not specify a township!");
+
+  echo "Info about the Mangement '$man_id' would go here!";
+?>
+</div>
+</div>
+</div>
+ 
+<?php include("../../include/footer.phtml"); ?>

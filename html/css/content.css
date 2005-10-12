@@ -1,0 +1,142 @@
+/* New WEPP master stylesheet */
+
+body {
+  margin: 5px;
+  padding: 0px;
+  font-family: "Luxi Sans", verdana, helvetica, arial, sans-serif;
+}
+a {
+	text-decoration: none;
+	}
+	
+a:link {
+	color: #06c;
+	}
+	
+a:visited {
+	color: #06c;
+	}
+h1 {
+  font-size: 1.30em;
+  margin-top: 1em;
+}
+
+#wepp-header {
+ background-color: #455372;
+ height: 5em;
+}
+#wepp-header-logo {
+    padding-left: 10px;
+    padding-top: 10px;
+    float: left;
+}
+#wepp-header-rlogo {
+    padding-right: 10px;
+    padding-top: 10px;
+    float: right;
+}
+#wepp-header-rlogo img{
+	border: 0px;
+}
+#wepp-header h1 {
+    margin-left: 20px;
+    font-size: 1.30em;
+    color: #fff;
+	float: left;
+}
+#wepp-header ul {
+    list-style: none;
+}
+#wepp-header li {
+	float: right;
+	padding: 0 6px 0 0;
+	margin: 0 1px 0 0;
+	border-bottom: 1px solid #515358;
+}
+#wepp-header ul a {
+        float: left;
+        display: block;
+        padding: 4px 4px 4px 10px;
+        font-weight: bold;
+        color: #fff;
+        text-decoration: none;
+}
+
+	
+#mainNavOuter {
+	width: 100%;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	background-color: #c00;
+	}
+	
+#mainNav {
+	width: 100%;
+	font-weight: bold;
+	font-family: "Luxi Sans", verdana, helvetica, arial, sans-serif;
+	font-size: x-small;
+	}
+	
+	
+/* float clear hack that has been hacked for Moz 1.5x and below */
+#mainNavOuter:after {
+    content: "."; 
+    display: block; 
+    height: 1px;
+    margin-top: -1px;
+    overflow: hidden;
+    clear: both; 
+    visibility: hidden;
+    }
+    /* Holly Hack Targets IE Win only \*/
+    * html .mainNavOuter {height: 1%;}
+    /* End Holly Hack */
+    
+    
+#mainNavInner {
+	width: 100%;
+	height: 7px;
+	}
+	
+#mainNav ul {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	}
+	
+#mainNav ul li {
+	background: #b70000;
+	display: block;
+	float: left;
+	padding: 0;
+	margin: 0;
+	}
+	
+#mainNav li#mainFirst-active,
+#mainNav li#main-active,
+#mainNav li#mainLast-active {
+	background-color: #800000;
+	}
+	
+
+#mainNav ul li a {
+	display: block;
+	float: left;
+	text-decoration: none;
+	color: #fff;
+	padding: 5px 15px;
+	font-size: 11px;
+	text-decoration: none !important;
+	}
+
+#mainNav ul li a:hover {
+	color: #000;
+}
+#linksbar {
+    color: #eee;
+}
+#wepp-footer {
+    text-align: center;
+    color: #777;
+    margin-bottom: 2em;
+}

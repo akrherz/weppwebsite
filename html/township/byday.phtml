@@ -1,0 +1,180 @@
+<?php
+$uri = 'byday.phtml';
+include("../../etc/config.inc.php");
+ 
+/* Request vars */
+//$request_twp = 1;
+//$request_date= 1;
+
+$twp = isset($_GET["twp"]) ? $_GET["twp"] : "T85NR17W";
+$sortcol = isset($_GET["sortcol"])? $_GET["sortcol"] : "combo_id";
+$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
+$tokens = explode("/", $dstr);
+$year = $tokens[2];
+$month = $tokens[0];
+$day = $tokens[1];
+
+
+
+$ts = mktime(0,0,0, $month, $day, $year);
+$sqlDate = strftime("%Y-%m-%d", $ts);
+$fancyDate = strftime("%d %B %Y", $ts);
+$c = pg_connect($weppdb);
+
+function aSortBySecondIndex($multiArray, $secondIndex) {
+        while (list($firstIndex, ) = each($multiArray))
+                $indexMap[$firstIndex] = $multiArray[$firstIndex][$secondIndex];
+        arsort($indexMap);
+        while (list($firstIndex, ) = each($indexMap))
+                if (is_numeric($firstIndex))
+                        $sortedArray[] = $multiArray[$firstIndex];
+                else $sortedArray[$firstIndex] = $multiArray[$firstIndex];
+        return $sortedArray;
+}
+
+/** First we must get the combos in this TWP */
+$hrap = Array();
+$combos = Array();
+
+/** Now we get the rainfall events */
+$q = "select hrap_i, round( (rainfall / 25.4)::numeric, 2) as rainfall 
+  from daily_rainfall_$year 
+  WHERE valid = '$sqlDate' and hrap_i IN 
+     (select distinct hrap_i from combos WHERE model_twp = '$twp')";
+$rs = pg_exec($c, $q);
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++)
+{
+  $hrap[ $row["hrap_i"] ] = $row["rainfall"];
+}
+
+$q = "select c.id as combo_id, n.len as len, m.name as man_name, 
+      n.steep as steep, c.hrap_i as hrap_i
+      from combos c, nri n, managements m WHERE n.man_id = m.man_id and 
+      n.id = c.nri_id and n.model_twp = c.model_twp and n.model_twp = '$twp'";
+$rs = pg_exec($c, $q);
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++)
+{
+  $combos[ $row["combo_id"] ] = $row;
+  if (strlen($hrap[$row["hrap_i"]]) == 0){
+    $hrap[ $row["hrap_i"] ] = 0;
+  }
+  $combos[ $row["combo_id"] ]["precip"] =  $hrap[ $row["hrap_i"] ];
+}
+
+
+/** Now we get the runoff events */
+$q = "select r.run_id, round((r.runoff / 25.4)::numeric, 2) as runoff, 
+       c.hrap_i as hrap_i,
+       round( (r.loss * 4.463)::numeric, 2) as loss, 
+       round( (r.precip / 25.4)::numeric, 2) as precip
+       from results r, combos c
+       WHERE c.id = r.run_id and
+       c.model_twp = '$twp' 
+       and r.valid = '$sqlDate'";
+$rs = pg_exec($c, $q);
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++)
+{
+  $combos[ $row["run_id"] ]["runoff"] = $row["runoff"];
+  $combos[ $row["run_id"] ]["loss"] = $row["loss"];
+  $combos[ $row["run_id"] ]["precip"] =  $hrap[ $row["hrap_i"] ];
+}
+
+/** Now lets get the summary for this date */
+$q = "select * from results_by_twp WHERE model_twp = '$twp' and valid = '$sqlDate'";
+$rs = pg_exec($c, $q);
+$event = @pg_fetch_array($rs,0);
+
+$url = "<a href=\"byday.phtml?twp=$twp&year=$year&month=$month&day=$day&sortcol=";
+?>
+<?php
+$HEADEXTRA = "<script language=\"JavaScript\" src=\"calendar2.js\"></script><!-- Date only with year scrolling -->";
+ $THISPAGE = "township"; include("../../include/header.phtml");
+  include("../../include/forms.php");
+  $side_bytwp = 1; include("../../include/side.phtml");
+?>
+  
+<!-- content BEGIN -->
+<div id="wepp-middle-two">
+<div id="wepp-content">
+<div id="page-main">
+
+<form method="GET" action="byday.phtml" name="myform">
+
+<div class="table">
+<table>
+<thead>
+<tr>
+<th>Township</th>
+<th>Date (mm/dd/yyyy)</th>
+<th>&nbsp;</th>
+</tr>
+<tbody>
+<tr>
+<td><input name="twp" type="text" size="10" value="<?php echo $twp; ?>"></td>
+<td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a></td>
+<td><input type="submit" value="Go!"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</form>
+<script language="JavaScript">
+<!-- // as
+var cal = new calendar2(document.forms['myform'].elements['dstr']);
+cal.year_scroll = true;
+cal.time_comp = false;
+//-->
+</script>
+
+<p>This page presents the individual run output for a selected township for
+a selected date. You can also view <a href="byyear.phtml?twp=<?php echo $twp; ?>">yearly summary</a> data for this township.
+
+<?php
+echo "<h1>$fancyDate output for township: $twp</h1>";
+echo "<hr><div class=\"table\">
+<table width=\"500px\">
+<caption>Township Summary</caption>
+<thead><tr><th></th><th>Rainfall:</th><th>Water Runoff:</th><th>Soil Loss:</th></tr></thead>
+<thead><tr><th></th><th>[inches]</th><th>[inches]</th><th>[tons/acre]</th></tr></thead>
+<tbody>
+<tr><th>Min:</th><td>". (round($event["min_precip"] /25.4, 2))."</td><td>". (round($event["min_runoff"]/25.4,2)) ."</td><td>". (round($event["min_loss"]*4.463,2)) ."</td></tr>
+<tr><th>Avg:</th><td>". (round($event["avg_precip"] /25.4, 2))."</td><td>". (round($event["avg_runoff"]/25.4,2)) ."</td><td>". (round($event["avg_loss"]*4.463,2)) ."</td></tr>
+<tr><th>Max:</th><td>". (round($event["max_precip"] /25.4, 2))."</td><td>". (round($event["max_runoff"]/25.4,2)) ."</td><td>". (round($event["max_loss"]*4.463,2)) ."</td></tr>
+</tbody></table>
+</div>";
+
+echo "<hr><div class=\"table\">
+  <table>
+<caption>Individual Run Output:</caption>";
+$divider = "<thead>
+  <tr>
+    <th>". $url ."combo_id\">Run ID</a></th>
+    <th>". $url ."hrap_i\">HRAP ID:</a></th>
+    <th>". $url ."man_name\">Management:</a></th>
+    <th>". $url ."steep\">Slope:</a></th>
+    <th>". $url ."len\">Length:</a></th>
+    <th>". $url ."runoff\">Runoff</a></th>
+    <th>". $url ."loss\">Soil Loss</a></th>
+    <th>". $url ."precip\">Rainfall</a></th></tr></thead>
+<thead><tr><th>#</th><th>#</th><th></th><th>[%]</th><th>[ft]</th><th>[in]</th><th>[t/a]</th><th>[in]</th></tr></thead><tbody>";
+
+$fa = Array();
+if (sizeof($combos) > 0) 
+$fa = aSortBySecondIndex($combos, $sortcol);
+$i = 0;
+while (list ($key, $val) = each ($fa))  {
+  if ($i % 20 == 0) echo $divider;
+  $i++;
+  $cid = $fa[$key]["combo_id"];
+  echo "<tr><td> ". $cid ."</td><td><a href=\"$_WEBBASE/GIS/hrap.phtml?hrap_i=". $fa[$key]["hrap_i"] ."\">". $fa[$key]["hrap_i"] ."</a></td><td><a href=\"$_WEBBASE/meta/management.phtml?man_id=". $fa[$key]["man_name"] ."\">". $fa[$key]["man_name"] ."</a></td><td>". $fa[$key]["steep"] ."</td><td>". $fa[$key]["len"] ."</td><td>". $fa[$key]["runoff"] ."</td><td>". $fa[$key]["loss"] ."</td><td>". $fa[$key]["precip"]  ."</td></tr>\n";
+
+}
+// if ($i == 0) echo "<tr><th colspan=7>No Events Found</th></tr>";
+
+echo "</tbody></table></div>";
+?>
+</div>
+</div>
+</div>
+  
+<?php include("../../include/footer.phtml"); ?>

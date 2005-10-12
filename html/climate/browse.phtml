@@ -1,0 +1,168 @@
+<?php
+include("../../etc/config.inc.php");
+
+$HEADEXTRA = "<script language=\"JavaScript\" src=\"calendar2.js\"></script><!-- Date only with year scrolling -->";
+$THISPAGE = "climate"; include("$_BASE/include/header.phtml");
+
+?>
+
+<?php
+include ("../../include/forms.php");
+$c = pg_connect($weppdb);
+
+$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
+$tokens = explode("/", $dstr);
+$year = intval($tokens[2]);
+$month = intval($tokens[0]);
+$day = intval($tokens[1]);
+$ts = mktime(0,0,0,$month,$day,$year);
+$sqldate = strftime("%m-%d-%Y", $ts);
+$prettyd = strftime("%d %b %Y", $ts);
+
+if ($EDITOR && isset($_GET['editor']))
+{
+  for ($sect=1;$sect<10;$sect++)
+  {
+     $sql = sprintf("UPDATE climate_sectors SET high = %s, low = %s, 
+       rad = %s, wvl = %s / 1.15, drct = 0, dewp = %s WHERE
+       day = '%s' and sector = %s", $_GET["high_$sect"],
+       $_GET["low_$sect"], $_GET["rad_$sect"], $_GET["wvl_$sect"],
+       $_GET["dewp_$sect"], $sqldate, $sect);
+     pg_exec($c, $sql);
+  }
+}
+
+
+?>
+
+<p>Outside of rainfall, there are 5 other variables needed to compose the
+climate files for the WEPP model.  We produce daily estimates of these 
+variables on a climate district scale.  This page shows you these estimates
+for the 9 climate districts in Iowa.
+
+<form method="GET" action="browse.phtml" name="myform">
+
+<div class="table">
+<table>
+<thead>
+<tr>
+<th>Prev Day</th>
+<th>Next Day</th>
+<th>Date (mm/dd/yyyy)</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="browse.phtml?dstr=<?php echo strftime("%m/%d/%Y", $ts - 86400); ?>"><?php echo date("d M Y", $ts - 86400); ?></a></td>
+<td><a href="browse.phtml?dstr=<?php echo strftime("%m/%d/%Y", $ts + 92000); ?>"><?php echo date("d M Y", $ts + 92000); ?></a></td>
+<td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a></td>
+<td><input type="submit" value="Go to date"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<script language="JavaScript">
+<!-- // as
+var cal = new calendar2(document.forms['myform'].elements['dstr']);
+cal.year_scroll = true;
+cal.time_comp = false;
+//-->
+</script>
+</form>
+
+<?php
+
+$data = Array();
+
+$sectors = Array( 1 => "NW", 2 => "NC", 3 => "NE",
+  4 => "WC", 5 => "C", 6 => "EC",
+  7 => "SW", 8 => "SC", 9 => "SE");
+
+$q = "SELECT * from climate_sectors WHERE day = '$sqldate' ";
+$rs = pg_exec($c, $q);
+
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++) 
+{ 
+  $data[ $row["sector"] ] = Array();
+  $data[ $row["sector"] ]["high"] = intval($row["high"]);
+  $data[ $row["sector"] ]["low"] = intval($row["low"]);
+  $data[ $row["sector"] ]["rad"] = intval($row["rad"]);
+  $data[ $row["sector"] ]["wvl"] = intval(floatval($row["wvl"]) * 1.15);
+  $data[ $row["sector"] ]["dewp"] = intval($row["dewp"]);
+}
+ 
+?>
+
+<?php
+
+
+function printer($data, $sector, $var)
+{
+  $s = "";
+  global $EDITOR;
+  $val = $data[$sector][$var];
+  if ($EDITOR)
+  {
+    $varname = sprintf("%s_%s", $var, $sector);
+    $s = "<input type=\"text\" name=\"$varname\" size=\"5\" value=\"$val\">";
+  }
+  else 
+  {
+    $s = $val;
+  }
+  return $s;
+}
+
+function printIowa($data, $var, $title) {
+?>
+<h4><?php echo $title; ?></h4>
+<table border="1" cellpadding="2" style="border: 2px solid #000;">
+<tr>
+  <td></td><th>West</th><th>Central</th><th>East</th></tr>
+
+<tr>
+  <th>North</th>
+  <td><?php echo printer($data,1,$var); ?></td>
+  <td><?php echo printer($data,2,$var); ?></td>
+  <td><?php echo printer($data,3,$var); ?></td></tr>
+<tr>
+  <th>Central</th>
+  <td><?php echo printer($data,4,$var); ?></td>
+  <td><?php echo printer($data,5,$var); ?></td>
+  <td><?php echo printer($data,6,$var); ?></td></tr>
+<tr>
+  <th>South</th>
+  <td><?php echo printer($data,7,$var); ?></td>
+  <td><?php echo printer($data,8,$var); ?></td>
+  <td><?php echo printer($data,9,$var); ?></td></tr>
+
+</table>
+<?php } ?>
+
+<h3>Values for <?php echo $prettyd; ?></h3>
+
+<?php if ($EDITOR) { echo "<form method=\"GET\" name=\"editor\"><input type=\"hidden\" name=\"editor\" value=\"1\"><input type=\"hidden\" name=\"dstr\" value=\"$dstr\">\n"; } ?>
+
+<table>
+<tr>
+<td><?php echo printIowa($data, "high", "High Temperature [F]"); ?></td>
+<td><?php echo printIowa($data, "low", "Low Temperature [F]"); ?></td>
+<td><?php echo printIowa($data, "dewp", "Dew Point [F]"); ?></td>
+</tr></table>
+
+<table>
+<tr><td>
+<?php echo printIowa($data, "rad", "Solar Radiation [Langleys]"); ?></td>
+
+<td>
+<?php echo printIowa($data, "wvl", "Wind Velocity [mph]"); ?></td>
+</tr></table>
+
+<?php if ($EDITOR) { echo "<input type=\"submit\" value=\"Make Changes!\"></form>"; } ?>
+
+<p>Note: These climate datasets are currently being worked on and improved.
+Some inconsistancies do exist in the archive at this time.
+
+
+<?php include("$_BASE/include/footer.phtml"); ?>

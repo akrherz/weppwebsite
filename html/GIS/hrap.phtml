@@ -1,0 +1,66 @@
+<?php
+include("../../etc/config.inc.php");
+$uri = "hrap.phtml";
+
+// Script to show HRAP information, should work nicely
+$hrap_i = $_GET["hrap_i"];
+$year = isset($_GET["year"]) ? intval($_GET["year"]) : date("Y");
+if (strlen($hrap_i) == 0) die("No HRAP_I specified");
+if (intval($hrap_i) < 0 || intval($hrap_i) > 1000000) die("HRAP_I out of range");
+$c = pg_connect($weppdb);
+
+$q = "SELECT valid, round((rainfall / 25.4)::numeric,2) as rainfall,
+      extract(month from valid) as month from daily_rainfall_$year
+      WHERE hrap_i = $hrap_i ORDER by valid ASC";
+$rs = pg_exec($c, $q);
+?>
+<?php
+  include("../../include/header.phtml");
+  $side_erosion = 1; include("../../include/side.phtml");
+?>
+ 
+<!-- content BEGIN -->
+<div id="wepp-middle-two">
+<div id="wepp-content">
+<div id="page-main">
+
+<?php
+echo "<b>HRAP Cell ID:</b> $hrap_i ";
+echo "<h2>Rainfall Estimates [inches] for $year</h2>";
+?>
+<p><h3>Select Year:</h3>
+<form method="GET" action="<?php echo $uri; ?>" name="setyear">
+<input type="hidden" name="hrap_i" value="<?php echo $hrap_i; ?>">
+<?php
+  include("../../include/forms.php");
+  echo yearSelect(2002, $year, "year"); ?>
+<input type="submit" value="View Year"></form></p>
+<?php
+
+echo "<table border=1><tr><td>Day:</td><td>Rainfall:</td><td>Month Total:</td></tr>\n";
+
+$tMonthTotal = 0;
+$tMonth = 1;
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++){
+  $thisMonth = $row["month"];
+  $ts = mktime(0,0,0,$tMonth,1,0);
+  $strMonth = strftime("%B" ,$ts);
+  if ($tMonth != $thisMonth){
+    echo "<tr bgcolor=\"#EEEEEE\"><td> $strMonth </td><td></td><td> $tMonthTotal </td></tr>";
+    $tMonthTotal = 0;
+  }
+  echo "<tr><td>". $row["valid"] ."</td><td>". $row["rainfall"] ."</td><td></td></tr>\n";
+  $tMonthTotal += $row["rainfall"];
+  $tMonth = $thisMonth;
+}
+$ts = mktime(0,0,0,$tMonth,1,0);
+$strMonth = strftime("%B" ,$ts);
+echo "<tr bgcolor=\"#EEEEEE\"><td> $strMonth </td><td></td><td> $tMonthTotal </td></tr>";
+echo "</table>\n";
+?>
+</div>
+</div>
+</div>
+ 
+<?php include("../../include/footer.phtml"); ?>
+

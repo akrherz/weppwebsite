@@ -1,0 +1,130 @@
+            NATURAL RESOURCES GEOGRAPHIC INFORMATION SYSTEM 
+
+                       COVERAGE DOCUMENTATION
+
+COVERAGE NAME: COUNTY              DOCUMENTATION REVISION: 1/29/1993
+
+DESCRIPTIVE NAME: State/County boundaries of the state of Iowa
+
+STATUS: Complete
+
+DESCRIPTION: This coverage contains polygons representing the county
+  boundaries of the state of Iowa. COUNTY was developed from a set of
+  99 individual coverages of the Public Land Survey System (PLSS) for each
+  county in the state. The PLSS coverages were digitized from paper copies
+  of 7.5' topographic quadrangle maps. River boundaries were also digitized
+  from 7.5' maps
+
+GEOGRAPHIC EXTENT: State of Iowa
+
+COVERAGE TYPE(S): Polygons
+
+COVERAGE SIZE:
+  Arcs: 296
+  Polygons: 100
+  Labels: 99
+  Tics: 167
+  Annotations: 198
+  File size: 433 Kb
+
+MAP PROJECTION:  Universal Transverse Mercator (UTM), Zone 15.
+
+MAP UNITS:  Meters
+
+DATUM: NAD83
+        
+SOFTWARE/VERSION:  PC ARC/INFO 3.4D
+
+COVERAGE CREATED: 11/90
+
+COVERAGE DEVELOPER: James D. Giglierano and Madhukar Mohan
+
+COVERAGE MODIFICATIONS: Intersection of South Dakota border, Sioux and Lyon
+  Counties modified; fixed location of tic #13: J. Giglierano, 11/10/92.
+  Added CO_FIPS ( county FIPS code) to .PAT file, changed COUNTY_ID to
+  CO_NUMBER, and changed NAME to CO_NAME: J. Giglierano, 11/12/92.
+  Added ACRES_SF to .PAT: J. Giglierano, 12/03/92.
+ 
+
+DNR CONTACT: James D. Giglierano, Iowa Department of Natural Resources,
+  Geological Survey Bureau, 109 Trowbridge Hall, Iowa City, Iowa
+  52242-1319  Phone: (319) 335-1575
+
+ORIGINAL SOURCE INFORMATION:
+  Media: Paper copies of 7.5' topographic quadrangle maps
+  Title: Varies
+  Author/Agency: U.S. Geological Survey
+  Published Date: Varies
+  Compiled Date: Varies
+  Scale: 1:24,000
+  Projection: Varies
+  Geographic Control: Latitude/longitude tics at corners of 7.5' maps
+  Data Conversion: Original map coordinate units were reprojected using
+    in-house digitizing software to UTM units.
+        
+ACCURACY ASSESSMENT: Based on NMAS accuracy standards for USGS 1:24,000
+  scale maps, digitizer resolution, ARC/INFO fuzzy tolerances, and 
+  estimated operator error, the positional accuracy of this coverage is
+  estimated to be around 22 meters.  Positional error was estimated using
+  a root-sum-squared error calculation.
+
+
+ASSOCIATED COVERAGES:
+  Each county in the state has a coverage of PLSS asections digitized from
+    7.5' topo quads. These are named using the first 8 characters in the
+    county name.
+  TOWNSHIP: This coverage has Iowa PLSS township boundaries developed
+    from individual county PLSS section coverages.
+  WCOUNTY: This is the same as COUNTY with vertices weeded to 500 meters.
+    Used for plotting county outlines at small scales.
+ 
+ASSOCIATED FILES:
+  ADD_UTM: A dBASE application that uses PLSS section corner data to
+    convert PLSS legal descriptions (up to 4 quarter sections) into
+    UTM or latitude/longitude.
+
+COMMENTS: Label points for polygons are placed at the locations of
+  county seats.
+
+ARC ATTRIBUTE FILE ITEMS (AAT): 
+  LENGTH: Length of arcs in meters
+  COUNTY_: Internal arc identifier
+  COUNTY_ID: Sequential arc identifier
+
+POLYGON ATTRIBUTE FILE ITEMS (PAT):
+  AREA: Area of county in square meters
+  PERIMETER: Length of county perimeters in meters
+  COUNTY_: Ineternal polygon identifier
+  COUNTY_ID: Sequential polygon identifier
+  CO_NUMBER: County number (1-99_
+  CO_FIPS: County FIPS code (1-197)
+  ACRES_SF: Area of county in acres using the US survey foot standard of
+    4046.873 sq. meters per acre
+  ACRES: Area of county in acres using the international metric (SI) 
+     standard of 4046.856 sq. meters per acre.
+
+
+POINT ATTRIBUTE FILE ITEMS (PAT): None
+
+ANNOTATIONS:
+  LEVEL 1: County names placed in upper left corner of county
+  LEVEL 2: Names of county seats placed at upper right of county
+    seat location
+
+TICS: There are 167 tics placed at corners of county boundaries
+
+****NOTICE****
+This digital, geographically referenced data set was developed by the
+Iowa Department of Natural Resources to carry out agency responsi- 
+bilities related to management, protection, and development of Iowa's 
+natural resources. It resides in the Natural Resources Geographic 
+Information System library. Although efforts have been made to make it 
+useful to the Department, the Department assumes no responsibility for 
+errors in the information.  Similarly the Department assumes no re- 
+sponsibility for the consequences of inappropriate uses or interpretations
+of the data made by anyone to whom this data has been made available. 
+The Department bears no responsibility to inform users of any changes 
+made to this data.  Anyone using this data is advised that precision 
+implied by the coverage may far exceed actual precision. Comments on this 
+data are invited and the Department would appreciate that documented 
+errors be brought to staff attention.
