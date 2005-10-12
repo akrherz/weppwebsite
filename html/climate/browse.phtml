@@ -7,7 +7,7 @@ $THISPAGE = "climate"; include("$_BASE/include/header.phtml");
 ?>
 
 <?php
-include ("../../include/forms.php");
+include ("$_BASE/include/forms.php");
 $c = pg_connect($weppdb);
 
 $dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
@@ -16,8 +16,11 @@ $year = intval($tokens[2]);
 $month = intval($tokens[0]);
 $day = intval($tokens[1]);
 $ts = mktime(0,0,0,$month,$day,$year);
+if ($ts > time()) $ts = time();
+
 $sqldate = strftime("%m-%d-%Y", $ts);
 $prettyd = strftime("%d %b %Y", $ts);
+
 
 if ($EDITOR && isset($_GET['editor']))
 {
