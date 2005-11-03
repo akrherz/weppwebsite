@@ -18,7 +18,7 @@ $layers = isset($_GET['layers']) ? $_GET['layers'] :
 $var = isset($_GET['var']) ? $_GET['var'] : "rainfall_in";
 $map_height = isset($_GET['height']) ? $_GET['height'] : 480;
 $map_width = isset($_GET['width']) ? $_GET['width'] : 640;
-$advanced = $_GET["advanced"] == "yes" ? 1 : 0;
+$advanced = isset($_GET["advanced"]) ? 1 : 0;
 $duration = isset($_GET["duration"]) ? $_GET["duration"] : 'daily';
 
 /* Time related stuff */
@@ -473,7 +473,7 @@ for ($k=8;$k>=0;$k--){
  $cl->label->set("position", MS_UR);
  $cl->label->set("offsetx", $width * 1.25);
  $cl->label->set("offsety", 0);
- $p->draw($map, $layer, $img, 8- $k, $param["ramp"][$k]);
+ $p->draw($map, $layer, $img, 8- $k, @$param["ramp"][$k]);
  $p->free();
  $y = $y + $height;
 }
