@@ -4,6 +4,15 @@
 include_once("../../etc/config.inc.php");
 dl($mapscript);
 
+if ($argv)
+   for ($i=1;$i<count($argv);$i++)
+   {
+       $it = split("=",$argv[$i]);
+       $_GET[$it[0]] = $it[1];
+   }
+//print_r($_GET);
+//die();
+
 /* stuff that we need to $_GET[] */
 $dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
 $tokens = explode("/", $dstr);
@@ -413,6 +422,10 @@ $rainfall->draw($img);
 }
 
 add_and_draw("counties");
+
+//$dm = $map->getlayerbyname("dm");
+//$dm->set("status", MS_ON);
+//$dm->draw($img);
 
 /* Need something to draw bars! */
 $bar = $map->getlayerbyname("bar");
