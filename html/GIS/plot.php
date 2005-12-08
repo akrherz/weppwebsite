@@ -4,7 +4,7 @@
 include_once("../../etc/config.inc.php");
 dl($mapscript);
 
-if ($argv)
+if (isset($argv))
    for ($i=1;$i<count($argv);$i++)
    {
        $it = split("=",$argv[$i]);
@@ -144,21 +144,21 @@ $params = Array(
 "min_runoff_mm" => Array('dbstr' => 'min_runoff',
   'units' => 'millimeters', 
   'title' => "Minimum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => "results_by_twp", 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_runoff_mm" => Array('dbstr' => 'avg_runoff',
   'units' => 'millimeters', 
   'title' => "Average Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => "results_by_twp", 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_runoff_mm" => Array('dbstr' => 'max_runoff',
   'units' => 'millimeters', 
   'title' => "Maximum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => "results_by_twp", 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
