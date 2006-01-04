@@ -4,10 +4,9 @@
 // Description:	Configuration file for JpGraph library
 // Created: 	2004-03-27
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpg-config.inc,v 1.1.2.1 2004/03/27 12:35:55 aditus Exp $
+// Ver:		$Id: jpg-config.inc 242 2005-11-20 11:34:41Z ljp $
 //
-// License:	This code is released under QPL 1.0
-// Copyright (C) 2004 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 
@@ -30,15 +29,17 @@
 // UNIX:
 //   CACHE_DIR /tmp/jpgraph_cache/
 //   TTF_DIR   /usr/X11R6/lib/X11/fonts/truetype/
+//   MBTTF_DIR /usr/share/fonts/ja/TrueType/
 //
 // WINDOWS:
 //   CACHE_DIR $SERVER_TEMP/jpgraph_cache/
 //   TTF_DIR   $SERVER_SYSTEMROOT/fonts/
+//   MBTTF_DIR $SERVER_SYSTEMROOT/fonts/
 //
 //------------------------------------------------------------------------
 // DEFINE("CACHE_DIR","/tmp/jpgraph_cache/");
-DEFINE("TTF_DIR","/home/httpd/nwnwebsite/include/fonts/");
-
+// DEFINE("TTF_DIR","/usr/X11R6/lib/X11/fonts/truetype/");
+// DEFINE("MBTTF_DIR","/usr/share/fonts/ja/TrueType/");
 
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are
@@ -70,6 +71,12 @@ DEFINE("LANGUAGE_CYRILLIC",false);
 // will assume that the input text is windows 1251, if
 // false it will assume koi8-r
 DEFINE("CYRILLIC_FROM_WINDOWS",false);
+
+// Japanese TrueType font used with FF_MINCHO, FF_PMINCHO, FF_GOTHIC, FF_PGOTHIC
+DEFINE('MINCHO_TTF_FONT','ipam.ttf');
+DEFINE('PMINCHO_TTF_FONT','ipamp.ttf');
+DEFINE('GOTHIC_TTF_FONT','ipag.ttf');
+DEFINE('PGOTHIC_TTF_FONT','ipagp.ttf');
 
 //------------------------------------------------------------------------
 // Various JpGraph Settings. Adjust accordingly to your
@@ -123,6 +130,13 @@ DEFINE("USE_IMAGE_ERROR_HANDLER",true);
 // during development to be able to see the error message as an image
 // instead as a "red-cross" in a page where an image is expected.
 DEFINE("INSTALL_PHP_ERR_HANDLER",false);
+
+// Should the library examin the global php_errmsg string and convert
+// any error in it to a graphical representation. This is handy for the
+// occasions when, for example, header files cannot be found and this results
+// in the graph not being created and just a "red-cross" image would be seen.
+// This should be turned off for a production site.
+DEFINE("CATCH_PHPERRMSG",true);
 
 // If the color palette is full should JpGraph try to allocate
 // the closest match? If you plan on using background images or

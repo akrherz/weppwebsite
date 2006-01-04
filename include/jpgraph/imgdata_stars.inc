@@ -4,10 +4,9 @@
 // Description:	Base64 encoded images for stars
 // Created: 	2003-03-20
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: imgdata_stars.inc,v 1.1 2003/03/23 13:37:37 aditus Exp $
+// Ver:		$Id: imgdata_stars.inc 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2003 Johan Persson 
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 
