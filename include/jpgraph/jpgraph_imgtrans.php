@@ -4,10 +4,9 @@
 // Description:	Extension for JpGraph to do some simple img transformations
 // Created: 	2003-09-06
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_imgtrans.php,v 1.1.2.3 2004/03/27 12:20:45 aditus Exp $
+// Ver:		$Id: jpgraph_imgtrans.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2003 Johan Persson 
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 //------------------------------------------------------------------------

@@ -4,10 +4,9 @@
 // Description: 3D Pie plot extension for JpGraph
 // Created: 	2001-03-24
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_pie3d.php,v 1.46.2.4 2003/12/07 19:23:02 aditus Exp $
+// Ver:		$Id: jpgraph_pie3d.php 332 2005-12-14 18:21:37Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -17,7 +16,7 @@
 // angle between 20 and 70 degrees.
 //===================================================
 class PiePlot3D extends PiePlot {
-    var $labelhintcolor="red",$showlabelhint=true,$labelmargin=0.30;
+    var $labelhintcolor="red",$showlabelhint=true;
     var $angle=50;	
     var $edgecolor="", $edgeweight=1;
     var $iThickness=false;
@@ -39,7 +38,7 @@ class PiePlot3D extends PiePlot {
 	
     // Set label arrays
     function SetLegends($aLegend) {
-	$this->legends = array_reverse($aLegend);
+	$this->legends = array_reverse(array_slice($aLegend,0,count($this->data)));
     }
 
     function SetSliceColors($aColors) {
@@ -119,7 +118,7 @@ class PiePlot3D extends PiePlot {
 	    $alt="alt=\"$tmp\" title=\"$tmp\"";
 	}
 	if( !empty($this->csimtargets[$i]) )
-	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\" $alt>\n";
+	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\" $alt />\n";
     }
 
     function SetLabels($aLabels,$aLblPosAdj="auto") {
@@ -130,8 +129,7 @@ class PiePlot3D extends PiePlot {
 	
     // Distance from the pie to the labels
     function SetLabelMargin($m) {
-	assert($m>0 && $m<1);
-	$this->labelmargin=$m;
+	$this->value->SetMargin($m);
     }
 	
     // Show a thin line from the pie to the label for a specific slice
@@ -639,7 +637,7 @@ class PiePlot3D extends PiePlot {
 	if( $aaoption !== 1 ) {
 	    // Now print possible labels and add csim
 	    $img->SetFont($this->value->ff,$this->value->fs);
-	    $margin = $img->GetFontHeight()/2;
+	    $margin = $img->GetFontHeight()/2 + $this->value->margin ;
 	    for($i=0; $i < count($data); ++$i ) {
 		$la = $labeldata[$i][0];
 		$x = $labeldata[$i][1] + cos($la*M_PI/180)*($d+$margin);
@@ -853,7 +851,6 @@ class PiePlot3D extends PiePlot {
     function StrokeLabels($label,$img,$a,$xp,$yp,$z) {
 	$this->value->halign="left";
 	$this->value->valign="top";
-	$this->value->margin=0;
 
 	// Position the axis title. 
 	// dx, dy is the offset from the top left corner of the bounding box that sorrounds the text
@@ -887,14 +884,18 @@ class PiePlot3D extends PiePlot {
 	$x = round($xp-$dx*$w);
 	$y = round($yp-$dy*$h);
 
-	/*
+	
         // Mark anchor point for debugging 
+	/*
 	$img->SetColor('red');
 	$img->Line($xp-10,$yp,$xp+10,$yp);
 	$img->Line($xp,$yp-10,$xp,$yp+10);
 	*/
-
+	$oldmargin = $this->value->margin;
+	$this->value->margin=0;
 	$this->value->Stroke($img,$label,$x,$y);
+	$this->value->margin=$oldmargin;
+
     }	
 } // Class
 

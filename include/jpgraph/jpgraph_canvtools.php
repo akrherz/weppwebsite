@@ -4,10 +4,9 @@
 // Description:	Some utilities for text and shape drawing on a canvas
 // Created: 	2002-08-23
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_canvtools.php,v 1.9 2002/12/01 10:00:40 aditus Exp $
+// Ver:		$Id: jpgraph_canvtools.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 

@@ -4,10 +4,9 @@
 // Description:	Error plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_error.php,v 1.16 2003/02/04 22:47:16 aditus Exp $
+// Ver:		$Id: jpgraph_error.php 88 2005-08-07 17:18:51Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -54,16 +53,18 @@ class ErrorPlot extends Plot {
 	}
 	else 
 	    $exist_x = false;
-
-	if( $exist_x )
-	    $xs=$this->coords[1][0];
-	else
-	    $xs=0;
-
 		
 	for( $i=0; $i<$numpoints; ++$i) {
-	    if( $exist_x ) $x=$this->coords[1][$i];
-	    else $x=$i;
+	    if( $exist_x ) 
+		$x=$this->coords[1][$i];
+	    else 
+		$x=$i;
+
+	    if( !is_numeric($x) ||  
+		!is_numeric($this->coords[0][$i*2]) || !is_numeric($this->coords[0][$i*2+1]) ) {
+		continue;
+	    }
+	    
 	    $xt = $xscale->Translate($x);
 	    $yt1 = $yscale->Translate($this->coords[0][$i*2]);
 	    $yt2 = $yscale->Translate($this->coords[0][$i*2+1]);
@@ -89,7 +90,8 @@ class ErrorLinePlot extends ErrorPlot {
     function ErrorLinePlot(&$datay,$datax=false) {
 	$this->ErrorPlot($datay,$datax);
 	// Calculate line coordinates as the average of the error limits
-	for($i=0; $i < count($datay); $i+=2 ) {
+	$n = count($datay);
+	for($i=0; $i < $n; $i+=2 ) {
 	    $ly[]=($datay[$i]+$datay[$i+1])/2;
 	}		
 	$this->line=new LinePlot($ly,$datax);
@@ -126,7 +128,7 @@ class LineErrorPlot extends ErrorPlot {
 	    JpGraphError::Raise('Error in input data to LineErrorPlot.'.
 		'Number of data points must be a multiple of 3');
 	}
-	for($i=0; $i < count($datay); $i+=3 ) {
+	for($i=0; $i < $n; $i+=3 ) {
 	    $ly[]=$datay[$i];
 	    $ey[]=$datay[$i]+$datay[$i+1];
 	    $ey[]=$datay[$i]+$datay[$i+2];

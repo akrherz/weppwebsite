@@ -4,10 +4,9 @@
 // Description:	Class Jpfile. Handles plotmarks
 // Created: 	2003-06-28
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_flags.php,v 1.2.2.6 2003/08/26 20:33:56 aditus Exp $
+// Ver:		$Id: jpgraph_flags.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2003 Johan Persson 
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 //------------------------------------------------------------
@@ -63,6 +62,7 @@ class FlagImages {
     'Republic of Cape Verde' => 'cave',
     'Republic of Chad' => 'chad',
     'Republic of Chile' => 'chil',
+    'Peoples Republic of China' => 'chin',
     'Territory of Christmas Island' => 'chms',
     'Commonwealth of Independent States' => 'cins',
     'Cook Islands' => 'ckis',
@@ -222,6 +222,7 @@ class FlagImages {
     'Syrian Arab Republic' => 'syra',
     'Kingdom of Swaziland' => 'szld',
     'Republic of China' => 'taiw',
+    'Taiwan' => 'taiw',
     'Republic of Tajikistan' => 'tajk',
     'United Republic of Tanzania' => 'tanz',
     'Kingdom of Thailand' => 'thal',
@@ -336,12 +337,21 @@ class FlagImages {
 	$aName = strtolower($aName);
 	$nlen = strlen($aName);
 	reset($this->iCountryNameMap);
-	// Match partial full country name or exact idx name
+	// Start by trying to match exact index name
 	while( list($key,$val) = each($this->iCountryNameMap) ) {
-	    if( strpos(strtolower($key), $aName) !== false || 
-                ($nlen == strlen($val) && $val == $aName) ) {
+	    if( $nlen == strlen($val) && $val == $aName )  {
 		$found=true;
 		break;
+	    }
+	}
+	if( !$found ) {
+	    reset($this->iCountryNameMap);
+	    // If the exact index doesn't work try a (partial) full name
+	    while( list($key,$val) = each($this->iCountryNameMap) ) {
+		if( strpos(strtolower($key), $aName) !== false ) {
+		    $found=true;
+		    break;
+		}
 	    }
 	}
 	if( $found ) {

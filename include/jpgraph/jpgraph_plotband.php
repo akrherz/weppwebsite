@@ -4,10 +4,9 @@
 // Description:	PHP4 Graph Plotting library. Extension module.
 // Created: 	2004-02-18
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_plotband.php,v 1.1.2.1 2004/02/21 08:46:45 aditus Exp $
+// Ver:		$Id: jpgraph_plotband.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL 1.0
-// Copyright (C) 2001,2002,2003,2004 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 // Constants for types of static bands in plot area

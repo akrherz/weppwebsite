@@ -4,10 +4,9 @@
 // Description: Scatter (and impuls) plot extension for JpGraph
 // Created: 	2001-02-11
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_scatter.php,v 1.31.2.2 2004/03/27 12:19:36 aditus Exp $
+// Ver:		$Id: jpgraph_scatter.php 53 2005-06-06 18:12:54Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 require_once ('jpgraph_plotmark.inc');
@@ -35,8 +34,12 @@ class FieldArrow {
     }
 
     function Stroke($aImg,$x,$y,$a) {
+	// First rotate the center coordinates
+	list($x,$y) = $aImg->Rotate($x,$y);
+
 	$old_origin = $aImg->SetCenter($x,$y);
-	$old_a = $aImg->SetAngle(-$a);
+	$old_a = $aImg->a;
+	$aImg->SetAngle(-$a+$old_a);
 
 	$dx = round($this->iSize/2);
 	$c = array($x-$dx,$y,$x+$dx,$y);
@@ -166,7 +169,7 @@ class ScatterPlot extends Plot {
 	for( $i=0; $i<$this->numpoints; ++$i ) {
 
 	    // Skip null values
-	    if( $this->coords[0][$i]==="" )
+	    if( $this->coords[0][$i]==="" || $this->coords[0][$i]==='-' || $this->coords[0][$i]==='x')
 		continue;
 
 	    if( isset($this->coords[1]) )

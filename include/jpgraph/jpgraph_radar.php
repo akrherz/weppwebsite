@@ -4,13 +4,13 @@
 // Description: Radar plot extension for JpGraph
 // Created: 	2001-02-04
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_radar.php,v 1.7.2.4 2004/04/13 20:10:19 aditus Exp $
+// Ver:		$Id: jpgraph_radar.php 213 2005-10-11 18:22:00Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
+require_once('jpgraph_plotmark.inc');
 
 class RadarLogTicks extends Ticks {
 //---------------
@@ -66,7 +66,13 @@ class RadarLogTicks extends Ticks {
 		    $aImg->Line($xt+$dx_maj,$yt+$dy_maj,$xt-$dx_maj,$yt-$dy_maj);
 		    if( $this->majcolor!="" ) $aImg->PopColor();
 		}
-		$aMajLabel[]=$nextMajor;	
+		if( $this->label_formfunc != "" ) {
+		    $f=$this->label_formfunc;
+		    $l = call_user_func($f,$nextMajor);
+		}
+		else
+		    $l = $nextMajor;
+		$aMajLabel[]=$l;	
 		$nextMajor *= 10;
 		$step *= 10;	
 		$count=1; 				
@@ -111,7 +117,15 @@ class RadarLinearTicks extends LinearTicks {
 	for($i=1; $i<=$nbrmaj; ++$i) {
 	    $xt=round($i*$maj_step_abs*cos($aAxisAngle))+$aScale->scale_abs[0];
 	    $yt=$aPos-round($i*$maj_step_abs*sin($aAxisAngle));
-	    $aMajLabel[]=$label;
+
+	    if( $this->label_formfunc != "" ) {
+		$f=$this->label_formfunc;
+		$l = call_user_func($f,$label);
+	    }
+	    else
+		$l = $label;
+
+	    $aMajLabel[]=$l;
 	    $label += $this->major_step;
 	    $grid[]=$xt;
 	    $grid[]=$yt;
@@ -145,7 +159,7 @@ class RadarLinearTicks extends LinearTicks {
 
 //===================================================
 // CLASS RadarAxis
-// Description: Implements axis for the spider graph
+// Description: Implements axis for the radar graph
 //===================================================
 class RadarAxis extends Axis {
     var $title_color="navy";
@@ -193,11 +207,14 @@ class RadarAxis extends Axis {
 	    $this->img->SetColor($this->color);
 			
 	    // majpos contsins (x,y) coordinates for labels
-	    for($i=0; $i<count($majpos)/2; ++$i) {
-		if( $this->ticks_label != null )
-		    $this->img->StrokeText($majpos[$i*2],$majpos[$i*2+1],$this->ticks_label[$i]);
-		else
-		    $this->img->StrokeText($majpos[$i*2],$majpos[$i*2+1],$majlabel[$i]);
+	    if( ! $this->hide_labels ) {
+		$n = floor(count($majpos)/2);
+		for($i=0; $i < $n; ++$i) {
+		    if( $this->ticks_label != null )
+			$this->img->StrokeText($majpos[$i*2],$majpos[$i*2+1],$this->ticks_label[$i]);
+		    else
+			$this->img->StrokeText($majpos[$i*2],$majpos[$i*2+1],$majlabel[$i]);
+		}
 	    }
 	}
 	$this->_StrokeAxisTitle($pos,$aAxisAngle,$title);
@@ -216,9 +233,14 @@ class RadarAxis extends Axis {
 	// that intersects with the extension of the corresponding axis. The code looks a little
 	// bit messy but this is really the only way of having a reasonable position of the
 	// axis titles.
-	$h=$this->img->GetFontHeight();
-	$w=$this->img->GetTextWidth($title);
+	if( $this->title->iWordwrap > 0 ) {
+	    $title = wordwrap($title,$this->title->iWordwrap,"\n");
+	}
+
+	$h=$this->img->GetTextHeight($title)*1.2;
+	$w=$this->img->GetTextWidth($title)*1.2;
 	while( $aAxisAngle > 2*M_PI ) $aAxisAngle -= 2*M_PI;
+
 	if( $aAxisAngle>=7*M_PI/4 || $aAxisAngle <= M_PI/4 ) $dx=0;
 	if( $aAxisAngle>=M_PI/4 && $aAxisAngle <= 3*M_PI/4 ) $dx=($aAxisAngle-M_PI/4)*2/M_PI; 
 	if( $aAxisAngle>=3*M_PI/4 && $aAxisAngle <= 5*M_PI/4 ) $dx=1;
@@ -241,7 +263,7 @@ class RadarAxis extends Axis {
 
 //===================================================
 // CLASS RadarGrid
-// Description: Draws grid for the spider graph
+// Description: Draws grid for the radar graph
 //===================================================
 class RadarGrid extends Grid {
 //------------
@@ -281,7 +303,7 @@ class RadarGrid extends Grid {
 
 //===================================================
 // CLASS RadarPlot
-// Description: Plot a spiderplot
+// Description: Plot a radarplot
 //===================================================
 class RadarPlot {
     var $data=array();
@@ -290,10 +312,12 @@ class RadarPlot {
     var $legend="";
     var $weight=1;
     var $linestyle='solid';
+    var $mark=null;
 //---------------
 // CONSTRUCTOR
     function RadarPlot($data) {
 	$this->data = $data;
+	$this->mark = new PlotMark();
     }
 
 //---------------
@@ -371,6 +395,13 @@ class RadarPlot {
 	$pnts[]=$pnts[1];
 	$img->Polygon($pnts);
 	$img->SetLineStyle('solid'); // Reset line style to default
+	// Add plotmarks on top
+	if( $this->mark->show ) {
+	    for($i=0; $i < $nbrpnts; ++$i) {
+		$this->mark->Stroke($img,$pnts[$i*2],$pnts[$i*2+1]); 
+	    }
+	}
+
     }
 	
 //---------------
@@ -382,16 +413,16 @@ class RadarPlot {
     function Legend(&$graph) {
 	if( $this->legend=="" ) return;
 	if( $this->fill )
-	    $graph->legend->Add($this->legend,$this->fill_color);
+	    $graph->legend->Add($this->legend,$this->fill_color,$this->mark);
 	else
-	    $graph->legend->Add($this->legend,$this->color);	
+	    $graph->legend->Add($this->legend,$this->color,$this->mark);	
     }
 	
 } // Class
 
 //===================================================
 // CLASS RadarGraph
-// Description: Main container for a spider graph
+// Description: Main container for a radar graph
 //===================================================
 class RadarGraph extends Graph {
     var $posx;
@@ -431,7 +462,7 @@ class RadarGraph extends Graph {
 	
     function SetScale($axtype,$ymin=1,$ymax=1) {
 	if( $axtype != "lin" && $axtype != "log" ) {
-	    JpGraphError::Raise("Illegal scale for spiderplot ($axtype). Must be \"lin\" or \"log\"");
+	    JpGraphError::Raise("Illegal scale for radarplot ($axtype). Must be \"lin\" or \"log\"");
 	}
 	if( $axtype=="lin" ) {
 	    $this->yscale = & new LinearScale($ymin,$ymax);
@@ -507,12 +538,13 @@ class RadarGraph extends Graph {
 	    $min=min($min,$p->Min());
 	}
 	if( $min < 0 ) 
-	    JpGraphError::Raise("Minimum data $min (Radar plots only makes sence to use when all data points > 0)");
+	    JpGraphError::Raise("Minimum data $min (Radar plots should only be used when all data points > 0)");
 	return array($min,$max);
     }	
 
     // Stroke the Radar graph
     function Stroke($aStrokeFileName="") {
+	$n = count($this->plots);
 	// Set Y-scale
 	if( !$this->yscale->IsSpecified() && count($this->plots)>0 ) {
 	    list($min,$max) = $this->GetPlotsYMinMax();
@@ -531,9 +563,9 @@ class RadarGraph extends Graph {
 	}
 	elseif(count($this->axis_title)<$nbrpnts) 
 	    JpGraphError::Raise("Number of titles does not match number of points in plot.");
-	for($i=0; $i<count($this->plots); ++$i )
+	for($i=0; $i < $n; ++$i )
 	    if( $nbrpnts != $this->plots[$i]->GetCount() )
-		JpGraphError::Raise("Each spider plot must have the same number of data points.");
+		JpGraphError::Raise("Each radar plot must have the same number of data points.");
 
 	if( $this->background_image != "" ) {
 	    $this->StrokeFrameBackground();
@@ -544,7 +576,7 @@ class RadarGraph extends Graph {
 	$astep=2*M_PI/$nbrpnts;
 
 	// Prepare legends
-	for($i=0; $i<count($this->plots); ++$i)
+	for($i=0; $i < $n; ++$i)
 	    $this->plots[$i]->Legend($this);
 	$this->legend->Stroke($this->img);			
 	$this->footer->Stroke($this->img);			
@@ -558,7 +590,7 @@ class RadarGraph extends Graph {
 		
 	// Plot points
 	$a=M_PI/2;
-	for($i=0; $i<count($this->plots); ++$i )
+	for($i=0; $i < $n; ++$i )
 	    $this->plots[$i]->Stroke($this->img, $this->posy, $this->yscale, $a);
 		
 	if( $this->grid_depth != DEPTH_BACK ) {

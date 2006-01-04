@@ -4,10 +4,9 @@
 // Description:	Log scale plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_log.php,v 1.15.2.4 2003/09/27 00:24:59 aditus Exp $
+// Ver:		$Id: jpgraph_log.php 56 2005-06-06 20:14:44Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -36,8 +35,9 @@ class LogScale extends LinearScale {
     // Translate between world and screen
     function Translate($a) {
 	if( !is_numeric($a) ) {
-	    if( $a != '' && $a != '-' ) 
+	    if( $a != '' && $a != '-' && $a != 'x' ) 
 		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 1;
 	}
 	if( $a < 0 ) {
 	    JpGraphError::Raise("Negative data values can not be used in a log scale.");
@@ -51,6 +51,11 @@ class LogScale extends LinearScale {
     // Relative translate (don't include offset) usefull when we just want
     // to know the relative position (in pixels) on the axis	
     function RelTranslate($a) {
+	if( !is_numeric($a) ) {
+	    if( $a != '' && $a != '-' && $a != 'x' ) 
+		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 1;
+	}
 	if( $a==0 ) $a=1;
 	$a=log10($a);
 	return round(($a*1.0 - $this->scale[0]) * $this->scale_factor); 
@@ -61,14 +66,14 @@ class LogScale extends LinearScale {
 	if( function_exists("bcpow") )
 	    return round(bcpow(10,$this->scale[0],15),14);
 	else
-	    return round(pow(10,$this->scale[0]));
+	    return round(pow(10,$this->scale[0]),14);
     }
 	
     function GetMaxVal() {
 	if( function_exists("bcpow") )
 	    return round(bcpow(10,$this->scale[1],15),14);
 	else
-	    return round(pow(10,$this->scale[1]));
+	    return round(pow(10,$this->scale[1]),14);
     }
 	
     // Logarithmic autoscaling is much simplier since we just
@@ -165,13 +170,15 @@ class LogTicks extends Ticks{
 		$this->ticks_pos[]=$ys;
 		$this->ticklabels_pos[]=$ys;
 		if( $count % 10 == 0 ) {
-		    if( $this->majcolor!="" ) {
-			$img->PushColor($this->majcolor);
-			$img->Line($pos,$ys,$a2,$ys);
-			$img->PopColor();
+		    if( !$this->supress_tickmarks ) {
+			if( $this->majcolor!="" ) {
+			    $img->PushColor($this->majcolor);
+			    $img->Line($pos,$ys,$a2,$ys);
+			    $img->PopColor();
+			}
+			else
+			    $img->Line($pos,$ys,$a2,$ys);
 		    }
-		    else
-			$img->Line($pos,$ys,$a2,$ys);
 
 		    $this->maj_ticks_pos[$i]=$ys;
 		    $this->maj_ticklabels_pos[$i]=$ys;
@@ -190,9 +197,11 @@ class LogTicks extends Ticks{
 		    $count=1; 				
 		}
 		else {
-		    if( $this->mincolor!="" ) $img->PushColor($this->mincolor);
-		    $img->Line($pos,$ys,$a,$ys);		
-		    if( $this->mincolor!="" ) $img->PopCOlor();
+		    if( !$this->supress_tickmarks && !$this->supress_minor_tickmarks) {
+			if( $this->mincolor!="" ) $img->PushColor($this->mincolor);
+			$img->Line($pos,$ys,$a,$ys);		
+			if( $this->mincolor!="" ) $img->PopColor();
+		    }
 		}
 	    }		
 	}
@@ -220,7 +229,9 @@ class LogTicks extends Ticks{
 		$this->ticks_pos[]=$xs;
 		$this->ticklabels_pos[]=$xs;
 		if( $count % 10 == 0 ) {
-		    $img->Line($xs,$pos,$xs,$a2);
+		    if( !$this->supress_tickmarks ) {
+			$img->Line($xs,$pos,$xs,$a2);
+		    }
 		    $this->maj_ticks_pos[$i]=$xs;
 		    $this->maj_ticklabels_pos[$i]=$xs;
 
@@ -237,8 +248,11 @@ class LogTicks extends Ticks{
 		    $step *= 10;	
 		    $count=1; 				
 		}
-		else
-		    $img->Line($xs,$pos,$xs,$a);		
+		else {
+		    if( !$this->supress_tickmarks && !$this->supress_minor_tickmarks) {
+			$img->Line($xs,$pos,$xs,$a);		
+		    }
+		}
 	    }		
 	}
 	return true;

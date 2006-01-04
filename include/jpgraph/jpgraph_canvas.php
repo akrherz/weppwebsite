@@ -4,10 +4,9 @@
 // Description:	Canvas drawing extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_canvas.php,v 1.12.2.1 2003/10/07 02:59:33 aditus Exp $
+// Ver:		$Id: jpgraph_canvas.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -64,8 +63,8 @@ class CanvasGraph extends Graph {
 	}
 	else {
 	    // Finally stream the generated picture					
-		$this->cache->PutAndStream($this->img,$this->cache_name,$this->inline,
-					   $aStrokeFileName);		
+	    $this->cache->PutAndStream($this->img,$this->cache_name,$this->inline,$aStrokeFileName);
+	    return true;
 	}
     }
 } // Class

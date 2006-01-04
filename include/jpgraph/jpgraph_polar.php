@@ -4,10 +4,9 @@
 // Description:	Polar plot extension for JpGraph
 // Created: 	2003-02-02
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_polar.php,v 1.2.2.4 2004/03/27 12:22:04 aditus Exp $
+// Ver:		$Id: jpgraph_polar.php 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL
-// Copyright (C) 2003 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -672,7 +671,6 @@ class PolarGraph extends Graph {
 	    JpGraphError::Raise('Unknown scale type for polar graph. Must be "lin" or "log"');
 	}
 
-	$this->scale->Init($this->img);
 	$this->axis = new PolarAxis($this->img,$this->scale);
 	$this->SetMargin(40,40,50,40);
     }
