@@ -58,7 +58,8 @@ $ramps = Array(
 	5 => Array(5, 10, 20, 40, 60, 100, 120, 160),
 	6 => Array(10, 25, 50, 75, 100, 150, 200, 250),
 	7 => Array(100, 200, 300, 400, 500, 600, 800, 1000),
-	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5)           // Precip(in)
+	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5),           // Precip(in)
+    9 => Array(100, 150, 200, 250, 300, 350, 400, 450),   // TSW
 );
 $mo_ramps = Array(
 	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24),
@@ -85,6 +86,28 @@ $yr_ramps = Array(
 );
 
 $params = Array(
+"tsw_stddev_mm" => Array('dbstr' => 'tsw_stddev',
+  'units' => 'millimeters', 
+  'title' => "STDDEV Total Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 5,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
+"tsw_range_mm" => Array('dbstr' => 'tsw_range',
+  'units' => 'millimeters',
+  'title' => "Range of Total Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 6,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
+
+"tsw_mm" => Array('dbstr' => 'tsw',
+  'units' => 'millimeters', 
+  'title' => "Average Total Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 9,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
 "rainfall_in" => Array('dbstr' => 'rainfall / 25.4',
   'units' => 'inches', 
   'title' => "Estimated Rainfall on ",
@@ -258,6 +281,7 @@ if ($param["gtype"] == "hrap")
  {
    $param["table"] = "monthly_rainfall_$year";
    $param["dbdate"] = strftime("%Y-%m-01", $ts);
+   $param['ramp'] = $mo_ramps[ $param['myramp'] ];
  } else if ($duration == "yearly")
  {
    $param["table"] = "yearly_rainfall";
