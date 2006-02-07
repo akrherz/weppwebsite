@@ -22,7 +22,7 @@ $dy = ($ul_y - $lr_y) / $map_height;
 $clickx = ($map_x * (0 - $dx) ) + $ul_x;
 $clicky = ($map_y * (0 - $dy) ) + $ul_y;
 
-$c = pg_connect("host=db1.mesonet.agron.iastate.edu port=5432 dbname=wepp user=nobody");
+$c = pg_connect("host=mesonet-db1.agron.iastate.edu port=5432 dbname=wepp user=nobody");
 $q = "select * from iatwp WHERE within(geometryfromtext('POINT($clickx $clicky)', 26915), the_geom)";
 $rs = pg_exec($c, $q);
 
