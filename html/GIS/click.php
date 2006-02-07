@@ -2,6 +2,7 @@
 // Hack to figure out where we clicked?
 include("../../etc/config.inc.php");
 
+$dstr = isset($_GET["dstr"]) ? $_GET["dstr"]: "";
 $cgiStr = "1=1";
 $map_x = $_GET["img_x"];
 $map_y = $_GET["img_y"];
@@ -32,6 +33,6 @@ $twp = $row["model_twp"];
 
 if (strlen($twp) == 0) die("You did not click in Iowa! $clickx $clicky");
 
-header("Location: $_WEBBASE/township/byday.phtml?twp=$twp&$cgiStr");
+header("Location: $_WEBBASE/township/byday.phtml?twp=$twp&$cgiStr&dstr=$dstr");
 
 ?>
