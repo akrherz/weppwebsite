@@ -2,7 +2,7 @@
 // An example plot to show at the WEPP meeting
 $ts = isset($_GET["ts"]) ? $_GET["ts"] : "2003-05-04";
 
-$c = pg_connect("db1.mesonet.agron.iastate.edu","5432","wepp");
+$c = pg_connect("mesonet-db1.agron.iastate.edu","5432","wepp");
 //$q = "select * from results WHERE valid = '2003-05-04'";
 $q = "select r.*, n.steep from results r, combos c, nri n WHERE r.valid = '2003-05-04' and  r.run_id = c.id and c.nri_id = n.id";
 $rs = pg_exec($c, $q);
