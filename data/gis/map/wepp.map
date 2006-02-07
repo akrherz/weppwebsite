@@ -153,7 +153,7 @@ END
 LAYER
   CONNECTIONTYPE postgis
   NAME iatwp
-  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  CONNECTION "user=nobody dbname=wepp host=mesonet-db1.agron.iastate.edu"
   DATA "the_geom from (select model_twp, oid, the_geom from iatwp) as foo using unique oid using srid=26915"
   STATUS ON
   TYPE POLYGON
@@ -178,7 +178,7 @@ END
 LAYER
   CONNECTIONTYPE postgis
   NAME daily_rainfall
-  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  CONNECTION "user=nobody dbname=wepp host=mesonet-db1.agron.iastate.edu"
   DATA  "the_geom from (select d.oid as oid, d.rainfall / 25.4 as da, h.the_geom from daily_rainfall_2003 d left join hrap_polygons h using (hrap_i) WHERE d.valid = '2003-05-04') as foo using unique oid using srid=26915" 
   STATUS ON
   TYPE POLYGON
@@ -192,7 +192,7 @@ END
 LAYER
   CONNECTIONTYPE postgis
   NAME monthly_rainfall
-  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  CONNECTION "user=nobody dbname=wepp host=mesonet-db1.agron.iastate.edu"
   DATA  "the_geom from (select d.oid as oid, d.rainfall / 25.4 as da, h.the_geom from daily_rainfall_2003 d left join hrap_polygons h using (hrap_i) WHERE d.valid = '2003-05-04') as foo using unique oid using srid=26915" 
   STATUS ON
   TYPE POLYGON
@@ -206,7 +206,7 @@ END
 LAYER
   CONNECTIONTYPE postgis
   NAME erosion
-  CONNECTION "user=nobody dbname=wepp host=db1.mesonet.agron.iastate.edu"
+  CONNECTION "user=nobody dbname=wepp host=mesonet-db1.agron.iastate.edu"
 #  DATA "the_geom from (select t.model_twp as model_twp, t.oid as oid, max(r.runoff) as runoff, t.the_geom as the_geom from results r, combos c, iatwp t WHERE r.valid = '2003-04-30' and r.run_id = c.id and c.model_twp = t.model_twp GROUP by t.the_geom, t.oid) as foo using unique oid using srid=26915"
   DATA "the_geom from (select t.model_twp as model_twp, t.oid as oid, r.avg_precip as val, t.the_geom as the_geom from results_by_twp r LEFT OUTER JOIN iatwp t on (t.model_twp = r.model_twp) WHERE r.valid = '2003-05-04') as foo using unique oid using srid=26915"
   STATUS ON
@@ -258,6 +258,68 @@ LAYER
 	END
   END
 END
+
+LAYER
+  NAME dm
+  STATUS ON
+  TYPE LINE   DATA /mesonet/data/gis/shape/4326/us/usdm/dm_current.shp
+  PROJECTION
+   "init=epsg:4326"
+  END
+  CLASSITEM "DCAT"
+  LABELCACHE OFF
+  CLASS
+    EXPRESSION /0/
+    COLOR 100 0 0
+    SIZE 4
+    TEXT "D0"
+    SYMBOL 'circle'
+    LABEL
+      COLOR 255 255 255
+    END
+  END
+  CLASS
+    EXPRESSION /1/
+    COLOR 120 0 0
+    TEXT "D1"
+    SIZE 4
+    SYMBOL 'circle'
+    LABEL
+      COLOR 255 255 255
+    END
+  END
+  CLASS
+    EXPRESSION /2/
+    COLOR 160 0 0
+    TEXT "D2"
+    SIZE 4
+    SYMBOL 'circle'
+    LABEL
+      COLOR 255 255 255
+    END
+  END
+  CLASS
+    EXPRESSION /3/
+    COLOR 200 0 0
+    TEXT "D3"
+    SYMBOL 'circle'
+    SIZE 4
+    LABEL
+      COLOR 255 255 255
+    END
+  END
+  CLASS
+    EXPRESSION /4/
+    COLOR 255 0 0
+    SIZE 4
+    SYMBOL 'circle'
+    TEXT "D4"
+    LABEL
+      COLOR 255 255 255
+    END
+  END
+END
+
 
 LAYER
   NAME singlebox
