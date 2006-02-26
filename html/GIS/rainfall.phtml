@@ -97,6 +97,15 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
  <input type="submit" value="Soil Loss Maps">
 </form>
 </td>
+<td>
+<form name="sm" action="sm.phtml" method="get">
+ <input type="hidden" name="pvar" value="tsw_mm">
+ <input type="hidden" name="dstr" value="<?php echo $dstr; ?>">
+ <input type="hidden" name="advanced" value="<?php echo $advanced; ?>">
+ <input type="hidden" name="extents" value="<?php echo $extents; ?>">
+ <input type="submit" value="Soil Moisture Maps">
+</form>
+</td>
 </tr>
 </tbody>
 </table>

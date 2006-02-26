@@ -65,16 +65,16 @@ cal.time_comp = false;
 
 <div class="table">
 <table>
-<thead>
-<tr><th>Rainfall</th><th>Runoff</th><th>Soil Loss</th></tr>
-</thead>
-<tbody>
+<tr><th>Rainfall</th><th>Runoff</th></tr>
 <tr>
  <td><a href="GIS/rainfall.phtml?option=daily&pvar=rainfall_in&dstr=<?php echo strftime("%m/%d/%Y", $ts); ?>"><img src="http://wepp.mesonet.agron.iastate.edu/static/<?php echo strftime("%Y/%m/%d", $ts); ?>_daily_rainfall_in.png"></a></td>
  <td><a href="GIS/erosion.phtml?pvar=avg_runoff_in&dstr=<?php echo strftime("%m/%d/%Y", $ts); ?>"><img src="http://wepp.mesonet.agron.iastate.edu/static/<?php echo strftime("%Y/%m/%d", $ts); ?>_daily_avg_runoff_in.png"></a></td>
- <td><a href="GIS/erosion.phtml?pvar=avg_loss_acre&dstr=<?php echo strftime("%m/%d/%Y", $ts); ?>"><img src="http://wepp.mesonet.agron.iastate.edu/static/<?php echo strftime("%Y/%m/%d", $ts); ?>_daily_avg_loss_acre.png"></a></td>
 </tr>
-</tbody>
+<tr><th>Soil Loss</th><th>Soil Moisture</th></tr>
+<tr>
+ <td><a href="GIS/erosion.phtml?pvar=avg_loss_acre&dstr=<?php echo strftime("%m/%d/%Y", $ts); ?>"><img src="http://wepp.mesonet.agron.iastate.edu/static/<?php echo strftime("%Y/%m/%d", $ts); ?>_daily_avg_loss_acre.png"></a></td>
+ <td><a href="GIS/sm.phtml?pvar=tsw_mm&dstr=<?php echo strftime("%m/%d/%Y", $ts); ?>"><img src="http://wepp.mesonet.agron.iastate.edu/static/<?php echo strftime("%Y/%m/%d", $ts); ?>_daily_tsw_mm.png"></a></td>
+</tr>
 </table>
 </div>
 
