@@ -358,6 +358,7 @@ function add_and_draw($name)
 add_and_draw("background");
 add_and_draw("states");
 
+$colors = $param["cramp"];
 if (! $missing )
 {
 $rainfall = $map->getlayerbyname($param["maplayer"]);
@@ -381,7 +382,6 @@ if ($param["gtype"] == "hrap")
 $rainfall->set("data", $sql);
 
 $bins = $param["ramp"];
-$colors = $param["cramp"];
 
 $cz = ms_newClassObj($rainfall);
 $cz->setexpression("([DA] == 0)");
