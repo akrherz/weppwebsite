@@ -61,6 +61,7 @@ $ramps = Array(
 	7 => Array(100, 200, 300, 400, 500, 600, 800, 1000,1001,1002,1003),
 	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5,6,7,8),           // Precip(in)
     9 => Array(150, 200, 250, 300, 350, 400,450,500,550,600,650),   // TSW
+	10 => Array(-100, -75, -50, -25, -10, 0, 10, 25, 50, 75,100),
 );
 $mo_ramps = Array(
 	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24,25,26,27),
@@ -87,22 +88,87 @@ $yr_ramps = Array(
 );
 
 $params = Array(
+"tsw_7day_mm" => Array('dbstr' => 'bogus',
+  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+  'title' => "7 Day Soil Water Change Ending: ",
+  'table' => "bogus", 'myramp' => 10,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
+          (select o.model_twp, o.tsw - t.tsw as da 
+           from waterbalance_by_twp o, waterbalance_by_twp t 
+           WHERE o.model_twp = t.model_twp 
+           and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
+        and t.valid = ('". strftime("%Y-%m-%d", $ts) ."'::date - '7 days'::interval) 
+           ) as foo 
+          left join iatwp h using (model_twp)) as foo2
+          USING unique oid using srid=26915"),
+
+"tsw_1month_mm" => Array('dbstr' => 'bogus',
+  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+  'title' => "1 Month Soil Water Change Ending: ",
+  'table' => "bogus", 'myramp' => 10,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
+          (select o.model_twp, o.tsw - t.tsw as da 
+           from waterbalance_by_twp o, waterbalance_by_twp t 
+           WHERE o.model_twp = t.model_twp 
+           and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
+        and t.valid = ('". strftime("%Y-%m-%d", $ts) ."'::date - '1 month'::interval) 
+           ) as foo 
+          left join iatwp h using (model_twp)) as foo2
+          USING unique oid using srid=26915"),
+
+"tsw_3month_mm" => Array('dbstr' => 'bogus',
+  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+  'title' => "3 Month Soil Water Change Ending: ",
+  'table' => "bogus", 'myramp' => 10,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
+          (select o.model_twp, o.tsw - t.tsw as da 
+           from waterbalance_by_twp o, waterbalance_by_twp t 
+           WHERE o.model_twp = t.model_twp 
+           and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
+        and t.valid = ('". strftime("%Y-%m-%d", $ts) ."'::date - '3 months'::interval) 
+           ) as foo 
+          left join iatwp h using (model_twp)) as foo2
+          USING unique oid using srid=26915"),
+
+"tsw_1year_mm" => Array('dbstr' => 'bogus',
+  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+  'title' => "1 Year Soil Water Change Ending: ",
+  'table' => "bogus", 'myramp' => 10,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
+          (select o.model_twp, o.tsw - t.tsw as da 
+           from waterbalance_by_twp o, waterbalance_by_twp t 
+           WHERE o.model_twp = t.model_twp 
+           and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
+        and t.valid = ('". strftime("%Y-%m-%d", $ts) ."'::date - '1 year'::interval) 
+           ) as foo 
+          left join iatwp h using (model_twp)) as foo2
+          USING unique oid using srid=26915"),
+
+
 "tsw_stddev_mm" => Array('dbstr' => 'tsw_stddev',
-  'units' => 'mm per 1.8m', 'cramp' => $c,
+  'units' => 'mm in top 1.8m', 'cramp' => $c,
   'title' => "STDDEV Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 5,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "tsw_range_mm" => Array('dbstr' => 'tsw_range',
-  'units' => 'mm per 1.8m','cramp' => $c,
+  'units' => 'mm in top 1.8m','cramp' => $c,
   'title' => "Range of Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 6,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "tsw_mm" => Array('dbstr' => 'tsw',
-  'units' => 'mm per 1.8m', 'cramp' => $cr,
+  'units' => 'mm in top 1.8m', 'cramp' => $cr,
   'title' => "Average Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 9,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
@@ -379,8 +445,14 @@ if ($param["gtype"] == "hrap")
    using unique oid using srid=26915";
 
 }
-$rainfall->set("data", $sql);
-
+/* Custom data statements :) */
+if (isset($param["sql"]))
+{
+  $rainfall->set("data", $param["sql"]);
+} else 
+{
+  $rainfall->set("data", $sql);
+}
 $bins = $param["ramp"];
 
 $cz = ms_newClassObj($rainfall);
@@ -534,4 +606,5 @@ for ($k=11;$k>=0;$k--){
 
 header("Content-type: image/png");
 $img->saveImage('');
+//$map->save('/tmp/t.map');
 ?>
