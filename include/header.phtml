@@ -11,7 +11,7 @@ function new_window(url) {
  link = window.open(url,"Link","toolbar=0,location=0,directories=0,status=0,menubar=no,scrollbars=yes,resizable=yes,width=810,height=810");
 } 
 </script>
-<?php echo $HEADEXTRA; ?>
+<?php if (isset($HEADEXTRA)) echo $HEADEXTRA; ?>
 </head>
 
 <body>

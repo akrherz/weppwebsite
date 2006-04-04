@@ -19,7 +19,7 @@ function yearSelect($start, $selected, $name){
   $start = intval($start);
   $now = time();
   $tyear = strftime("%Y", $now);
-  $s .= "<select name='$name'>\n";
+  $s = "<select name='$name'>\n";
   for ($i=$start; $i<=$tyear;$i++) {
     $s .= "<option value='".$i ."' ";
     if ($i == intval($selected)) $s .= "SELECTED";
