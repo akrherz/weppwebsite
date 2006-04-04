@@ -55,10 +55,12 @@ $rs = pg_exec($c, $q);
 for( $i=0; $row = @pg_fetch_array($rs,$i); $i++)
 {
   $combos[ $row["combo_id"] ] = $row;
-  if (strlen($hrap[$row["hrap_i"]]) == 0){
+  if (! isset($hrap[$row["hrap_i"]]) ){
     $hrap[ $row["hrap_i"] ] = 0;
   }
   $combos[ $row["combo_id"] ]["precip"] =  $hrap[ $row["hrap_i"] ];
+  $combos[ $row["combo_id"] ]["runoff"] = 0;
+  $combos[ $row["combo_id"] ]["loss"] = 0;
 }
 
 
