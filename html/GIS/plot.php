@@ -62,6 +62,7 @@ $ramps = Array(
 	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5,6,7,8),           // Precip(in)
     9 => Array(150, 200, 250, 300, 350, 400,450,500,550,600,650),   // TSW
 	10 => Array(-100, -75, -50, -25, -10, 0, 10, 25, 50, 75,100),
+	11 => Array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
 );
 $mo_ramps = Array(
 	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24,25,26,27),
@@ -173,6 +174,19 @@ $params = Array(
   'table' => "waterbalance_by_twp", 'myramp' => 9,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
+"s10cm_mm" => Array('dbstr' => 's10cm',   'units' => 'mm in top 10cm', 'cramp' => $cr,
+  'title' => "0-10cm Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 11,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
+"s20cm_mm" => Array('dbstr' => 's20cm',   'units' => 'mm in 10-20cm layer', 'cramp' => $cr,
+  'title' => "10-20cm Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 11,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
 
 "rainfall_in" => Array('dbstr' => 'rainfall / 25.4',
   'units' => 'inches', 'cramp' => $c,
