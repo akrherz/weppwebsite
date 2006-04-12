@@ -3,7 +3,7 @@ include("../../etc/config.inc.php");
 include("../../include/forms.php");
 $uri = "rainfall.phtml";
 
-$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
+$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() -100000);
 $metric = isset($_GET["metric"]) ? $_GET["metric"]: "";
 $tokens = explode("/", $dstr);
 $year = $tokens[2];
