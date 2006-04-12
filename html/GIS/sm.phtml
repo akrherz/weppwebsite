@@ -14,7 +14,7 @@ $day = $tokens[1];
 
 $oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
 $zoom     = isset($_GET['zoom']) ? $_GET['zoom'] : 0;
-$pvar = isset($_GET['pvar']) ? $_GET['pvar'] : "tsw_mm";
+$pvar = isset($_GET['pvar']) ? $_GET['pvar'] : "vsm";
 
 if ($zoom == 99) {
  $oextents = "160000, 4450000, 760000, 4850000";
@@ -108,13 +108,13 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
 <tbody>
 <td>
  <select name="pvar">
-	<option value="tsw_mm" <?php if ($pvar == "tsw_mm") echo "SELECTED"; ?>>Total Soil Moisture [mm/1.8m]
+	<option value="vsm" <?php if ($pvar == "vsm") echo "SELECTED"; ?>>Volumetric Soil Moisture [%]
 	<option value="s10cm_mm" <?php if ($pvar == "s10cm_mm") echo "SELECTED"; ?>>0-10cm Soil Moisture [mm]
 	<option value="s20cm_mm" <?php if ($pvar == "s20cm_mm") echo "SELECTED"; ?>>10-20cm Soil Moisture [mm]
-	<option value="tsw_7day_mm" <?php if ($pvar == "tsw_7day_mm") echo "SELECTED"; ?>>7 Day Soil Moisture Change[mm/1.8m]
-	<option value="tsw_1month_mm" <?php if ($pvar == "tsw_1month_mm") echo "SELECTED"; ?>>1 Month Soil Moisture Change[mm/1.8m]
-	<option value="tsw_3month_mm" <?php if ($pvar == "tsw_3month_mm") echo "SELECTED"; ?>>3 Month Soil Moisture Change[mm/1.8m]
-	<option value="tsw_1year_mm" <?php if ($pvar == "tsw_1year_mm") echo "SELECTED"; ?>>1 Year Soil Moisture Change[mm/1.8m]
+	<option value="vsm_7day" <?php if ($pvar == "vsm_7day") echo "SELECTED"; ?>>7 Soil Moisture Change[%]
+	<option value="vsm_1month" <?php if ($pvar == "vsm_1month") echo "SELECTED"; ?>>1 Month Soil Moisture Change[%]
+	<option value="vsm_3month" <?php if ($pvar == "vsm_3month") echo "SELECTED"; ?>>3 Month Soil Moisture Change[%]
+	<option value="vsm_1year" <?php if ($pvar == "vsm_1year") echo "SELECTED"; ?>>1 Year Soil Moisture Change[%]
 <!--
 	<option value="tsw_range_mm" <?php if ($pvar == "tsw_range_mm") echo "SELECTED"; ?>>Range of Soil Moisture [mm/1.8m]
 	<option value="tsw_stddev_mm" <?php if ($pvar == "tsw_stddev_mm") echo "SELECTED"; ?>>Standard Deviation of Soil Moisture [mm/1.8m]

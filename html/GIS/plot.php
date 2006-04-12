@@ -89,14 +89,14 @@ $yr_ramps = Array(
 );
 
 $params = Array(
-"tsw_7day_mm" => Array('dbstr' => 'bogus',
-  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+"vsm_7day" => Array('dbstr' => 'bogus',
+  'units' => '%', 'cramp' => $cr,
   'title' => "7 Day Soil Water Change Ending: ",
   'table' => "bogus", 'myramp' => 10,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts),
   'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
-          (select o.model_twp, o.tsw - t.tsw as da 
+          (select o.model_twp, o.vsm - t.vsm as da 
            from waterbalance_by_twp o, waterbalance_by_twp t 
            WHERE o.model_twp = t.model_twp 
            and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
@@ -105,14 +105,14 @@ $params = Array(
           left join iatwp h using (model_twp)) as foo2
           USING unique oid using srid=26915"),
 
-"tsw_1month_mm" => Array('dbstr' => 'bogus',
-  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+"vsm_1month" => Array('dbstr' => 'bogus',
+  'units' => '%', 'cramp' => $cr,
   'title' => "1 Month Soil Water Change Ending: ",
   'table' => "bogus", 'myramp' => 10,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts),
   'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
-          (select o.model_twp, o.tsw - t.tsw as da 
+          (select o.model_twp, o.vsm - t.vsm as da 
            from waterbalance_by_twp o, waterbalance_by_twp t 
            WHERE o.model_twp = t.model_twp 
            and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
@@ -121,14 +121,14 @@ $params = Array(
           left join iatwp h using (model_twp)) as foo2
           USING unique oid using srid=26915"),
 
-"tsw_3month_mm" => Array('dbstr' => 'bogus',
-  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+"vsm_3month" => Array('dbstr' => 'bogus',
+  'units' => '%', 'cramp' => $cr,
   'title' => "3 Month Soil Water Change Ending: ",
   'table' => "bogus", 'myramp' => 10,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts),
   'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
-          (select o.model_twp, o.tsw - t.tsw as da 
+          (select o.model_twp, o.vsm - t.vsm as da 
            from waterbalance_by_twp o, waterbalance_by_twp t 
            WHERE o.model_twp = t.model_twp 
            and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
@@ -137,14 +137,14 @@ $params = Array(
           left join iatwp h using (model_twp)) as foo2
           USING unique oid using srid=26915"),
 
-"tsw_1year_mm" => Array('dbstr' => 'bogus',
-  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+"vsm_1year" => Array('dbstr' => 'bogus',
+  'units' => '%', 'cramp' => $cr,
   'title' => "1 Year Soil Water Change Ending: ",
   'table' => "bogus", 'myramp' => 10,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts),
   'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
-          (select o.model_twp, o.tsw - t.tsw as da 
+          (select o.model_twp, o.vsm - t.vsm as da 
            from waterbalance_by_twp o, waterbalance_by_twp t 
            WHERE o.model_twp = t.model_twp 
            and o.valid = '". strftime("%Y-%m-%d", $ts) ."' 
@@ -154,22 +154,22 @@ $params = Array(
           USING unique oid using srid=26915"),
 
 
-"tsw_stddev_mm" => Array('dbstr' => 'tsw_stddev',
-  'units' => 'mm in top 1.8m', 'cramp' => $c,
+"vsm_stddev" => Array('dbstr' => 'vsm_stddev',
+  'units' => '%', 'cramp' => $c,
   'title' => "STDDEV Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 5,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"tsw_range_mm" => Array('dbstr' => 'tsw_range',
-  'units' => 'mm in top 1.8m','cramp' => $c,
+"vsm_range" => Array('dbstr' => 'vsm_range',
+  'units' => '%','cramp' => $c,
   'title' => "Range of Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 6,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"tsw_mm" => Array('dbstr' => 'tsw',
-  'units' => 'mm in top 1.8m', 'cramp' => $cr,
+"vsm" => Array('dbstr' => 'vsm',
+  'units' => '%', 'cramp' => $cr,
   'title' => "Average Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 9,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
