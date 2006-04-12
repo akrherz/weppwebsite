@@ -169,9 +169,9 @@ $params = Array(
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "vsm" => Array('dbstr' => 'vsm',
-  'units' => '%', 'cramp' => $cr,
-  'title' => "Average Total Soil Water on ",
-  'table' => "waterbalance_by_twp", 'myramp' => 9,
+  'units' => '% in Root Zone', 'cramp' => $cr,
+  'title' => "Volumetric Soil Water on ",
+  'table' => "waterbalance_by_twp", 'myramp' => 11,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
