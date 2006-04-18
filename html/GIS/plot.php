@@ -63,6 +63,7 @@ $ramps = Array(
     9 => Array(150, 200, 250, 300, 350, 400,450,500,550,600,650),   // TSW
 	10 => Array(-100, -75, -50, -25, -10, 0, 10, 25, 50, 75,100),
 	11 => Array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
+	12 => Array(-30, -20, -15, -10, -5, 0, 5, 10, 15, 20,30),
 );
 $mo_ramps = Array(
 	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24,25,26,27),
@@ -124,7 +125,7 @@ $params = Array(
 "vsm_3month" => Array('dbstr' => 'bogus',
   'units' => '%', 'cramp' => $cr,
   'title' => "3 Month Soil Water Change Ending: ",
-  'table' => "bogus", 'myramp' => 10,
+  'table' => "bogus", 'myramp' => 12,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts),
   'sql' => "the_geom from (select h.the_geom, h.oid, da  from 
