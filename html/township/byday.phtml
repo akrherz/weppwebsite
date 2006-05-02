@@ -8,7 +8,7 @@ include("../../etc/config.inc.php");
 
 $twp = isset($_GET["twp"]) ? $_GET["twp"] : "T85NR17W";
 $sortcol = isset($_GET["sortcol"])? $_GET["sortcol"] : "combo_id";
-$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
+$dstr = (isset($_GET["dstr"]) && strlen($_GET["dstr"]) > 0) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
 $tokens = explode("/", $dstr);
 $year = $tokens[2];
 $month = $tokens[0];
@@ -168,7 +168,7 @@ while (list ($key, $val) = each ($fa))  {
   if ($i % 20 == 0) echo $divider;
   $i++;
   $cid = $fa[$key]["combo_id"];
-  echo "<tr><td> ". $cid ."</td><td><a href=\"$_WEBBASE/GIS/hrap.phtml?hrap_i=". $fa[$key]["hrap_i"] ."\">". $fa[$key]["hrap_i"] ."</a></td><td><a href=\"$_WEBBASE/meta/management.phtml?man_id=". $fa[$key]["man_name"] ."\">". $fa[$key]["man_name"] ."</a></td><td>". $fa[$key]["steep"] ."</td><td>". $fa[$key]["len"] ."</td><td>". $fa[$key]["runoff"] ."</td><td>". $fa[$key]["loss"] ."</td><td>". $fa[$key]["precip"]  ."</td></tr>\n";
+  echo "<tr><td><a href=\"$_WEBBASE/plotting/wb.php?runid=$cid&year=$year\">$cid</a></td><td><a href=\"$_WEBBASE/GIS/hrap.phtml?hrap_i=". $fa[$key]["hrap_i"] ."\">". $fa[$key]["hrap_i"] ."</a></td><td><a href=\"$_WEBBASE/meta/management.phtml?man_id=". $fa[$key]["man_name"] ."\">". $fa[$key]["man_name"] ."</a></td><td>". $fa[$key]["steep"] ."</td><td>". $fa[$key]["len"] ."</td><td>". $fa[$key]["runoff"] ."</td><td>". $fa[$key]["loss"] ."</td><td>". $fa[$key]["precip"]  ."</td></tr>\n";
 
 }
 // if ($i == 0) echo "<tr><th colspan=7>No Events Found</th></tr>";
