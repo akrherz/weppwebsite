@@ -3,7 +3,6 @@
 body {
   margin: 5px;
   padding: 0px;
-  font-family: "Luxi Sans", verdana, helvetica, arial, sans-serif;
 }
 a {
 	text-decoration: none;
@@ -73,7 +72,6 @@ h1 {
 #mainNav {
 	width: 100%;
 	font-weight: bold;
-	font-family: "Luxi Sans", verdana, helvetica, arial, sans-serif;
 	font-size: x-small;
 	}
 	
