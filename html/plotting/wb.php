@@ -8,7 +8,7 @@ $runid = isset($_GET["runid"]) ? intval($_GET["runid"]) : 166090;
 $year = isset($_GET["year"]) ? intval($_GET["year"]) : date("Y");
 //$myvar = isset($_GET["var"]) ? $_GET["var"] : "tsw";
 
-$fcontents = file("/wepp/RT/wb/166090.wb");
+$fcontents = file("/wepp/RT/wb/${runid}.wb");
 $now = time();
 $lbound = mktime(0,0,0,1,1,$year);
 $obound = mktime(0,0,0,1,1,$year +1);
@@ -40,7 +40,7 @@ $dates = Array();
 while (list ($line_num, $line) = each ($fcontents)) {
   if ($line_num < 14) { continue; }
   $parts = preg_split ("/[\s]+/", $line);
-  $ts = mktime(0,0,0,1,1,1996 + $parts[3]) + (86400 * $parts[2]);
+  $ts = mktime(0,0,0,1,1,1996 + $parts[3]) + (86400 * ($parts[2] - 1));
   if ($ts < $lbound || $ts >= $obound || $ts > $now) { continue; }
   //if ($parts[$col] == "NaN" || $parts[$col] == "******") { continue; }
   $dates[] = $ts;
