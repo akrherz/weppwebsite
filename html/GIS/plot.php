@@ -383,6 +383,7 @@ $a = explode("_", $var);
 $logtable = "rainfall_log";
 if ($param["gtype"] == "twp") $logtable = "erosion_log";
 
+$nicedate = "";
 if ($a[0] == "daily")
 {
 	$q = "SELECT * from $logtable WHERE valid = '". $param["dbdate"] ."'";
