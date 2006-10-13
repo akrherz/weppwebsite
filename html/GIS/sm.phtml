@@ -120,6 +120,8 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
 	<option value="tsw_stddev_mm" <?php if ($pvar == "tsw_stddev_mm") echo "SELECTED"; ?>>Standard Deviation of Soil Moisture [mm/1.8m]
 -->
  </select>
+
+
 </td>
 <td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
 </td>
@@ -161,6 +163,8 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
   onClick="javascript: resetButtons(); document.zoomoutButton.src = '../imagenav/button_zoomout_on.png'; document.myform.zoom.value = 2;">
 <img src="../imagenav/button_query_off.png" name="queryButton" alt="Query"
   onClick="javascript: resetButtons(); document.queryButton.src = '../imagenav/button_query_on.png'; document.myform.action = 'click.php';">
+
+&nbsp; &nbsp; Save as <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=<?php echo $day; ?>">GIS shapefile</a>
 
 <p><div style="width: 650px;"><input type="image" name="img" src="<?php echo $imgurl; ?>" border="1" height="480" width="640"></div>
 </form>
