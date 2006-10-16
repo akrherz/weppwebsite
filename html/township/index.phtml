@@ -61,7 +61,7 @@ $iatwp->set("maxscale", 2000000);
 
 $img = $map->prepareImage();
 $ref = $map->drawReferenceMap();
-$refurl = $ref->saveWebImage(MS_PNG);
+$refurl = $ref->saveWebImage('');
                                                                                 
 $background->draw($img);
 $states->draw($img);
@@ -72,7 +72,7 @@ $interstates_label->draw($img);
 $iatwp->draw($img);
 $counties->draw($img);
 $map->drawLabelCache($img);
-$url = $img->saveWebImage(MS_PNG, 0,0,-1);
+$url = $img->saveWebImage('');
 
 
 ?>
