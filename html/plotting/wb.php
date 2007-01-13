@@ -40,7 +40,7 @@ $dates = Array();
 while (list ($line_num, $line) = each ($fcontents)) {
   if ($line_num < 14) { continue; }
   $parts = preg_split ("/[\s]+/", $line);
-  $ts = mktime(0,0,0,1,1,1996 + $parts[3]) + (86400 * $parts[2]);
+  $ts = mktime(0,0,0,1,1, $parts[3]) + (86400 * $parts[2]);
   if ($ts < $lbound || $ts >= $obound || $ts > $now) { continue; }
   //if ($parts[$col] == "NaN" || $parts[$col] == "******") { continue; }
   $dates[] = $ts;
