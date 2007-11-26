@@ -29,7 +29,14 @@ $map_height = isset($_GET['height']) ? $_GET['height'] : 480;
 $map_width = isset($_GET['width']) ? $_GET['width'] : 640;
 $advanced = isset($_GET["advanced"]) ? 1 : 0;
 $duration = isset($_GET["duration"]) ? $_GET["duration"] : 'daily';
+$resultsTBL = "results_by_twp";
+$scenario = isset($_GET["scenario"]) ? $_GET["scenario"]: "";
+$scenarioSQL = "";
 
+if ($scenario != ""){
+  $scenarioSQL = " and d.scenario = '$scenario'";
+  $resultsTBL = "scenario_results_by_twp";
+}
 /* Time related stuff */
 $ts = mktime(0,0,0, $month, $day, $year);
 
@@ -61,7 +68,7 @@ $ramps = Array(
 	7 => Array(100, 200, 300, 400, 500, 600, 800, 1000,1001,1002,1003),
 	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5,6,7,8),           // Precip(in)
     9 => Array(150, 200, 250, 300, 350, 400,450,500,550,600,650),   // TSW
-	10 => Array(-20, -16, -12, -8, -4, 0, 4, 8, 12, 16,20),
+	10 => Array(-20, -12, -8, -4, -2, 0, 2, 4, 8, 12,20),
 	11 => Array(10, 15, 20, 24, 27, 30, 33, 36, 40, 45, 50),
 	12 => Array(-30, -20, -15, -10, -5, 0, 5, 10, 15, 20,30),
 );
@@ -78,7 +85,7 @@ $mo_ramps = Array(
 );
 
 $yr_ramps = Array(
-	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24,25,26,27),
+	0 =>  Array(0.1, 1, 2, 4, 8, 16, 24,32,40,48,56),
 	1 => Array(0.5, 1, 2, 3, 4, 6, 8, 10,11,12,13),
 	2 => Array(1, 2, 4, 6, 8, 10, 12, 20,21,22,23),
 	3 => Array(100, 200, 300, 400, 500, 750, 1000, 1250,1251,1252,1253),
@@ -86,7 +93,7 @@ $yr_ramps = Array(
 	5 => Array(5, 10, 20, 40, 60, 100, 120, 160,161,162,163),
 	6 => Array(10, 25, 50, 75, 100, 150, 200, 250,251,252,253),
 	7 => Array(100, 200, 300, 400, 500, 600, 800, 1000,1001,1002,1003),
-	8 => Array(1, 2, 6, 10, 14, 18, 22, 26,27,28,29)
+	8 => Array(1, 2, 6, 12, 18, 22, 26, 30, 34, 38, 42)
 );
 
 $params = Array(
@@ -227,112 +234,112 @@ $params = Array(
 "min_runoff_in" => Array('dbstr' => 'min_runoff / 25.4',
   'units' => 'inches', 'cramp' => $c,
   'title' => "Minimum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_runoff_in" => Array('dbstr' => 'avg_runoff / 25.4',
   'units' => 'inches', 'cramp' => $c,
   'title' => "Average Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_runoff_in" => Array('dbstr' => 'max_runoff / 25.4',
   'units' => 'inches', 'cramp' => $c,
   'title' => "Maximum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "min_runoff_mm" => Array('dbstr' => 'min_runoff',
   'units' => 'millimeters', 'cramp' => $c,
   'title' => "Minimum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 3,
+  'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_runoff_mm" => Array('dbstr' => 'avg_runoff',
   'units' => 'millimeters', 'cramp' => $c,
   'title' => "Average Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 3,
+  'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_runoff_mm" => Array('dbstr' => 'max_runoff',
   'units' => 'millimeters', 'cramp' => $c,
   'title' => "Maximum Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 3,
+  'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "min_loss_acre" => Array('dbstr' => 'min_loss * 4.463',
   'units' => 'tons per acre', 'cramp' => $c,
   'title' => "Minimum Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_loss_acre" => Array('dbstr' => 'avg_loss * 4.463',
   'units' => 'tons per acre', 'cramp' => $c,
   'title' => "Average Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_loss_acre" => Array('dbstr' => 'max_loss * 4.463',
   'units' => 'tons per acre', 'cramp' => $c,
   'title' => "Maximum Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "min_loss_hectare" => Array('dbstr' => 'min_loss * 10.0',
   'units' => 'tons per hectare', 'cramp' => $c,
   'title' => "Minimum Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_loss_hectare" => Array('dbstr' => 'avg_loss * 10.0',
   'units' => 'tons per hectare', 'cramp' => $c,
   'title' => "Average Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_loss_hectare" => Array('dbstr' => 'max_loss * 10.0',
   'units' => 'tons per hectare', 'cramp' => $c,
   'title' => "Maximum Soil Loss: ",
-  'table' => "results_by_twp", 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "ve_runoff_in" => Array('dbstr' => 've_runoff / 25.4',
   'units' => 'inches', 'cramp' => $c,
   'title' => "Variance Estimator for Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "ve_runoff_mm" => Array('dbstr' => 've_runoff',
   'units' => 'millimeters', 'cramp' => $c,
   'title' => "Variance Estimator for Runoff: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "ve_loss_acre" => Array('dbstr' => 've_loss * 4.463',
   'units' => 'tons per acre', 'cramp' => $c,
   'title' => "Variance Estimator for Loss: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "ve_loss_hectare" => Array('dbstr' => 've_loss * 10.0',
   'units' => 'tons per hectare', 'cramp' => $c,
   'title' => "Variance Estimator for Loss: ",
-  'table' => "results_by_twp", 'myramp' => 0,
+  'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
@@ -457,7 +464,7 @@ if ($param["gtype"] == "hrap")
   $sql = "the_geom from (select d.oid as oid, 
    (". $param["dbstr"] .") as da, h.the_geom from 
    ". $param["table"] ." d left join iatwp h using (model_twp) 
-   WHERE d.valid = '". $param["dbdate"] ."') as foo 
+   WHERE d.valid = '". $param["dbdate"] ."' $scenarioSQL) as foo 
    using unique oid using srid=26915";
 
 }
@@ -472,65 +479,65 @@ if (isset($param["sql"]))
 $bins = $param["ramp"];
 
 $cz = ms_newClassObj($rainfall);
-$cz->setexpression("([DA] == 0)");
+$cz->setexpression("([da] == 0)");
 
 $c0 = ms_newClassObj($rainfall);
-$c0->setexpression("([DA] < ". $bins[0] .")");
+$c0->setexpression("([da] < ". $bins[0] .")");
 $c0s = ms_newStyleObj($c0);
 $c0s->color->setRGB($colors[0]['r'], $colors[0]['g'], $colors[0]['b']);
 
 $c1 = ms_newClassObj($rainfall);
-$c1->setexpression("([DA] < ". $bins[1] .")");
+$c1->setexpression("([da] < ". $bins[1] .")");
 $c1s = ms_newStyleObj($c1);
 $c1s->color->setRGB($colors[1]['r'], $colors[1]['g'], $colors[1]['b']);
 
 $c2 = ms_newClassObj($rainfall);
-$c2->setexpression("([DA] < ". $bins[2] .")");
+$c2->setexpression("([da] < ". $bins[2] .")");
 $c2s = ms_newStyleObj($c2);
 $c2s->color->setRGB($colors[2]['r'], $colors[2]['g'], $colors[2]['b']);
 
 $c3 = ms_newClassObj($rainfall);
-$c3->setexpression("([DA] < ". $bins[3] .")");
+$c3->setexpression("([da] < ". $bins[3] .")");
 $c3s = ms_newStyleObj($c3);
 $c3s->color->setRGB($colors[3]['r'], $colors[3]['g'], $colors[3]['b']);
 
 $c4 = ms_newClassObj($rainfall);
-$c4->setexpression("([DA] < ". $bins[4] .")");
+$c4->setexpression("([da] < ". $bins[4] .")");
 $c4s = ms_newStyleObj($c4);
 $c4s->color->setRGB($colors[4]['r'], $colors[4]['g'], $colors[4]['b']);
 
 $c5 = ms_newClassObj($rainfall);
-$c5->setexpression("([DA] < ". $bins[5] .")");
+$c5->setexpression("([da] < ". $bins[5] .")");
 $c5s = ms_newStyleObj($c5);
 $c5s->color->setRGB($colors[5]['r'], $colors[5]['g'], $colors[5]['b']);
 
 $c6 = ms_newClassObj($rainfall);
-$c6->setexpression("([DA] < ". $bins[6] .")");
+$c6->setexpression("([da] < ". $bins[6] .")");
 $c6s = ms_newStyleObj($c6);
 $c6s->color->setRGB($colors[6]['r'], $colors[6]['g'], $colors[6]['b']);
 
 $c7 = ms_newClassObj($rainfall);
-$c7->setexpression("([DA] < ". $bins[7] .")");
+$c7->setexpression("([da] < ". $bins[7] .")");
 $c7s = ms_newStyleObj($c7);
 $c7s->color->setRGB($colors[7]['r'], $colors[7]['g'], $colors[7]['b']);
 
 $c8 = ms_newClassObj($rainfall);
-$c8->setexpression("([DA] < ". $bins[8] .")");
+$c8->setexpression("([da] < ". $bins[8] .")");
 $c8s = ms_newStyleObj($c8);
 $c8s->color->setRGB($colors[8]['r'], $colors[8]['g'], $colors[8]['b']);
 
 $c9 = ms_newClassObj($rainfall);
-$c9->setexpression("([DA] < ". $bins[9] .")");
+$c9->setexpression("([da] < ". $bins[9] .")");
 $c9s = ms_newStyleObj($c9);
 $c9s->color->setRGB($colors[9]['r'], $colors[9]['g'], $colors[9]['b']);
 
 $c10 = ms_newClassObj($rainfall);
-$c10->setexpression("([DA] < ". $bins[10] .")");
+$c10->setexpression("([da] < ". $bins[10] .")");
 $c10s = ms_newStyleObj($c10);
 $c10s->color->setRGB($colors[10]['r'], $colors[10]['g'], $colors[10]['b']);
 
 $c11 = ms_newClassObj($rainfall);
-$c11->setexpression("([DA] >= ". $bins[10] .")");
+$c11->setexpression("([da] >= ". $bins[10] .")");
 $c11s = ms_newStyleObj($c11);
 $c11s->color->setRGB($colors[11]['r'], $colors[11]['g'], $colors[11]['b']);
 
@@ -558,6 +565,9 @@ add_and_draw("counties");
 /* Need something to draw bars! */
 $bar = $map->getlayerbyname("bar");
 
+if ($scenario != ""){
+  $param["title"] .= " Scenario: '$scenario'";
+}
 $layer = $map->getLayerByName("credits");
 if ($map_width > 320)
 {
