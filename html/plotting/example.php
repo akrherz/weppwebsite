@@ -2,7 +2,7 @@
 // An example plot to show at the WEPP meeting
 $ts = isset($_GET["ts"]) ? $_GET["ts"] : "2003-05-04";
 
-$c = pg_connect("10.10.10.20","5432","wepp");
+$c = pg_connect("iem20","5432","wepp");
 $q = "SELECT runoff / 25.4 as runoff, loss * 4.463 as loss from results WHERE valid = '$ts' LIMIT 1000";
 $rs = pg_exec($c, $q);
 pg_close($c);
