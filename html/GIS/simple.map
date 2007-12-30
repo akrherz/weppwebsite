@@ -168,7 +168,7 @@ END
 LAYER
   CONNECTIONTYPE postgis
   NAME erosion
-  CONNECTION "user=akrherz dbname=wepp host=10.10.10.20"
+  CONNECTION "user=akrherz dbname=wepp host=iem20"
   DATA "the_geom from (select t.oid as oid, max(r.runoff) as runoff, t.the_geom as the_geom from results r, combos c, iatwp t WHERE r.valid = '2003-04-30' and r.run_id = c.id and c.model_twp = t.model_twp GROUP by t.the_geom, t.oid) as foo using unique oid using srid=26915"
   STATUS DEFAULT
   TYPE POLYGON
