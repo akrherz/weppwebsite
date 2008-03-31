@@ -13,7 +13,7 @@ EXTENT 160000 4424687.5 760000 4875312.5
 # Washington County
 #EXTENT 567973 4537344 647029 4616582
 UNITS METERS
-SHAPEPATH "/home/akrherz/projects/weppwebsite/data/gis"
+SHAPEPATH "/mesonet/www/apps/weppwebsite/data/gis"
 SYMBOLSET "../symbols/stations.sym"
 IMAGECOLOR 255 255 255
 IMAGETYPE PNG
