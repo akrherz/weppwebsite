@@ -96,7 +96,7 @@ LAYER
   NAME counties
   STATUS ON
   TYPE LINE
-  DATA "shape/26915/iowa/iacounties.shp"
+  DATA "/mesonet/data/gis/static/shape/26915/iowa/iacounties.shp"
   PROJECTION
    "init=epsg:26915"
   END
@@ -127,7 +127,7 @@ LAYER
   NAME states
   STATUS ON
   TYPE POLYGON
-  DATA "shape/26915/usa/states.shp"
+  DATA "/mesonet/data/gis/static/shape/26915/us/states.shp"
   PROJECTION
    "init=epsg:26915"
   END
@@ -379,185 +379,6 @@ LAYER
       BUFFER 0
       FORCE true
       POSITION LL
-    END
-  END
-END
-
-LAYER
-  NAME interstates
-  TYPE LINE
-  STATUS OFF
-  PROJECTION
-   "init=epsg:26915"
-  END
-  DATA shape/26915/iowa/nhpn_roads.shp
-  CLASSITEM "SIGNT1"
-  CLASS
-        EXPRESSION /I/
-    COLOR 255 0 0
-    SYMBOL 'circle'
-    SIZE 4
-    OVERLAYSYMBOL 'circle'
-    OVERLAYSIZE 2
-    OVERLAYCOLOR 0 0 0
-  END
-END
- 
-LAYER
-  NAME interstates_label
-  TYPE ANNOTATION
-  STATUS OFF
-  PROJECTION
-   "init=epsg:26915"
-  END
-  LABELITEM "SIGNN1"
-  CLASSITEM "SIGNT1"
-  DATA shape/26915/iowa/nhpn_roads.shp
-  CLASS
-    EXPRESSION /I/
-    COLOR -1 -1 -1
-    SYMBOL 'interstate_shield'
-    LABEL
-      TYPE TRUETYPE
-      FONT arialblk
-      POSITION CC
-      MINDISTANCE 100
-      MINFEATURESIZE 10
-      SIZE 6
-      COLOR 255 255 255
-      PARTIALS FALSE
-    END
-  END
-END
-LAYER
-  NAME roads
-  STATUS OFF
-  TYPE LINE
-  DATA "shape/26915/iowa/nhpn_roads.shp"
-  CLASSITEM "SIGNT1"
-  MAXSCALE 1000000
-  PROJECTION
-    "init=epsg:26915"
-  END
-  CLASS
-    EXPRESSION /U/
-    SYMBOL "circle"
-    COLOR 0 0 0
-    SIZE 3
-    OVERLAYSYMBOL "circle"
-    OVERLAYCOLOR 250 250 250
-    OVERLAYSIZE 1
-  END
-  CLASS
-    EXPRESSION /C|S/
-    SYMBOL "circle"
-    COLOR 0 0 0
-    SIZE 1
-    #OVERLAYSYMBOL "circle"
-    #OVERLAYCOLOR 250 250 250
-    #OVERLAYSIZE 1
-  END
-END
-
-LAYER
-  NAME roads_label
-  TYPE ANNOTATION
-  STATUS OFF
-  LABELITEM SIGNN1
-  MAXSCALE 1000000
-  DATA "shape/26915/iowa/nhpn_roads.shp"
-  CLASSITEM "SIGNT1"
-  LABELCACHE ON
-  CLASS
-    EXPRESSION /U/
-    COLOR -1 -1 -1
-    SYMBOL 'us_highway_shield'
-    LABEL
-      TYPE BITMAP
-     # FONT arial
-      POSITION CC
-      MINDISTANCE 100
-      MINFEATURESIZE 30
-      SIZE TINY
-      BUFFER 20
-      COLOR 0 0 0
-      PARTIALS FALSE
-    END
-  END
-  CLASS
-    EXPRESSION /S/
-    COLOR -1 -1 -1
-    SYMBOL 'state_highway_shield'
-    LABEL
-      TYPE BITMAP
-     # FONT arial
-      POSITION CC
-      MINDISTANCE 100
-      MINFEATURESIZE 30
-      SIZE TINY
-      BUFFER 20
-      COLOR 0 0 0
-      PARTIALS FALSE
-    END
-  END
-                                                                                
-END
-
-
-LAYER
-  NAME iards
-  TYPE LINE
-  STATUS ON
-  PROJECTION
-   "proj=latlong"
-  END
-  DATA /mesonet/data/gis/shape/unproj/iowa/interstates.shp
-  CLASS
-    SYMBOL "circle"
-    COLOR 0 0 0
-    SIZE 4
-    OVERLAYSYMBOL "circle"
-    OVERLAYCOLOR 105 105 105
-    OVERLAYSIZE 2
-    LABEL
-      ANGLE AUTO
-      TYPE TRUETYPE
-      ANTIALIAS TRUE
-      FONT "kcci"
-      MINDISTANCE 300
-      MINFEATURESIZE 10
-      BUFFER 4
-      SIZE 8
-      POSITION AUTO
-      OFFSET 0 3
-      COLOR 0 0 0
-      OUTLINECOLOR 255 255 204
-    END
-  END
-END
-
-LAYER
-  NAME iards_label
-  TYPE ANNOTATION
-  STATUS ON
-  PROJECTION
-   "proj=latlong"
-  END
-  LABELITEM HWYNAME
-  DATA /mesonet/data/gis/shape/unproj/iowa/interstates.shp
-  CLASS
-    EXPRESSION ([HWYNAME] < 100)
-    COLOR -1 -1 -1
-    SYMBOL 'interstate_shield'
-    LABEL
-      TYPE TRUETYPE
-      FONT arialblk
-      POSITION CC
-      MINDISTANCE 100
-      MINFEATURESIZE 10
-      SIZE 8
-      COLOR 255 255 255
-      PARTIALS FALSE
     END
   END
 END
