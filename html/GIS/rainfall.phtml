@@ -2,6 +2,7 @@
 include("../../etc/config.inc.php");
 include("../../include/forms.php");
 $uri = "rainfall.phtml";
+$advanced = "1";
 
 $dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() -100000);
 $metric = isset($_GET["metric"]) ? $_GET["metric"]: "";
