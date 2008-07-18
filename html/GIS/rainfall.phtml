@@ -16,6 +16,7 @@ $duration = isset($_GET['duration'])? $_GET["duration"] : "daily";
 $oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
 $zoom     = isset($_GET['zoom']) ? $_GET['zoom'] : 0;
 $pvar = isset($_GET['pvar']) ? $_GET['pvar'] : "rainfall_in";
+$days = isset($_GET["days"]) ? $_GET["days"]: 1;
 
 if ($zoom == 99) {
  $oextents = "160000, 4450000, 760000, 4850000";
@@ -32,7 +33,7 @@ if ($zoom == 99) {
  }
 
 $keep_vars = Array("pvar" => $pvar, "metric" => $metric, "extents" => $extents,
-  "duration" => $duration, "dstr" => $dstr );
+  "duration" => $duration, "dstr" => $dstr, "days" => $days);
 
 
 $ts = mktime(0, 0, 0, $month, $day, $year);
@@ -41,7 +42,7 @@ $nicedate = strftime("%d %b %Y", $ts);
 
 $erosionURL = strftime('erosion.phtml?dstr=%m/%d/%Y' , $ts);
 
-$imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
+$imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&days=$days";
 
 ?>
 <?php 
@@ -112,7 +113,8 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
 <table>
 <thead>
 <tr>
-<th>Time Interval</th>
+<th>Time Period</th>
+<th>Day Interval</th>
 <th>Plot Variable</th>
 <th>Date (mm/dd/yyyy)</th>
 </tr>
@@ -124,6 +126,21 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
    <option value="monthly" <?php if ($duration == "monthly") echo "SELECTED"; ?>>Monthly
    <option value="yearly" <?php if ($duration == "yearly") echo "SELECTED"; ?>>Yearly
  </select>
+</td>
+<td>
+<select name="days">
+<?php
+ $s ="";
+ for ($k=1;$k<32;$k++){
+    $s .= "<option value=\"".$k."\" ";
+    if ($k == (int)$days){
+      $s .= "SELECTED";
+    }
+    $s .= ">".$k."\n";
+  }
+  echo $s;
+?>
+</select>
 </td>
 <td>
  <select name="pvar">

@@ -15,6 +15,8 @@ $pvar = isset($_GET["pvar"]) ? $_GET['pvar'] : "avg_loss_acre";
 $duration = isset($_GET["duration"]) ? $_GET["duration"] : "daily";
 $advanced = isset($_GET["advanced"]) ? $_GET["advanced"] : 0;
 $metric = isset($_GET["metric"]) ? $_GET["metric"]: "";
+$days = isset($_GET["days"]) ? $_GET["days"]: 1;
+
 
 if ($zoom == 99){
 	$oextents = "160000, 4450000, 760000, 4850000";
@@ -31,9 +33,9 @@ if ($zoom == 99){
  }
 
 $keep_vars = Array("pvar" => $pvar, "metric" => $metric, "extents" => $extents,
-	"dstr" => $dstr );
+	"dstr" => $dstr , "days" => $days);
 
-$imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
+$imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&days=$days";
 
 ?>
 
@@ -107,6 +109,7 @@ $imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$ext
  <thead>
 <tr>
  <th>Duration:</th>
+ <th>Day Interval:</th>
  <th>Plot variable:</th>
  <th>Date (mm/dd/yyyy)</th>
  <th></th>
@@ -119,6 +122,21 @@ $imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$ext
 <option value="monthly" <?php if ($duration == "monthly") echo "SELECTED"; ?>>Monthly</option>
 <option value="yearly" <?php if ($duration == "yearly") echo "SELECTED"; ?>>Yearly</option>
 </select></td>
+<td>
+<select name="days">
+<?php
+ $s ="";
+ for ($k=1;$k<32;$k++){
+    $s .= "<option value=\"".$k."\" ";
+    if ($k == (int)$days){
+      $s .= "SELECTED";
+    }
+    $s .= ">".$k."\n";
+  }
+  echo $s;
+?>
+</select>
+</td>
 <td><?php
 if ($advanced) {
 echo "<input type=\"hidden\" value=\"yes\" name=\"advanced\">";

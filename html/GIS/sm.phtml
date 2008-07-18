@@ -11,6 +11,7 @@ $tokens = explode("/", $dstr);
 $year = $tokens[2];
 $month = $tokens[0];
 $day = $tokens[1];
+$days = isset($_GET["days"]) ? $_GET["days"]: 1;
 
 
 $oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
@@ -32,14 +33,14 @@ if ($zoom == 99) {
  }
 
 $keep_vars = Array("pvar" => $pvar, "metric" => $metric, "extents" => $extents,
-  "dstr" => $dstr );
+  "dstr" => $dstr, "days" => $days );
 
 
 $ts = mktime(0, 0, 0, $month, $day, $year);
 $nicedate = strftime("%d %b %Y", $ts);
 
 
-$imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
+$imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&days=$days";
 
 ?>
 <?php 
@@ -98,6 +99,7 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
 <tr>
 <th>Plot Variable</th>
 <th>Date (mm/dd/yyyy)</th>
+<th>Day Interval:</th>
 </tr>
 </thead>
 <tbody>
@@ -119,6 +121,22 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr";
 
 </td>
 <td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
+</td>
+
+<td>
+<select name="days">
+<?php
+ $s ="";
+ for ($k=1;$k<32;$k++){
+    $s .= "<option value=\"".$k."\" ";
+    if ($k == (int)$days){
+      $s .= "SELECTED";
+    }
+    $s .= ">".$k."\n";
+  }
+  echo $s;
+?>
+</select>
 </td>
 
 </tr>

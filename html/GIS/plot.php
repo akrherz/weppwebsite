@@ -32,6 +32,7 @@ $duration = isset($_GET["duration"]) ? $_GET["duration"] : 'daily';
 $resultsTBL = "results_by_twp";
 $scenario = isset($_GET["scenario"]) ? $_GET["scenario"]: "";
 $scenarioSQL = "";
+$days = isset($_GET["days"]) ? $_GET["days"]: 1;
 
 if ($scenario != ""){
   $scenarioSQL = " and d.scenario = '$scenario'";
@@ -39,6 +40,15 @@ if ($scenario != ""){
 }
 /* Time related stuff */
 $ts = mktime(0,0,0, $month, $day, $year);
+$tsSQL = sprintf("('%s',", date("Y-m-d", $ts));
+$today = time();
+for ($i=1; $i<$days;$i++)
+{
+  $t0 = $ts + ($i * 86400);
+  if ($t0 > $today) {$days = $i-1; continue;}
+  $tsSQL .= sprintf("'%s',", date("Y-m-d", $ts + ($i * 86400) ));
+}
+$tsSQL = substr($tsSQL,0,strlen($tsSQL)-1) .")";
 
 /* Color table, blue to brown */
 $c = Array();
@@ -163,14 +173,14 @@ $params = Array(
 
 
 "vsm_stddev" => Array('dbstr' => 'vsm_stddev',
-  'units' => '%', 'cramp' => $c,
+  'units' => '%', 'cramp' => $c,'dbagg'=> 'avg',
   'title' => "STDDEV Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 5,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "vsm_range" => Array('dbstr' => 'vsm_range',
-  'units' => '%','cramp' => $c,
+  'units' => '%','cramp' => $c, 'dbagg'=> 'avg',
   'title' => "Range of Total Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 6,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
@@ -178,166 +188,167 @@ $params = Array(
 
 "vsm" => Array('dbstr' => 'vsm',
   'units' => '% in Root Zone', 'cramp' => $cr,
-  'title' => "Volumetric Soil Water on ",
+  'title' => "Volumetric Soil Water on ",'dbagg'=> 'avg',
   'table' => "waterbalance_by_twp", 'myramp' => 11,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"s10cm_mm" => Array('dbstr' => 's10cm',   'units' => 'mm in top 10cm', 'cramp' => $cr,
-  'title' => "0-10cm Soil Water on ",
+"s10cm_mm" => Array('dbstr' => 's10cm',
+  'units' => 'mm in top 10cm', 'cramp' => $cr,
+  'title' => "0-10cm Soil Water on ",'dbagg'=> 'avg',
   'table' => "waterbalance_by_twp", 'myramp' => 11,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"s20cm_mm" => Array('dbstr' => 's20cm',   'units' => 'mm in 10-20cm layer', 'cramp' => $cr,
+"s20cm_mm" => Array('dbstr' => 's20cm',
+  'units' => 'mm in 10-20cm layer', 'cramp' => $cr,'dbagg'=> 'avg',
   'title' => "10-20cm Soil Water on ",
   'table' => "waterbalance_by_twp", 'myramp' => 11,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-
-"rainfall_in" => Array('dbstr' => 'rainfall / 25.4',
-  'units' => 'inches', 'cramp' => $c,
+"rainfall_in" => Array('dbstr' => 'rainfall / 25.4','dbcol' => 'rainfall',
+  'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Estimated Rainfall on ",
   'table' => "daily_rainfall_$year", 'myramp' => 8,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "rainfall_mm" => Array('dbstr' => 'rainfall',
-  'units' => 'millimeters', 'cramp' => $c,
+  'units' => 'millimeters', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Estimated Rainfall on ",
   'table' => "daily_rainfall_$year", 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"peak_15min_in" => Array('dbstr' => '(peak_15min / 25.4) * 4.0',
-  'units' => 'inches per hour', 'cramp' => $c,
+"peak_15min_in" => Array('dbstr' => '(peak_15min / 25.4) * 4.0','dbcol' => 'peak_15min',
+  'units' => 'inches per hour', 'cramp' => $c,'dbagg'=> 'max',
   'title' => "Peak Rainfall Intensity on ",
   'table' => "daily_rainfall_$year", 'myramp' => 8,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"peak_15min_mm" => Array('dbstr' => '(peak_15min) * 4.0',
-  'units' => 'millimeters per hour', 'cramp' => $c,
+"peak_15min_mm" => Array('dbstr' => '(peak_15min) * 4.0','dbcol' => 'peak_15min',
+  'units' => 'millimeters per hour', 'cramp' => $c,'dbagg'=> 'max',
   'title' => "Peak Rainfall Intensity on ",
   'table' => "daily_rainfall_$year", 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"time_" => Array('dbstr' => '(hr_cnt) / 4.0',
-  'units' => 'hours', 'cramp' => $c,
+"time_" => Array('dbstr' => '(hr_cnt) / 4.0','dbcol' => 'hr_cnt',
+  'units' => 'hours', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Rainfall Duration: ",
   'table' => "daily_rainfall_$year", 'myramp' => 2,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"min_runoff_in" => Array('dbstr' => 'min_runoff / 25.4',
-  'units' => 'inches', 'cramp' => $c,
+"min_runoff_in" => Array('dbstr' => 'min_runoff / 25.4','dbcol' => 'min_runoff',
+  'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Runoff: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"avg_runoff_in" => Array('dbstr' => 'avg_runoff / 25.4',
-  'units' => 'inches', 'cramp' => $c,
+"avg_runoff_in" => Array('dbstr' => 'avg_runoff / 25.4','dbcol' => 'avg_runoff',
+  'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Average Runoff: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"max_runoff_in" => Array('dbstr' => 'max_runoff / 25.4',
-  'units' => 'inches', 'cramp' => $c,
+"max_runoff_in" => Array('dbstr' => 'max_runoff / 25.4','dbcol' => 'max_runoff',
+  'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Maximum Runoff: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "min_runoff_mm" => Array('dbstr' => 'min_runoff',
-  'units' => 'millimeters', 'cramp' => $c,
+  'units' => 'millimeters', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Runoff: ",
   'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_runoff_mm" => Array('dbstr' => 'avg_runoff',
-  'units' => 'millimeters', 'cramp' => $c,
+  'units' => 'millimeters', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Average Runoff: ",
   'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_runoff_mm" => Array('dbstr' => 'max_runoff',
-  'units' => 'millimeters', 'cramp' => $c,
+  'units' => 'millimeters', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Maximum Runoff: ",
   'table' => $resultsTBL, 'myramp' => 3,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"min_loss_acre" => Array('dbstr' => 'min_loss * 4.463',
-  'units' => 'tons per acre', 'cramp' => $c,
+"min_loss_acre" => Array('dbstr' => 'min_loss * 4.463','dbcol' => 'min_loss',
+  'units' => 'tons per acre', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"avg_loss_acre" => Array('dbstr' => 'avg_loss * 4.463',
-  'units' => 'tons per acre', 'cramp' => $c,
+"avg_loss_acre" => Array('dbstr' => 'avg_loss * 4.463','dbcol' => 'avg_loss',
+  'units' => 'tons per acre', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Average Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"max_loss_acre" => Array('dbstr' => 'max_loss * 4.463',
-  'units' => 'tons per acre', 'cramp' => $c,
+"max_loss_acre" => Array('dbstr' => 'max_loss * 4.463','dbcol' => 'max_loss',
+  'units' => 'tons per acre', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Maximum Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"min_loss_hectare" => Array('dbstr' => 'min_loss * 10.0',
-  'units' => 'tons per hectare', 'cramp' => $c,
+"min_loss_hectare" => Array('dbstr' => 'min_loss * 10.0','dbcol' => 'min_loss',
+  'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"avg_loss_hectare" => Array('dbstr' => 'avg_loss * 10.0',
-  'units' => 'tons per hectare', 'cramp' => $c,
+"avg_loss_hectare" => Array('dbstr' => 'avg_loss * 10.0','dbcol' => 'avg_loss',
+  'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Average Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"max_loss_hectare" => Array('dbstr' => 'max_loss * 10.0',
-  'units' => 'tons per hectare', 'cramp' => $c,
+"max_loss_hectare" => Array('dbstr' => 'max_loss * 10.0','dbcol' => 'max_loss',
+  'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Maximum Soil Loss: ",
   'table' => $resultsTBL, 'myramp' => 1,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"ve_runoff_in" => Array('dbstr' => 've_runoff / 25.4',
-  'units' => 'inches', 'cramp' => $c,
+"ve_runoff_in" => Array('dbstr' => 've_runoff / 25.4','dbcol' => 've_runoff',
+  'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Variance Estimator for Runoff: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "ve_runoff_mm" => Array('dbstr' => 've_runoff',
-  'units' => 'millimeters', 'cramp' => $c,
+  'units' => 'millimeters', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Variance Estimator for Runoff: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"ve_loss_acre" => Array('dbstr' => 've_loss * 4.463',
-  'units' => 'tons per acre', 'cramp' => $c,
+"ve_loss_acre" => Array('dbstr' => 've_loss * 4.463','dbcol' => 've_loss',
+  'units' => 'tons per acre', 'cramp' => $c, 'dbagg'=> 'sum',
   'title' => "Variance Estimator for Loss: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
-"ve_loss_hectare" => Array('dbstr' => 've_loss * 10.0',
-  'units' => 'tons per hectare', 'cramp' => $c,
+"ve_loss_hectare" => Array('dbstr' => 've_loss * 10.0','dbcol' => 've_loss',
+  'units' => 'tons per hectare', 'cramp' => $c, 'dbagg'=> 'sum',
   'title' => "Variance Estimator for Loss: ",
   'table' => $resultsTBL, 'myramp' => 0,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
@@ -452,6 +463,16 @@ if (! $missing )
 {
 $rainfall = $map->getlayerbyname($param["maplayer"]);
 $rainfall->set("status", MS_ON);
+
+if ($days > 1 && $duration == "daily")
+{
+  if ($param["gtype"] == "hrap") {$jc = "hrap_i";} else {$jc = "model_twp";}
+  $col = isset($param["dbcol"])? $param["dbcol"]: $param["dbstr"];
+  $agg = isset($param["dbagg"])? $param["dbagg"]: "avg";
+  $param["table"] = "(SELECT max(oid) as oid, ${agg}($col) as $col, $jc, '". $param["dbdate"] ."'::text as valid from ". $param["table"] ." WHERE valid IN $tsSQL GROUP by $jc) as";
+  $param["title"] .= sprintf(" - %s [%s]", date("d M Y", $ts + (($days -1) * 86400)), $agg);
+}
+
 if ($param["gtype"] == "hrap")
 {
   $sql = "the_geom from (select d.oid as oid, 
@@ -468,6 +489,7 @@ if ($param["gtype"] == "hrap")
    using unique oid using srid=26915";
 
 }
+
 /* Custom data statements :) */
 if (isset($param["sql"]))
 {
