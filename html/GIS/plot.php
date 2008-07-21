@@ -659,8 +659,12 @@ for ($k=11;$k>=0;$k--){
  $y = $y + $height;
 }
 
-
-header("Content-type: image/png");
+if (isset($_GET["dl"])){
+ header("Content-type: application/octet-stream");
+ header("Content-Disposition: attachment; filename=idep.png");
+} else {
+  header("Content-type: image/png");
+}
 $img->saveImage('');
 //$map->save('/tmp/t.map');
 ?>

@@ -138,7 +138,6 @@ $imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$ext
 </select>
 </td>
 <td><?php
-if ($advanced) {
 echo "<input type=\"hidden\" value=\"yes\" name=\"advanced\">";
 echo "<select name=\"pvar\">";
 $plotables = Array("min_runoff_in" => "Minimum Runoff [inch]",
@@ -166,11 +165,6 @@ while( list($k,$v) = each($plotables) )
   echo "> ". $v ."\n"; 
 }
  echo "</select>";
-?>
-<?php
-} else { /* Not advanced */
- echo "<a href=\"erosion.phtml?var=$pvar&extents=$extents&dstr=$dstr&advanced=yes\">More Plot Options</a>";
-}
 ?>
 </td>
   <td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
@@ -213,7 +207,8 @@ while( list($k,$v) = each($plotables) )
 <img src="../imagenav/button_query_off.png" name="queryButton" alt="Query"
   onClick="javascript: resetButtons(); document.queryButton.src = '../imagenav/button_query_on.png'; document.myform.action = 'click.php';">
 
-	<p><input type="image" name="img" src="<?php echo $imgurl; ?>" border=1>
+<a href="<?php echo $imgurl; ?>&dl=yes">Save Image</a>
+<p><input type="image" name="img" src="<?php echo $imgurl; ?>" border="1">
 </form>
 <script language="JavaScript">
 <!-- // as
