@@ -242,6 +242,14 @@ $params = Array(
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
+"runoff_ratio" => Array('dbstr' => 'avg_runoff / (avg_precip+0.01) * 100',
+  'dbcol' => 'min_runoff', 'daily_only'=> 1,
+  'units' => '%', 'cramp' => $c,'dbagg'=> 'sum',
+  'title' => "Runoff/Precip Ratio: ",
+  'table' => $resultsTBL, 'myramp' => 3,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
 "min_runoff_in" => Array('dbstr' => 'min_runoff / 25.4','dbcol' => 'min_runoff',
   'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Runoff: ",
@@ -464,7 +472,7 @@ if (! $missing )
 $rainfall = $map->getlayerbyname($param["maplayer"]);
 $rainfall->set("status", MS_ON);
 
-if ($days > 1 && $duration == "daily")
+if ($days > 1 && $duration == "daily" && !isset($param["daily_only"]))
 {
   if ($param["gtype"] == "hrap") {$jc = "hrap_i";} else {$jc = "model_twp";}
   $col = isset($param["dbcol"])? $param["dbcol"]: $param["dbstr"];
