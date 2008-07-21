@@ -192,6 +192,8 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&day
 <img src="../imagenav/button_query_off.png" name="queryButton" alt="Query"
   onClick="javascript: resetButtons(); document.queryButton.src = '../imagenav/button_query_on.png'; document.myform.action = 'click.php';">
 
+<a href="<?php echo $imgurl; ?>&dl=yes">Save Image</a>
+
 <p><div style="width: 650px;"><input type="image" name="img" src="<?php echo $imgurl; ?>" border="1" height="480" width="640"></div>
 </form>
 <script language="JavaScript">
