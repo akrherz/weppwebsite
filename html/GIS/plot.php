@@ -381,6 +381,10 @@ else if ($duration == "yearly")
     $param["dbdate"] = strftime("%Y-01-01", $ts);
     $param['ramp'] = $yr_ramps[ $param['myramp'] ];
   }
+if ($days > 10)
+{
+  $param['ramp'] = $yr_ramps[ $param['myramp'] ];
+}
 /* Rainfall hacks */
 if ($param["gtype"] == "hrap")
 {
