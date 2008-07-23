@@ -383,7 +383,7 @@ else if ($duration == "yearly")
   }
 if ($days > 10)
 {
-  $param['ramp'] = $yr_ramps[ $param['myramp'] ];
+  $param['ramp'] = $mo_ramps[ $param['myramp'] ];
 }
 /* Rainfall hacks */
 if ($param["gtype"] == "hrap")
