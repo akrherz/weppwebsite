@@ -8,7 +8,7 @@ $runid = isset($_GET["runid"]) ? intval($_GET["runid"]) : 166090;
 $year = isset($_GET["year"]) ? intval($_GET["year"]) : date("Y");
 //$myvar = isset($_GET["var"]) ? $_GET["var"] : "tsw";
 
-$fcontents = file("/wepp/RT/wb/${runid}.wb");
+$fcontents = file("/mnt/mesonet/wepp/RT/wb/${runid}.wb");
 $now = time();
 $lbound = mktime(0,0,0,1,1,$year);
 $obound = mktime(0,0,0,1,1,$year +1);
