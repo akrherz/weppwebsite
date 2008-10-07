@@ -98,9 +98,10 @@ $graph->xaxis->scale-> SetDateAlign( MONTHADJ_1);
 //$graph->xaxis->SetTickLabels($dates);
 //$graph->xaxis-> SetLabelFormatCallback( 'DateCallback'); 
 $graph->xaxis->scale->SetDateFormat( 'M d');
+$graph->xaxis->SetTickSide(SIDE_DOWN);
 
 $lineplot=new LinePlot($tsw, $dates);
-$lineplot->SetColor("red");
+$lineplot->SetColor("tan");
 $lineplot->SetLegend("0-". intval($soildepth/10) ."cm layer");
 $lineplot->SetWeight(2);
 
@@ -110,7 +111,7 @@ $lineplot2->SetLegend("0-10cm layer");
 $lineplot2->SetWeight(2);
 
 $lineplot3=new LinePlot($t20sw, $dates);
-$lineplot3->SetColor("green");
+$lineplot3->SetColor("red");
 $lineplot3->SetLegend("10-20cm layer");
 $lineplot3->SetWeight(2);
 
@@ -135,6 +136,4 @@ $graph->Add($tx1);
 
 // Display the graph
 $graph->Stroke();
-
-
 ?>
