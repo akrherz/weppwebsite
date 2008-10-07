@@ -2,11 +2,14 @@
 include("../../etc/config.inc.php");
 /* Plot water balance goodies! */
 $conn = pg_connect($weppdb);
-
 /* Tunables */
 $runid = isset($_GET["runid"]) ? intval($_GET["runid"]) : 166090;
 $year = isset($_GET["year"]) ? intval($_GET["year"]) : date("Y");
-//$myvar = isset($_GET["var"]) ? $_GET["var"] : "tsw";
+
+/* Queries */
+$rs = pg_prepare($conn, "metadata", "SELECT t.county as cname, c.hrap_i, s.name as soil_name, m.name as man_name, c.model_twp, n.soil_depth from nri n, combos c, managements m, soils s, iatwp t WHERE c.id = $1 and c.nri_id = n.id and n.man_id = m.man_id and n.soil_id = s.soil_id and c.model_twp = t.model_twp");
+$rs = pg_prepare($conn, "rainfall", "SELECT valid, rainfall / 25.4 as ra from daily_rainfall_$year WHERE hrap_i = $1 ORDER by valid ASC");
+
 
 $fcontents = file("/mnt/mesonet/wepp/RT/wb/${runid}.wb");
 $now = time();
@@ -15,11 +18,23 @@ $obound = mktime(0,0,0,1,1,$year +1);
 $now = time();
 
 /* Need to figure out the soil depth */
-$sql = "SELECT n.soil_depth from nri n, combos c WHERE c.id = $runid 
-        and c.nri_id = n.id";
-$rs = pg_exec($conn, $sql);
+$rs = pg_execute($conn, "metadata", Array($runid) );
 $row = pg_fetch_array($rs,0);
 $soildepth = intval($row["soil_depth"]);
+$modeltwp = $row["model_twp"];
+$management = $row["man_name"];
+$soilname = $row["soil_name"];
+$hrapi = $row["hrap_i"];
+$cname = $row["cname"];
+
+$rs = pg_execute($conn, "rainfall", Array($hrapi) );
+$row = pg_fetch_array($rs,0);
+$rainfall = Array();
+$rdates = Array();
+for($i=0;$row=@pg_fetch_array($rs,$i);$i++){
+  $rdates[] = strtotime($row["valid"]);
+  $rainfall[] = $row["ra"];
+}
 
 $params = Array(
  "tsw" => Array("title" => "Root Zone Soil Moisture", "column" => 5, 
@@ -35,8 +50,6 @@ $t10sw = Array();
 $t20sw = Array();
 $dates = Array();
 
-//$col = $params[$myvar]["column"];
-//$factor = $params[$myvar]["factor"];
 while (list ($line_num, $line) = each ($fcontents)) {
   if ($line_num < 14) { continue; }
   $parts = preg_split ("/[\s]+/", $line);
@@ -51,48 +64,52 @@ while (list ($line_num, $line) = each ($fcontents)) {
 
 include ("$_BASE/include/jpgraph/jpgraph.php");
 include ("$_BASE/include/jpgraph/jpgraph_line.php");
-//include ("$_BASE/include/jpgraph/jpgraph_date.php");
+include ("$_BASE/include/jpgraph/jpgraph_bar.php");
+include ("$_BASE/include/jpgraph/jpgraph_date.php");
 
 $graph = new Graph(640,400);
-$graph->SetScale("textlin",0, 50);
+$graph->SetScale("datlin",0, 50);
+$graph->SetY2Scale('lin', 0, 10);
 $graph->SetFrame(false);
 $graph->SetTickDensity(TICKD_SPARSE);
 
 $graph->ygrid->SetFill(true,'#EFEFEF@0.5','#BBCCFF@0.5');
 
-$graph->img->SetMargin(50,10,60,50);
+$graph->img->SetMargin(50,50,60,50);
 
 $graph->tabtitle->Set("WEPP Modelled Soil Moisture");
 $graph->tabtitle->SetFont(FF_FONT1,FS_BOLD,16);
 
-$graph->subtitle->Set("Values shown for runid $runid during $year");
+//$graph->subtitle->Set("Values shown for runid $runid during $year");
 
 $graph->yaxis->SetTitle("Volumetric Soil Moisture [%] ");
+$graph->y2axis->SetTitle("Rainfall [inch] ");
 $graph->xaxis->SetLabelAngle(90); 
 $graph->yaxis->HideZeroLabel();
 
 function  DateCallback( $aVal) {
-    global $lbound;
-    $ts = $lbound + ($aVal * 86400);
-    if (Date ('d',$ts) == "01")
-      return Date ('M d',$ts);
-    return "";
+    //global $lbound;
+    //$ts = $lbound + ($aVal * 86400);
+    //if (Date ('d',$ts) == "01")
+      return Date ('M d',$aVal);
+    //return "";
 }
-//$graph->xaxis->scale-> SetDateAlign( MONTHADJ_1);
+$graph->xaxis->scale-> SetDateAlign( MONTHADJ_1);
 //$graph->xaxis->SetTickLabels($dates);
-$graph->xaxis-> SetLabelFormatCallback( 'DateCallback'); 
+//$graph->xaxis-> SetLabelFormatCallback( 'DateCallback'); 
+$graph->xaxis->scale->SetDateFormat( 'M d');
 
-$lineplot=new LinePlot($tsw);
+$lineplot=new LinePlot($tsw, $dates);
 $lineplot->SetColor("red");
 $lineplot->SetLegend("0-". intval($soildepth/10) ."cm layer");
 $lineplot->SetWeight(2);
 
-$lineplot2=new LinePlot($t10sw);
+$lineplot2=new LinePlot($t10sw, $dates);
 $lineplot2->SetColor("blue");
 $lineplot2->SetLegend("0-10cm layer");
 $lineplot2->SetWeight(2);
 
-$lineplot3=new LinePlot($t20sw);
+$lineplot3=new LinePlot($t20sw, $dates);
 $lineplot3->SetColor("green");
 $lineplot3->SetLegend("10-20cm layer");
 $lineplot3->SetWeight(2);
@@ -101,7 +118,20 @@ $graph->Add($lineplot);
 $graph->Add($lineplot2);
 $graph->Add($lineplot3);
 
-$graph->legend->SetPos(0.01,0.01);
+$bp=new BarPlot($rainfall, $rdates);
+$bp->SetColor("black");
+//$bp->SetLegend("10-20cm layer");
+//$bp->SetWeight(2);
+$graph->AddY2($bp);
+
+
+$graph->legend->SetPos(0.02,0.00);
+
+$tx1 = new Text("Township: $modeltwp  Management: $management  Soil: $soilname
+IDEP Run ID: $runid   Year: $year   Iowa County: $cname");
+$tx1->SetPos(0.02,0.00, 'left', 'top');
+$tx1->SetFont(FF_FONT1, FS_BOLD, 16);
+$graph->Add($tx1);
 
 // Display the graph
 $graph->Stroke();
