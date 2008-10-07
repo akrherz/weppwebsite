@@ -10,8 +10,6 @@ if (isset($argv))
        $it = split("=",$argv[$i]);
        $_GET[$it[0]] = $it[1];
    }
-//print_r($_GET);
-//die();
 
 /* stuff that we need to $_GET[] */
 $dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
@@ -74,7 +72,7 @@ $ramps = Array(
 	3 => Array(1, 2, 5, 10, 15, 20, 30, 40, 50, 75,100),  // Precip(mm)
 	4 => Array(4, 8, 12, 16, 20, 25, 30, 35,36,37,38),
 	5 => Array(5, 10, 20, 40, 60, 100, 120, 160,161,162,163),
-	6 => Array(10, 25, 50, 75, 100, 150, 200, 250,251,252,253),
+	6 => Array(10, 25, 50, 75, 100, 125, 150, 175,200,225,250),
 	7 => Array(100, 200, 300, 400, 500, 600, 800, 1000,1001,1002,1003),
 	8 => Array(0.1, 0.25, 0.5, 1, 1.5, 2, 3, 5,6,7,8),           // Precip(in)
     9 => Array(150, 200, 250, 300, 350, 400,450,500,550,600,650),   // TSW
@@ -115,6 +113,80 @@ $yr_ramps = Array(
 );
 
 $params = Array(
+"corn" => Array('dbstr' => 'bogus',
+  'units' => 'bu/acre', 'cramp' => $c,
+  'title' => "Estimated Corn Yield: ",
+  'table' => "bogus", 'myramp' => 6,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select avg(h.yield) * 159 as da, t.model_twp,
+          t.the_geom
+          from iatwp t, combos c, harvest h  WHERE
+          t.model_twp = c.model_twp and c.id = h.combo_id
+          and h.year = ". strftime("%Y", $ts) ." and h.crop = 'C'
+          GROUP by t.model_twp, t.the_geom) as foo
+          USING unique model_twp using srid=26915"),
+
+"soy" => Array('dbstr' => 'bogus',
+  'units' => 'bu/acre', 'cramp' => $c,
+  'title' => "Estimated Soybean Yield: ",
+  'table' => "bogus", 'myramp' => 3,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select avg(h.yield) * 159 as da, t.model_twp,
+          t.the_geom
+          from iatwp t, combos c, harvest h  WHERE
+          t.model_twp = c.model_twp and c.id = h.combo_id
+          and h.year = ". strftime("%Y", $ts) ." and h.crop = 'B'
+          GROUP by t.model_twp, t.the_geom) as foo
+          USING unique model_twp using srid=26915"),
+
+"h1" => Array('dbstr' => 'bogus',
+  'units' => 'tons/acre', 'cramp' => $c,
+  'title' => "Estimated Alfalfa Yield (first crop): ",
+  'table' => "bogus", 'myramp' => 0,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select avg(h.yield) * 4.45 as da, t.model_twp,
+          t.the_geom
+          from iatwp t, combos c, harvest h  WHERE
+          t.model_twp = c.model_twp and c.id = h.combo_id
+          and h.year = ". strftime("%Y", $ts) ." and h.crop = 'H'
+          and h.cut = 1
+          GROUP by t.model_twp, t.the_geom) as foo
+          USING unique model_twp using srid=26915"),
+
+"h2" => Array('dbstr' => 'bogus',
+  'units' => 'tons/acre', 'cramp' => $c,
+  'title' => "Estimated Alfalfa Yield (second crop): ",
+  'table' => "bogus", 'myramp' => 0,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select avg(h.yield) * 4.45 as da, t.model_twp,
+          t.the_geom
+          from iatwp t, combos c, harvest h  WHERE
+          t.model_twp = c.model_twp and c.id = h.combo_id
+          and h.year = ". strftime("%Y", $ts) ." and h.crop = 'H'
+          and h.cut = 2
+          GROUP by t.model_twp, t.the_geom) as foo
+          USING unique model_twp using srid=26915"),
+
+"h3" => Array('dbstr' => 'bogus',
+  'units' => 'tons/acre', 'cramp' => $c,
+  'title' => "Estimated Alfalfa Yield (third crop): ",
+  'table' => "bogus", 'myramp' => 0,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts),
+  'sql' => "the_geom from (select avg(h.yield) * 4.45 as da, t.model_twp,
+          t.the_geom
+          from iatwp t, combos c, harvest h  WHERE
+          t.model_twp = c.model_twp and c.id = h.combo_id
+          and h.year = ". strftime("%Y", $ts) ." and h.crop = 'H'
+          and h.cut = 3
+          GROUP by t.model_twp, t.the_geom) as foo
+          USING unique model_twp using srid=26915"),
+
+
 "vsm_7day" => Array('dbstr' => 'bogus',
   'units' => '%', 'cramp' => $cr,
   'title' => "7 Day Soil Water Change Ending: ",

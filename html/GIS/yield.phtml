@@ -1,0 +1,174 @@
+<?php
+include("../../etc/config.inc.php");
+include("$_BASE/include/forms.php");
+$uri = "yield.phtml";
+
+$duration = "daily";
+$dstr = isset($_GET["dstr"]) ? $_GET["dstr"] : date("m/d/Y", time() - 86400);
+$metric = isset($_GET["metric"]) ? $_GET["metric"]: "";
+$advanced = isset($_GET["advanced"]) ? $_GET["advanced"]: "";
+$tokens = explode("/", $dstr);
+$year = $tokens[2];
+$month = $tokens[0];
+$day = $tokens[1];
+$days = isset($_GET["days"]) ? $_GET["days"]: 1;
+
+
+$oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
+$zoom     = isset($_GET['zoom']) ? $_GET['zoom'] : 0;
+$pvar = isset($_GET['pvar']) ? $_GET['pvar'] : "vsm";
+
+if ($zoom == 99) {
+ $oextents = "160000, 4450000, 760000, 4850000";
+}
+
+ $imgwidth = 640;
+ $imgheight = 480;
+ if ( isset($_GET['img_x']) ){
+   include("$_BASE/include/click2geo.inc.php");
+   $extents = click2geo($oextents, $_GET['img_x'], $_GET['img_y'],
+     $_GET['map_width'], $_GET['map_height'], $zoom);
+ } else {
+   $extents = $oextents;
+ }
+
+$keep_vars = Array("pvar" => $pvar, "metric" => $metric, "extents" => $extents,
+  "dstr" => $dstr, "days" => $days );
+
+
+$ts = mktime(0, 0, 0, $month, $day, $year);
+$nicedate = strftime("%d %b %Y", $ts);
+
+
+$imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&days=$days";
+
+?>
+<?php 
+ $THISPAGE = "yield"; 
+ $HEADEXTRA = "<script language=\"JavaScript\" src=\"calendar2.js\"></script><!-- Date only with year scrolling -->";
+ include("$_BASE/include/header.phtml"); 
+?>
+
+<table><tr><td valign="top">
+<?php
+  $HOF = 'yield.phtml';
+
+  $side_rainfall = 0; include("$_BASE/include/side.phtml");
+?></td><td>
+                                                                                
+
+<div class="table">
+<table>
+<tbody></tr>
+<td>
+<form name="rainfall" action="rainfall.phtml" method="get">
+ <input type="hidden" name="dstr" value="<?php echo $dstr; ?>">
+ <input type="hidden" name="advanced" value="<?php echo $advanced; ?>">
+ <input type="hidden" name="extents" value="<?php echo $extents; ?>">
+ <input type="submit" value="Rainfall Maps">
+</form>
+</td>
+<td>
+<form name="erosion" action="erosion.phtml" method="get">
+ <input type="hidden" name="pvar" value="avg_runoff_in">
+ <input type="hidden" name="dstr" value="<?php echo $dstr; ?>">
+ <input type="hidden" name="advanced" value="<?php echo $advanced; ?>">
+ <input type="hidden" name="extents" value="<?php echo $extents; ?>">
+ <input type="submit" value="Runoff Maps">
+</form>
+</td>
+<td>
+<form name="loss" action="erosion.phtml" method="get">
+ <input type="hidden" name="pvar" value="avg_loss_acre">
+ <input type="hidden" name="dstr" value="<?php echo $dstr; ?>">
+ <input type="hidden" name="advanced" value="<?php echo $advanced; ?>">
+ <input type="hidden" name="extents" value="<?php echo $extents; ?>">
+ <input type="submit" value="Soil Loss Maps">
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<form method="GET" action="yield.phtml" name="myform">
+
+<div class="table">
+<table>
+<thead>
+<tr>
+<th>Plot Variable</th>
+<th>Date (mm/dd/yyyy)</th>
+</tr>
+</thead>
+<tbody>
+<td>
+ <select name="pvar">
+	<option value="corn" <?php if ($pvar == "corn") echo "SELECTED"; ?>>Combined Corn [bushel / acre]
+	<option value="soy" <?php if ($pvar == "soy") echo "SELECTED"; ?>>Soybean [bushel / acre]
+	<option value="h1" <?php if ($pvar == "h1") echo "SELECTED"; ?>>Alfalfa (first crop) [tons / acre]
+	<option value="h2" <?php if ($pvar == "h2") echo "SELECTED"; ?>>Alfalfa (second crop) [tons / acre]
+	<option value="h3" <?php if ($pvar == "h3") echo "SELECTED"; ?>>Alfalfa (third crop) [tons / acre]
+ </select>
+
+
+</td>
+<td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
+</td>
+
+
+</tr>
+</tbody>
+</table>
+</div>
+
+<br /><input type="submit" value="Generate Map">
+
+
+<p>
+<input type="hidden" name="map_height" value="<?php echo $map->height; ?>">
+<input type="hidden" name="map_width" value="<?php echo $map->width; ?>">
+<input type="hidden" name="ul_x" value="<?php echo $map->extent->minx; ?>">
+<input type="hidden" name="ul_y" value="<?php echo $map->extent->maxy ; ?>">
+<input type="hidden" name="lr_x" value="<?php echo $map->extent->maxx; ?>">
+<input type="hidden" name="lr_y" value="<?php echo $map->extent->miny ; ?>">
+<input type="hidden" name="extents" value="<?php echo $map->extent->minx .",".$map->extent->miny .",".$map->extent->maxx .",".$map->extent->maxy ; ?>">
+<input type="hidden" name="zoom" value="1">
+<script Language="JavaScript">
+ function resetButtons(){
+   document.myform.action = 'yield.phtml';
+   document.panButton.src = '../imagenav/button_pan_off.png';
+   document.zoominButton.src = '../imagenav/button_zoomin_off.png';
+   document.zoomoutButton.src = '../imagenav/button_zoomout_off.png';
+   document.queryButton.src = '../imagenav/button_query_off.png';
+ }
+</script>
+<b>Map Controls:</b>
+<img src="../imagenav/button_zoomfull_off.png" name="zoomfullButton" alt="Full Extents"
+  onClick="javascript: resetButtons(); document.zoomfullButton.src = '../imagenav/button_zoomfull_on.png'; document.myform.zoom.value = 99; document.myform.submit();">
+<img src="../imagenav/button_zoomin_off.png" name="zoominButton" alt="Zoom In"
+  onClick="javascript: resetButtons(); document.zoominButton.src = '../imagenav/button_zoomin_on.png'; document.myform.zoom.value = -2;">
+<img src="../imagenav/button_pan_on.png" name="panButton" alt="Pan"
+  onClick="javascript: resetButtons(); document.panButton.src = '../imagenav/button_pan_on.png'; document.myform.zoom.value = 1;">
+<img src="../imagenav/button_zoomout_off.png" name="zoomoutButton" alt="Zoom Out"
+  onClick="javascript: resetButtons(); document.zoomoutButton.src = '../imagenav/button_zoomout_on.png'; document.myform.zoom.value = 2;">
+<img src="../imagenav/button_query_off.png" name="queryButton" alt="Query"
+  onClick="javascript: resetButtons(); document.queryButton.src = '../imagenav/button_query_on.png'; document.myform.action = 'click.php';">
+
+&nbsp; &nbsp; Save as <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=<?php echo $day; ?>">GIS shapefile</a>
+
+&nbsp; &nbsp; <a href="<?php echo $imgurl; ?>&dl=yes">Save Image</a>
+
+<p><div style="width: 650px;"><input type="image" name="img" src="<?php echo $imgurl; ?>" border="1" height="480" width="640"></div>
+</form>
+<script language="JavaScript">
+<!-- // as
+var cal = new calendar2(document.forms['myform'].elements['dstr']);
+cal.year_scroll = true;
+cal.time_comp = false;
+//-->
+</script>
+
+</td></tr></table>
+
+<?php include("$_BASE/include/footer.phtml"); ?>
