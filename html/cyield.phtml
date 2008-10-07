@@ -1,0 +1,54 @@
+<?php
+  include("../etc/config.inc.php");
+  $THISPAGE = "bogus"; include("../include/header.phtml");
+  include("../include/forms.php");
+
+$conn = pg_connect($weppdb);
+
+$cvar = isset($_GET["cvar"]) ? $_GET["cvar"] : "corn";
+$year = isset($_GET["year"]) ? $_GET["year"] : date("Y");
+
+$codes = Array("corn"=>"C", "soy"=>"B", "h1"=>"H", "h2"=>"H","h3"=>"H");
+$crops = Array("corn"=>"Corn", "soy"=>"Soybean", "h1"=>"Alfalfa (first crop)", "h2"=>"Alfalfa (second crop)","h3"=>"Alfalfa (third crop)");
+$cut = 1;
+if ($cvar == "h2") $cut = 2;
+if ($cvar == "h3") $cut = 3;
+
+$rs = pg_prepare($conn, "myquery", "select t.county, count(*) as c, min(yield) * 159 as ny, avg(yield) * 159 as ay, max(yield) * 159 as xy from harvest h, iatwp t, combos c WHERE c.id = h.combo_id and c.model_twp = t.model_twp and h.crop = $1 and h.year = $2 and h.cut = $3 GROUP by county ORDER by county ASC");
+
+$rs = pg_execute($conn, "myquery", Array($codes[$cvar], $year, $cut));
+
+?>
+<h3>WEPP Predicted Yield By County</h3> 
+<form method="GET">
+<strong>Select Crop:</strong>
+ <select name="cvar">
+        <option value="corn" <?php if ($cvar == "corn") echo "SELECTED"; ?>>Combined Corn [bushel / acre]
+        <option value="soy" <?php if ($cvar == "soy") echo "SELECTED"; ?>>Soybean [bushel / acre]
+        <option value="h1" <?php if ($cvar == "h1") echo "SELECTED"; ?>>Alfalfa (first crop) [tons / acre]
+        <option value="h2" <?php if ($cvar == "h2") echo "SELECTED"; ?>>Alfalfa (second crop) [tons / acre]
+        <option value="h3" <?php if ($cvar == "h3") echo "SELECTED"; ?>>Alfalfa (third crop) [tons / acre]
+ </select>
+
+<strong>Select Year:</strong>
+<?php echo yearSelect(1997,$year, "year"); ?>
+
+<input type="submit">
+
+</form>
+<hr />
+<h3>Results for <?php echo $crops[$cvar]; ?> during <?php echo $year; ?></h3>
+<p>Presented are the number of Iowa Daily Erosion Project runs made for 
+each county for this given crop.  The minimum, average, and maximum estimated
+yields are computed for these given runs.</p>
+<table cellpadding="2" cellspacing="0" border="1">
+ <tr><th>County:</th><th>Runs:</th><th>Minimum</th><th>Average</th><th>Maximum</th></tr>
+<?php
+for($i=0;$row=@pg_fetch_array($rs,$i);$i++)
+{
+  echo sprintf("<tr><td>%s</td><td>%d</td><td>%.1f</td><td>%.1f</td><td>%.1f</td></tr>", $row["county"], $row["c"], $row["ny"], $row["ay"], $row["xy"]);
+}
+?>
+</table>
+
+<?php include("../include/footer.phtml"); ?>
