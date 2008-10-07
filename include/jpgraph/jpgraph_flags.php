@@ -3,8 +3,7 @@
 // File:	JPGRAPH_FLAGS.PHP
 // Description:	Class Jpfile. Handles plotmarks
 // Created: 	2003-06-28
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_flags.php 21 2005-05-30 20:35:34Z ljp $
+// Ver:		$Id: jpgraph_flags.php 957 2007-12-01 14:00:29Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -19,7 +18,7 @@ DEFINE('FLAGSIZE4',4);
 
 class FlagImages {
 
-    var $iCountryNameMap = array(
+    public $iCountryNameMap = array(
     'Afghanistan' => 'afgh',
     'Republic of Angola' => 'agla',
     'Republic of Albania' => 'alba',
@@ -36,6 +35,7 @@ class FlagImages {
     'Commonwealth of Australia' => 'astl',
     'Republic of Austria' => 'aust',
     'Azerbaijani Republic' => 'azer',
+    'Bangladesh' => 'bngl',
     'British Antarctic Territory' => 'bant',
     'Kingdom of Belgium' => 'belg',
     'British Overseas Territory of Bermuda' => 'berm',
@@ -188,6 +188,7 @@ class FlagImages {
     'Republic of Palau' => 'pala',
     'Independent State of Papua New Guinea' => 'pang',
     'Republic of Paraguay' => 'para',
+    'Republic of Peru' => 'peru',
     'Republic of the Philippines' => 'phil',
     'British Overseas Territory of the Pitcairn Islands' => 'piis',
     'Republic of Poland' => 'pola',
@@ -195,6 +196,7 @@ class FlagImages {
     'Commonwealth of Puerto Rico' => 'purc',
     'State of Qatar' => 'qata',
     'Russian Federation' => 'russ',
+    'Romania' => 'rmna',
     'Republic of Rwanda' => 'rwan',
     'Kingdom of Saudi Arabia' => 'saar',
     'Republic of San Marino' => 'sama',
@@ -202,6 +204,7 @@ class FlagImages {
     'Sark' => 'sark',
     'Scotland' => 'scot',
     'Principality of Seborga' => 'sebo',
+    'Republic of Serbia' => 'serb',
     'Republic of Sierra Leone' => 'sile',
     'Republic of Singapore' => 'sing',
     'Republic of Korea' => 'skor',
@@ -253,16 +256,16 @@ class FlagImages {
     'Republic of Zimbabwe' => 'zbwe' ) ;
 
 
-    var $iFlagCount = -1;
-    var $iFlagSetMap = array(
+    private $iFlagCount = -1;
+    private $iFlagSetMap = array(
 	FLAGSIZE1 => 'flags_thumb35x35',
 	FLAGSIZE2 => 'flags_thumb60x60',
 	FLAGSIZE3 => 'flags_thumb100x100',
 	FLAGSIZE4 => 'flags'
 	);
 
-    var $iFlagData ;
-    var $iOrdIdx=array();
+    private $iFlagData ;
+    private $iOrdIdx=array();
 
     function FlagImages($aSize=FLAGSIZE1) {
 	switch($aSize) {
@@ -276,8 +279,8 @@ class FlagImages {
 		$this->iFlagData = unserialize($rawdata);
 	    break;
 	    default:
-		JpGraphError::Raise('Unknown flag size. ('.$aSize.')');
-		die();
+		JpGraphError::RaiseL(5001,$aSize);
+//('Unknown flag size. ('.$aSize.')');
 	}
 	$this->iFlagCount = count($this->iCountryNameMap);
     }
@@ -297,7 +300,8 @@ class FlagImages {
 	    return Image::CreateFromString($d);   
 	}
 	else {
-	    JpGraphError::Raise("Flag index \" $aIdx\" does not exist.");
+	    JpGraphError::RaiseL(5002,$aIdx);
+//("Flag index \" $aIdx\" does not exist.");
 	}
     }
 
@@ -322,7 +326,8 @@ class FlagImages {
 	    return $tmp[0];
 	}
 	else {
-	    JpGraphError::Raise('Invalid ordinal number specified for flag index.');
+	    JpGraphError::RaiseL(5003,$aOrd);
+//('Invalid ordinal number specified for flag index.');
 	}
     }
 
@@ -359,7 +364,8 @@ class FlagImages {
 	    return $val;   
 	}
 	else { 
-	    JpGraphError::Raise("The (partial) country name \"$aName\" does not have a cooresponding flag image. The flag may still exist but under another name, e.g. insted of \"usa\" try \"united states\".");
+	    JpGraphError::RaiseL(5004,$aName);
+//("The (partial) country name \"$aName\" does not have a cooresponding flag image. The flag may still exist but under another name, e.g. insted of \"usa\" try \"united states\".");
 	}
     }
 }

@@ -3,15 +3,15 @@
 // File:	JPGRAPH_ANTISPAM.PHP
 // Description:	Genarate anti-spam challenge
 // Created: 	2004-10-07
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_antispam.php 21 2005-05-30 20:35:34Z ljp $
+// Ver:		$Id: jpgraph_antispam.php 808 2006-11-28 19:10:40Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 class HandDigits {
-    var $chars = array();
-    var $iHeight=30, $iWidth=30;
+    public $chars = array();
+    public $iHeight=30, $iWidth=30;
+
     function HandDigits() {
 
 //==========================================================
@@ -545,8 +545,8 @@ $this->chars['q'][1]=
 
 class AntiSpam {
 
-    var $iData='';
-    var $iDD=null;
+    private $iData='';
+    private $iDD=null;
 
     function AntiSpam($aData='') {
 	$this->iData = $aData;
@@ -576,7 +576,7 @@ class AntiSpam {
 	return $d;
     }
 
-    function Stroke($aStrokeFileName="") {
+    function Stroke() {
 
 	$n=strlen($this->iData);
 	if( $n==0 ) {
@@ -606,19 +606,9 @@ class AntiSpam {
 	}
 
 	imagecopy($resimg,$img,2,2,0,0,$start, $this->iDD->iHeight);
-
-	if( $aStrokeFileName!="" ) {
-	    if( file_exists($aStrokeFileName) ) {
-		if( !@unlink($aStrokeFileName) )
-		    return false;
-	    }
-	    imagejpeg($resimg,$aStrokeFileName);
-	    return;
-	}
-
 	header("Content-type: image/jpeg");
-	$res=imagejpeg($resimg);
-	return $res;
+	imagejpeg($resimg);
+	return true;
     }
 }
 
