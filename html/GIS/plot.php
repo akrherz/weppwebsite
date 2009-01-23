@@ -25,6 +25,8 @@ $layers = isset($_GET['layers']) ? $_GET['layers'] :
 $var = isset($_GET['var']) ? $_GET['var'] : "rainfall_in";
 $map_height = isset($_GET['height']) ? $_GET['height'] : 480;
 $map_width = isset($_GET['width']) ? $_GET['width'] : 640;
+$fontsz = intval($map_width / 40);
+if ($map_width == 320) $fontsz = 12;
 $advanced = isset($_GET["advanced"]) ? 1 : 0;
 $duration = isset($_GET["duration"]) ? $_GET["duration"] : 'daily';
 $resultsTBL = "results_by_twp";
@@ -527,6 +529,7 @@ if (($row = @pg_fetch_array($rs, 0))){
 $map = ms_newMapObj("$_BASE/data/gis/map/wepp.map");
 $map->set("width", $map_width);
 $map->set("height", $map_height);
+$map->selectOutputFormat("png24");
 
 /* Set Extents */
 $arExtents = explode(",", $extents);
@@ -656,7 +659,10 @@ $c11s = ms_newStyleObj($c11);
 $c11s->color->setRGB($colors[11]['r'], $colors[11]['g'], $colors[11]['b']);
 
 $rainfall->draw($img);
+add_and_draw("counties");
 } else {
+  /* Draw the counties before adding the overlay */
+  add_and_draw("counties");
   /* Draw something to say no values available */
   if ($map_width > 320) {
   $exp = $map->getlayerbyname("unavailable");
@@ -669,8 +675,10 @@ $rainfall->draw($img);
 
   }
 }
+if ($scenario != ""){
+  $param["title"] .= " Scenario: '$scenario'";
+}
 
-add_and_draw("counties");
 
 //$dm = $map->getlayerbyname("dm");
 //$dm->set("status", MS_ON);
@@ -678,66 +686,76 @@ add_and_draw("counties");
 
 /* Need something to draw bars! */
 $bar = $map->getlayerbyname("bar");
+$credits = $map->getLayerByName("credits");
+$cl = $credits->getClass(0);
+$cl->label->color->setRGB(255, 255, 255);
+$cl->label->set("type", MS_TRUETYPE);
+$cl->label->set("font", "arial");
+$cl->label->set("size", $fontsz);
+$cl->label->set("position", MS_UR);
+$cl->label->set("offsetx", 0);
+$cl->label->set("offsety", 0);
 
-if ($scenario != ""){
-  $param["title"] .= " Scenario: '$scenario'";
-}
-$layer = $map->getLayerByName("credits");
-if ($map_width > 320)
-{
+$cl = $credits->getClass(1);
+$cl->label->color->setRGB(255, 255, 255);
+$cl->label->set("type", MS_TRUETYPE);
+$cl->label->set("font", "arial");
+$cl->label->set("size", $fontsz/1.5);
+$cl->label->set("position", MS_UR);
+$cl->label->set("offsetx", 0);
+$cl->label->set("offsety", 0);
+
+/* Draw Bottom Bar for title */
 $rt = ms_newRectObj();
-$rt->setextent(0, 30, $map_width, 5);
+$rt->setextent(0, $map_height, $map_width, $map_height - $fontsz - 3);
 $rt->draw($map, $bar, $img, 0, "");
 $rt->free();
+
+/* Draw Top Bar for title */
+$rt = ms_newRectObj();
+$rt->setextent(0, $fontsz+3+5, $map_width, 0);
+$rt->draw($map, $bar, $img, 0, "");
+$rt->free();
+
+/* Write Title at the top */
 $point = ms_newpointobj();
-$point->setXY(50, 20);
-$point->draw($map, $layer, $img, 0, $param["title"]);
-} else {
-$rt = ms_newRectObj();
-$rt->setextent(0, 20, $map_width, 5);
-$rt->draw($map, $bar, $img, 0, "");
-$rt->free();
+$point->setXY(50, $fontsz + 7);
+$point->draw($map, $credits, $img, 0, $param["title"]);
+$point->free();
+
+/* Draw title at the bottom */
 $point = ms_newpointobj();
-$point->setXY(5, 10);
-$point->draw($map, $layer, $img, 1, $param["title"]);
-}
+$point->setXY($map_width / 9, $map_height -  1);
+$point->draw($map, $credits, $img, 1, "Map Units: ". $param["units"] ."  Iowa Daily Erosion Project         Map Generated on  ". date("Y/m/d"));
+$point->free();
 
+/* Build legend bar */
+$x = 1;
+$y = $map_height - 12 * ($fontsz ) - 3;
+$height = $fontsz ;
+$width = intval($map_width / 30);
 
+/* Draw Bar for legned */
 $rt = ms_newRectObj();
-$rt->setextent(0, $map_height, $map_width, $map_height - 20);
+$rt->setextent(0, $map_height, $width + 5 + ($fontsz * 2), $y-3);
 $rt->draw($map, $bar, $img, 0, "");
 $rt->free();
-
-if ($map_width > 320)
-{
-$rt = ms_newRectObj();
-$rt->setextent(0, $map_height, 60, $map_height - 210);
-$rt->draw($map, $bar, $img, 0, "");
-$rt->free();
-}
-
-$point = ms_newpointobj();
-$point->setXY(5, $map_height - 10);
-$point->draw($map, $layer, $img, 1, "Map Units: ". $param["units"] ."  Iowa Daily Erosion Project         Map Generated on  ". date("Y/m/d"));
 
 $layer = $map->getLayerByName("singlebox");
-$x = 1;
-$y = $map_height - 200;
-$height = 14;
-$width = 10;
 for ($k=11;$k>=0;$k--){
  $p = ms_newRectObj();
- $p->setextent($x, $y + $height, $x + $width, $y);
+ $p->setextent($x, $y + $height , $x + $width, $y);
  $cl = ms_newClassObj($layer);
  $st = ms_newStyleObj($cl);
  $st->color->setRGB($colors[$k]['r'], $colors[$k]['g'], $colors[$k]['b']);
  $st->outlinecolor->setRGB(255, 255, 255);
  $cl->label->color->setRGB(255, 255, 255);
- $cl->label->set("type", MS_BITMAP);
- $cl->label->set("size", MS_MEDIUM);
- $cl->label->set("position", MS_UR);
- $cl->label->set("offsetx", $width * 1.25);
- $cl->label->set("offsety", 0);
+ $cl->label->set("type", MS_TRUETYPE);
+ $cl->label->set("font", "arial");
+ $cl->label->set("size", $fontsz/1.5);
+ $cl->label->set("position", MS_CC);
+ $cl->label->set("offsetx", $width*1.6);
+ $cl->label->set("offsety", 0 - $height/2);
  $p->draw($map, $layer, $img, 11- $k, @$param["ramp"][$k]);
  $p->free();
  $y = $y + $height;
