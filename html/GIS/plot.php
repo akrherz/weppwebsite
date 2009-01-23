@@ -19,7 +19,7 @@ $month = $tokens[0];
 $day = $tokens[1];
 
 $extents = isset($_GET['extents']) ? $_GET['extents'] : 
-		"160000, 4450000, 760000, 4850000";
+		"140000, 4450000, 740000, 4850000";
 $layers = isset($_GET['layers']) ? $_GET['layers'] : 
 		Array("background", "states", "counties");
 $var = isset($_GET['var']) ? $_GET['var'] : "rainfall_in";
