@@ -725,8 +725,12 @@ $point->free();
 
 /* Draw title at the bottom */
 $point = ms_newpointobj();
-$point->setXY($map_width / 9, $map_height -  1);
-$point->draw($map, $credits, $img, 1, "Map Units: ". $param["units"] ."  Iowa Daily Erosion Project         Map Generated on  ". date("Y/m/d"));
+$point->setXY($map_width / 8, $map_height -  1);
+if ($map_width > 320){
+  $point->draw($map, $credits, $img, 1, "Map Units: ". $param["units"] ."  Iowa Daily Erosion Project         Map Generated on  ". date("Y/m/d"));
+} else {
+  $point->draw($map, $credits, $img, 1, "Map Units: ". $param["units"] ."  IDEP generated ". date("Y/m/d"));
+}
 $point->free();
 
 /* Build legend bar */
