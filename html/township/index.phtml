@@ -43,11 +43,11 @@ $background->set("status", MS_ON);
 $states = $map->getlayerbyname("states");
 $states->set("status", MS_ON);
 
-$roads = $map->getlayerbyname("roads");
-$roads->set("status", MS_ON);
+//$roads = $map->getlayerbyname("roads");
+//$roads->set("status", MS_ON);
 
-$roads_label = $map->getlayerbyname("roads_label");
-$roads_label->set("status", MS_ON);
+//$roads_label = $map->getlayerbyname("roads_label");
+//$roads_label->set("status", MS_ON);
 
 $interstates = $map->getlayerbyname("interstates");
 $interstates->set("status", MS_ON);
@@ -65,8 +65,8 @@ $refurl = $ref->saveWebImage('');
                                                                                 
 $background->draw($img);
 $states->draw($img);
-$roads->draw($img);
-$roads_label->draw($img);
+//$roads->draw($img);
+//$roads_label->draw($img);
 $interstates->draw($img);
 $interstates_label->draw($img);
 $iatwp->draw($img);
