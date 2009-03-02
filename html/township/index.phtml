@@ -43,6 +43,9 @@ $background->set("status", MS_ON);
 $states = $map->getlayerbyname("states");
 $states->set("status", MS_ON);
 
+$cities = $map->getlayerbyname("cities");
+$cities->set("status", MS_ON);
+
 //$roads = $map->getlayerbyname("roads");
 //$roads->set("status", MS_ON);
 
@@ -57,7 +60,7 @@ $interstates->set("status", MS_ON);
 
 $iatwp = $map->getlayerbyname("iatwp");
 $iatwp->set("status", MS_ON);
-$iatwp->set("maxscale", 2000000);
+//$iatwp->set("maxscale", 2000000);
 
 $img = $map->prepareImage();
 $ref = $map->drawReferenceMap();
@@ -69,6 +72,7 @@ $states->draw($img);
 //$roads_label->draw($img);
 $interstates->draw($img);
 //$interstates_label->draw($img);
+$cities->draw($img);
 $iatwp->draw($img);
 $counties->draw($img);
 $map->drawLabelCache($img);
@@ -78,11 +82,11 @@ $url = $img->saveWebImage('');
 ?>
 <?php
 /* Start HTML Stuff */
-  $THISPAGE = "township"; include("../../include/header.phtml");
+  $THISPAGE = "township-base"; include("../../include/header.phtml");
 ?>
 
 <table><tr><td valign="top">
-<?php $side_bytwp = 1; include("../../include/side.phtml"); ?>
+<?php $uri = 'index.phtml'; $side_bytwp = 1; include("../../include/side.phtml"); ?>
 </td><td>
 
 <h3>Select Your Township:</h3>

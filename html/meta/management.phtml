@@ -1,24 +1,17 @@
 <?php
 include("../../etc/config.inc.php");
 $uri = "management.phtml";
-?>
-<?php
-  include("../../include/header.phtml");
-  $side_erosion = 1; include("../../include/side.phtml");
+
+$man_id = isset($_GET["man_id"]) ? $_GET["man_id"] : 'GGGG';
+
+$THISPAGE = "idep-man"; include("$_BASE/include/header.phtml");
 ?>
  
-<!-- content BEGIN -->
-<div id="wepp-middle-two">
-<div id="wepp-content">
-<div id="page-main">
+<h3>WEPP Management File: <?php echo $man_id; ?></h3>
+<pre style="margin-left: 15px;">
 <?php
-  $man_id = $_GET["man_id"];
-  if (! isset($man_id) ) die ("You did not specify a township!");
-
-  echo "Info about the Mangement '$man_id' would go here!";
+echo file_get_contents("/mnt/mesonet/wepp/data/managements/${man_id}.man");
 ?>
-</div>
-</div>
-</div>
+</pre>
  
 <?php include("../../include/footer.phtml"); ?>
