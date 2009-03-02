@@ -177,7 +177,7 @@ LAYER
   STATUS ON
   TYPE POLYGON
   TEMPLATE q_template.html
-  LABELITEM "MODEL_TWP"
+  LABELITEM "model_twp"
   PROJECTION
     "init=epsg:26915"
   END
@@ -187,11 +187,42 @@ LAYER
   CLASS
     OUTLINECOLOR 0 0 0
     LABEL
-      COLOR 0 0 0
+      COLOR 0 0 255
       TYPE BITMAP
       SIZE medium
+      PARTIALS FALSE
+      FORCE TRUE
     END
   END
+END
+
+LAYER
+    NAME cities
+    STATUS OFF
+    TYPE    POLYGON
+    DATA    "/mesonet/data/gis/static/shape/26915/iowa/incorporated_cities_2000.shp"
+    PROJECTION
+        "init=epsg:26915"
+    END
+    LABELITEM "NAME"
+    LABELMAXSCALE 700000
+    MAXSCALE 1000000
+    LABELCACHE  ON
+    CLASS
+        OUTLINECOLOR 0 0 0
+        COLOR 210 210 210
+        LABEL 
+            TYPE BITMAP
+            SIZE MEDIUM
+            OUTLINECOLOR 250 250 250
+            COLOR 0 0 0
+            FORCE FALSE
+            FORCE TRUE
+            BUFFER 2
+            POSITION AUTO
+            PARTIALS false
+        END
+    END
 END
 
 LAYER
