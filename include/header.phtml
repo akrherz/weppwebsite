@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>Iowa Daily Erosion Project</title>
+<title><?php echo isset($TITLE) ? $TITLE: "Iowa Daily Erosion Project"; ?></title>
 <link rel="stylesheet" type="text/css" href="<?php echo $_WEBBASE; ?>/css/content.css" />
 <link rel="icon" href="<?php echo $_WEBBASE; ?>images/icon.gif" type="image/gif">
 <script language="JavaScript" type="text/javascript">
@@ -22,22 +22,67 @@ function new_window(url) {
  <div id="wepp-header-rlogo"><a href="http://www.agron.iastate.edu/initiatives/default.html"><img src="<?php echo $_WEBBASE; ?>/images/ptfmark.gif"></a></div>
 </div>
 
-<div id="mainNavOuter">
-<div id="mainNav">
-<div id="mainNavInner">
+<?php
 
- <ul>
-  <li id="mainFirst<?php if ($THISPAGE == "homepage") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/index.phtml">Homepage</a></li>
-  <li id="main<?php if ($THISPAGE == "erosion") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/GIS/erosion.phtml">Erosion</a></li>
-  <li id="main<?php if ($THISPAGE == "rainfall") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/GIS/rainfall.phtml">Rainfall</a></li>
-  <li id="main<?php if ($THISPAGE == "soil_moisture") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/GIS/sm.phtml">Soil Moisture</a></li>
-  <li id="main<?php if ($THISPAGE == "climate") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/climate/index.phtml">Climate</a></li>
-  <li id="main<?php if ($THISPAGE == "township") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/township/index.phtml">By Township</a></li>
-  <li id="main<?php if ($THISPAGE == "info") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/about.phtml">Project Info</a></li>
-  <li id="mainLast<?php if ($THISPAGE == "contact") echo "-active"; ?>"><a href="<?php echo $_WEBBASE; ?>/contact.phtml">Contact Us</a></li>
- </ul>
+$_pages = Array(
+ "idep" => Array(
+    "base" => Array("title" => "IDEP", "url" => "/index.phtml"),
+    "homepage" => Array("title" => "Homepage", "url" => "/"),
+    "about" => Array("title" => "About", "url" => "/about.phtml"),
+    "contact" => Array("title" => "Contact Us", "url" => "/contact.phtml"),
+    "man" => Array("title" => "Managements", "url" => "/meta/management.phtml"),
+ ),
+ "erosion" => Array(
+    "base" => Array("title" => "Erosion", "url" => "/GIS/erosion.phtml"),
+    "maps" => Array("title" => "Maps", "url" => "/GIS/erosion.phtml"),
+    "methodology" => Array("title" => "Methodology", "url" => "/erosion/methodology.phtml"),
+ ),
+ "rainfall" => Array(
+    "base" => Array("title" => "Rainfall", "url" => "/GIS/rainfall.phtml"),
+    "maps" => Array("title" => "Maps", "url" => "/GIS/rainfall.phtml"),
+    "methodology" => Array("title" => "Methodology", "url" => "/rainfall/methodology.phtml"),
+ ),
+ "sm" => Array(
+    "base" => Array("title" => "Soil Moisture", "url" => "/GIS/sm.phtml"),
+    "map" => Array("title" => "Maps", "url" => "/GIS/sm.phtml"),
+ ),
+ "climate" => Array(
+    "base" => Array("title" => "Climate", "url" => "/climate/"),
+    "browse" => Array("title" => "Browse", "url" => "/climate/browse.phtml"),
+ ),
+ "township" => Array(
+    "base" => Array("title" => "By Township", "url" => "/township/"),
+    "map" => Array("title" => "Select Map", "url" => "/township/"),
+    "daily" => Array("title" => "Daily Result", "url" => "/township/byday.phtml"),
+    "yearly" => Array("title" => "Yearly Result", "url" => "/township/byyear.phtml"),
+  ),
+);
 
-</div>
-</div>
-</div>
+$THISPAGE = isset($THISPAGE) ? $THISPAGE : "networks-base";
+$ar = split("-", $THISPAGE);
+if (sizeof($ar) == 1) $ar[1] = "";
+echo "<div id=\"iem_nav\"><ul>\n";
+$b = "";
+while( list($idx, $page) = each($_pages) )
+{
+  echo sprintf("<li%s><a href=\"%s\">%s</a></li>", 
+      ($ar[0] == $idx) ? " class=\"selected\"" : " ",
+      $_WEBBASE . $page["base"]["url"], $page["base"]["title"]);
+  if ($ar[0] == $idx)
+  {
+    $b .= "<div id=\"iem_subnav\"><ul>\n";
+    while( list($idx2, $page2) = each($page) )
+    {
+       if ($idx2 == "base") continue;
+       $b .= sprintf("<li%s><a href=\"%s\">%s</a></li>", 
+         ($ar[1] == $idx2) ? " class=\"selected\"" : " ",
+          $_WEBBASE . $page[$idx2]["url"], 
+     ($ar[1] == $idx2) ? "[ ". $page[$idx2]["title"] ." ]": $page[$idx2]["title"
+] );
+    }
+    $b .= "</ul></div>\n";
+  }
+}
+echo "</ul></div> $b";
+?>
 <br clear="all" />
