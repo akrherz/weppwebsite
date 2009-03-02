@@ -140,6 +140,25 @@ LAYER
 END
 
 LAYER
+  NAME interstates
+  TYPE LINE
+  STATUS OFF
+  PROJECTION
+   "init=epsg:4326"
+  END
+  DATA /mesonet/data/gis/static/shape/4326/us/interstates.shp
+  CLASS
+    COLOR 255 0 0
+    SYMBOL 'circle'
+    SIZE 4
+    OVERLAYSYMBOL 'circle'
+    OVERLAYSIZE 2
+    OVERLAYCOLOR 0 0 0
+  END
+END
+
+
+LAYER
   NAME rainfall
   STATUS ON
   TYPE POINT
@@ -442,7 +461,7 @@ LAYER
   TRANSFORM FALSE
   STATUS ON
   FEATURE
-    POINTS 160 100 END
+    POINTS 170 100 END
   END
   #TRANSPARENCY 30
   LABELCACHE FALSE

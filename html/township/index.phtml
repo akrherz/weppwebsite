@@ -52,8 +52,8 @@ $states->set("status", MS_ON);
 $interstates = $map->getlayerbyname("interstates");
 $interstates->set("status", MS_ON);
 
-$interstates_label = $map->getlayerbyname("interstates_label");
-$interstates_label->set("status", MS_ON);
+//$interstates_label = $map->getlayerbyname("interstates_label");
+//$interstates_label->set("status", MS_ON);
 
 $iatwp = $map->getlayerbyname("iatwp");
 $iatwp->set("status", MS_ON);
@@ -68,7 +68,7 @@ $states->draw($img);
 //$roads->draw($img);
 //$roads_label->draw($img);
 $interstates->draw($img);
-$interstates_label->draw($img);
+//$interstates_label->draw($img);
 $iatwp->draw($img);
 $counties->draw($img);
 $map->drawLabelCache($img);
