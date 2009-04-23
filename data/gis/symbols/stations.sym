@@ -1,3 +1,4 @@
+SYMBOLSET
 
  SYMBOL
    NAME 'circle'
@@ -147,4 +148,6 @@ Symbol
   Type PIXMAP
   Image 'images/clrbar.png'
   Transparent 17
+END
+
 END
