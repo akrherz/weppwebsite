@@ -46,6 +46,7 @@ $params = Array(
 );
 
 $tsw = Array();
+$et = Array();
 $t10sw = Array();
 $t20sw = Array();
 $dates = Array();
@@ -60,6 +61,7 @@ while (list ($line_num, $line) = each ($fcontents)) {
   $tsw[] = $parts[5] / $soildepth * 100;
   $t10sw[] = $parts[6] / 100 * 100;
   $t20sw[] = $parts[7] / 100 * 100;
+  $et[] = floatval($parts[8]);
 }
 
 include ("$_BASE/include/jpgraph/jpgraph.php");
@@ -83,7 +85,7 @@ $graph->tabtitle->SetFont(FF_FONT1,FS_BOLD,16);
 //$graph->subtitle->Set("Values shown for runid $runid during $year");
 
 $graph->yaxis->SetTitle("Volumetric Soil Moisture [%] ");
-$graph->y2axis->SetTitle("Rainfall [inch] ");
+$graph->y2axis->SetTitle("Rainfall (bars) [inch] and Plant ET (green) [mm]");
 $graph->xaxis->SetLabelAngle(90); 
 $graph->yaxis->HideZeroLabel();
 
@@ -119,6 +121,13 @@ $graph->Add($lineplot);
 $graph->Add($lineplot2);
 $graph->Add($lineplot3);
 
+$lineplot4=new LinePlot($et, $dates);
+$lineplot4->SetColor("green");
+$lineplot4->SetLegend("Plant ET");
+$lineplot4->SetWeight(2);
+$graph->AddY2($lineplot4);
+
+
 $bp=new BarPlot($rainfall, $rdates);
 $bp->SetColor("black");
 //$bp->SetLegend("10-20cm layer");
@@ -126,7 +135,7 @@ $bp->SetColor("black");
 $graph->AddY2($bp);
 
 
-$graph->legend->SetPos(0.02,0.00);
+$graph->legend->SetPos(0.1,0.01);
 
 $tx1 = new Text("Township: $modeltwp  Management: $management  Soil: $soilname
 IDEP Run ID: $runid   Year: $year   Iowa County: $cname");
