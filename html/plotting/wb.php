@@ -71,7 +71,7 @@ include ("$_BASE/include/jpgraph/jpgraph_date.php");
 
 $graph = new Graph(800,600);
 $graph->SetScale("datlin",0, 50);
-$graph->SetY2Scale('lin', 0, 10);
+$graph->SetY2Scale('lin', 0, max( Array(intval(max($et))+1,10) ) );
 $graph->SetFrame(false);
 $graph->SetTickDensity(TICKD_SPARSE);
 
