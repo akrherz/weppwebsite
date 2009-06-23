@@ -275,6 +275,13 @@ $params = Array(
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
+"et" => Array('dbstr' => 'et',
+  'units' => 'mm', 'cramp' => $cr,
+  'title' => "Plant Evap. Trans. on ",'dbagg'=> 'avg',
+  'table' => "waterbalance_by_twp", 'myramp' => 0,
+  'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
+  'dbdate' => strftime("%Y-%m-%d", $ts) ),
+
 "s10cm_mm" => Array('dbstr' => 's10cm',
   'units' => 'mm in top 10cm', 'cramp' => $cr,
   'title' => "0-10cm Soil Water on ",'dbagg'=> 'avg',
@@ -291,7 +298,7 @@ $params = Array(
 
 "rainfall_in" => Array('dbstr' => 'rainfall / 25.4','dbcol' => 'rainfall',
   'units' => 'inches', 'cramp' => $c,'dbagg'=> 'sum',
-  'title' => "Estimated Rainfall on ",
+  'title' => "Rainfall on ",
   'table' => "daily_rainfall_$year", 'myramp' => 8,
   'maplayer' => 'daily_rainfall', 'gtype' => 'hrap',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
@@ -719,7 +726,7 @@ $rt->free();
 
 /* Write Title at the top */
 $point = ms_newpointobj();
-$point->setXY(50, $fontsz + 7);
+$point->setXY(5, $fontsz + 7);
 $point->draw($map, $credits, $img, 0, $param["title"]);
 $point->free();
 
