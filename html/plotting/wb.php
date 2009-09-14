@@ -31,9 +31,11 @@ $rs = pg_execute($conn, "rainfall", Array($hrapi) );
 $row = pg_fetch_array($rs,0);
 $rainfall = Array();
 $rdates = Array();
+$total_rainfall = 0;
 for($i=0;$row=@pg_fetch_array($rs,$i);$i++){
   $rdates[] = strtotime($row["valid"]);
   $rainfall[] = $row["ra"];
+  $total_rainfall += $row["ra"];
 }
 
 $params = Array(
@@ -137,7 +139,7 @@ $graph->AddY2($bp);
 
 $graph->legend->SetPos(0.1,0.01);
 
-$tx1 = new Text("Township: $modeltwp  Management: $management  Soil: $soilname
+$tx1 = new Text("Township: $modeltwp  Management: $management  Soil: $soilname Total Rainfall: ". round($total_rainfall,2) ." in
 IDEP Run ID: $runid   Year: $year   Iowa County: $cname");
 $tx1->SetPos(0.02,0.00, 'left', 'top');
 $tx1->SetFont(FF_FONT1, FS_BOLD, 16);
