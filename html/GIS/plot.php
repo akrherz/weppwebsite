@@ -81,6 +81,7 @@ $ramps = Array(
 	10 => Array(-20, -12, -8, -4, -2, 0, 2, 4, 8, 12,20),
 	11 => Array(10, 15, 20, 24, 27, 30, 33, 36, 40, 45, 50),
 	12 => Array(-30, -20, -15, -10, -5, 0, 5, 10, 15, 20,30),
+	13 => Array(0.1, 0.2, 0.5, 1, 1.5, 2, 3, 4,6,10,14), // Metric Loss
 );
 $mo_ramps = Array(
 	0 =>  Array(0.1, 0.5, 1, 2, 4, 8, 16, 24,25,26,27),
@@ -96,6 +97,7 @@ $mo_ramps = Array(
     10 => Array(-20, -12, -8, -4, -2, 0, 2, 4, 8, 12,20),
     11 => Array(10, 15, 20, 24, 27, 30, 33, 36, 40, 45, 50),
     12 => Array(-30, -20, -15, -10, -5, 0, 5, 10, 15, 20,30),
+	13 => Array(0.5, 1, 2, 3, 4, 6, 8, 10,11,12,13), // Metric Loss
 );
 
 $yr_ramps = Array(
@@ -112,6 +114,7 @@ $yr_ramps = Array(
     10 => Array(-20, -12, -8, -4, -2, 0, 2, 4, 8, 12,20),
     11 => Array(10, 15, 20, 24, 27, 30, 33, 36, 40, 45, 50),
     12 => Array(-30, -20, -15, -10, -5, 0, 5, 10, 15, 20,30),
+	13 => Array(0.5, 1, 2, 3, 4, 6, 8, 10,11,12,13), // Metric Loss
 );
 
 $params = Array(
@@ -405,21 +408,21 @@ $params = Array(
 "min_loss_hectare" => Array('dbstr' => 'min_loss * 10.0','dbcol' => 'min_loss',
   'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Minimum Soil Loss: ",
-  'table' => $resultsTBL, 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 13,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "avg_loss_hectare" => Array('dbstr' => 'avg_loss * 10.0','dbcol' => 'avg_loss',
   'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Average Soil Loss: ",
-  'table' => $resultsTBL, 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 13,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
 "max_loss_hectare" => Array('dbstr' => 'max_loss * 10.0','dbcol' => 'max_loss',
   'units' => 'tons per hectare', 'cramp' => $c,'dbagg'=> 'sum',
   'title' => "Maximum Soil Loss: ",
-  'table' => $resultsTBL, 'myramp' => 1,
+  'table' => $resultsTBL, 'myramp' => 13,
   'maplayer' => 'daily_rainfall', 'gtype' => 'twp',
   'dbdate' => strftime("%Y-%m-%d", $ts) ),
 
