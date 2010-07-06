@@ -54,8 +54,9 @@ $t20sw = Array();
 $dates = Array();
 
 while (list ($line_num, $line) = each ($fcontents)) {
-  if ($line_num < 14) { continue; }
+  if ($line_num < 20) { continue; }
   $parts = preg_split ("/[\s]+/", $line);
+  //print_r($parts);
   $ts = mktime(0,0,0,1,1, $parts[3]) + (86400 * $parts[2]);
   if ($ts < $lbound || $ts >= $obound || $ts > $now) { continue; }
   //if ($parts[$col] == "NaN" || $parts[$col] == "******") { continue; }
