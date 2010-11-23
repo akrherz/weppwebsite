@@ -2,7 +2,7 @@
 /* Something to generate the plots! */
 
 include_once("../../etc/config.inc.php");
-dl($mapscript);
+
 
 if (isset($argv))
    for ($i=1;$i<count($argv);$i++)
