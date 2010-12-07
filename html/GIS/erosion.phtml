@@ -86,7 +86,7 @@ $imgurl = "plot.php?advanced=$advanced&duration=$duration&var=$pvar&extents=$ext
  <input type="hidden" name="day" value="<?php echo $day; ?>">
  <input type="hidden" name="advanced" value="<?php echo $advanced; ?>">
  <input type="hidden" name="extents" value="<?php echo $extents; ?>">
- <input type="submit" value="Soil Loss Maps">
+ <input type="submit" value="Soil Erosion Maps">
 </form>
 </td>
 <td>
@@ -146,17 +146,17 @@ $plotables = Array("min_runoff_in" => "Minimum Runoff [inch]",
 	"min_runoff_mm" => "Minimum Runoff [mm]",
 	"avg_runoff_mm" => "Average Runoff [mm]",
 	"max_runoff_mm" => "Maximum Runoff [mm]",
-	"min_loss_acre" => "Minimum Loss [tons/acre]",
-	"avg_loss_acre" => "Average Loss [tons/acre]",
-	"max_loss_acre" => "Maximum Loss [tons/acre]",
-	"min_loss_hectare" => "Minimum Loss [tons/hectare]",
-	"avg_loss_hectare" => "Average Loss [tons/hectare]",
-	"max_loss_hectare" => "Maximum Loss [tons/hectare]",
+	"min_loss_acre" => "Minimum Erosion [tons/acre]",
+	"avg_loss_acre" => "Average Erosion [tons/acre]",
+	"max_loss_acre" => "Maximum Erosion [tons/acre]",
+	"min_loss_hectare" => "Minimum Erosion [tons/hectare]",
+	"avg_loss_hectare" => "Average Erosion [tons/hectare]",
+	"max_loss_hectare" => "Maximum Erosion [tons/hectare]",
 	"runoff_ratio" => "Runoff Ratio [%]",
 	"ve_runoff_in" => "Variance Estimator for Runoff [inch]",
 	"ve_runoff_mm" => "Variance Estimator for Runoff [mm]",
-	"ve_loss_acre" => "Variance Estimator for Loss [tons/acre]",
-	"ve_loss_hectare" => "Variance Estimatro for Loss [tons/hectare]");
+	"ve_loss_acre" => "Variance Estimator for Erosion [tons/acre]",
+	"ve_loss_hectare" => "Variance Estimatro for Erosion [tons/hectare]");
 
 while( list($k,$v) = each($plotables) )
 {
