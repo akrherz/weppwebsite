@@ -691,7 +691,7 @@ if ($scenario != ""){
 
 
 //$dm = $map->getlayerbyname("dm");
-//$dm->set("status", MS_ON);
+//$dm->set("status", MS_OFF);
 //$dm->draw($img);
 
 /* Need something to draw bars! */
@@ -719,19 +719,19 @@ $cl->label->set("offsety", 0);
 $rt = ms_newRectObj();
 $rt->setextent(0, $map_height, $map_width, $map_height - $fontsz - 3);
 $rt->draw($map, $bar, $img, 0, "");
-$rt->free();
+
 
 /* Draw Top Bar for title */
 $rt = ms_newRectObj();
 $rt->setextent(0, $fontsz+3+5, $map_width, 0);
 $rt->draw($map, $bar, $img, 0, "");
-$rt->free();
+
 
 /* Write Title at the top */
 $point = ms_newpointobj();
 $point->setXY(5, $fontsz + 7);
 $point->draw($map, $credits, $img, 0, $param["title"]);
-$point->free();
+
 
 /* Draw title at the bottom */
 $point = ms_newpointobj();
@@ -741,7 +741,7 @@ if ($map_width > 320){
 } else {
   $point->draw($map, $credits, $img, 1, "Map Units: ". $param["units"] ."  IDEP generated ". date("Y/m/d"));
 }
-$point->free();
+
 
 /* Build legend bar */
 $x = 1;
@@ -753,7 +753,7 @@ $width = intval($map_width / 30);
 $rt = ms_newRectObj();
 $rt->setextent(0, $map_height, $width + 5 + ($fontsz * 2), $y-3);
 $rt->draw($map, $bar, $img, 0, "");
-$rt->free();
+
 
 $layer = $map->getLayerByName("singlebox");
 for ($k=11;$k>=0;$k--){
@@ -771,7 +771,7 @@ for ($k=11;$k>=0;$k--){
  $cl->label->set("offsetx", $width*1.6);
  $cl->label->set("offsety", 0 - $height/2);
  $p->draw($map, $layer, $img, 11- $k, @$param["ramp"][$k]);
- $p->free();
+
  $y = $y + $height;
 }
 

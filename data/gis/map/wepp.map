@@ -24,14 +24,14 @@ INTERLACE off
 OUTPUTFORMAT
         NAME png
         MIMETYPE "image/png"
-        DRIVER "GD/PNG"
+        DRIVER "AGG/PNG"
         IMAGEMODE PC256
         TRANSPARENT OFF
 END
 OUTPUTFORMAT
         NAME png24
         MIMETYPE "image/png"
-        DRIVER "GD/PNG"
+        DRIVER "AGG/PNG"
         IMAGEMODE RGB
         TRANSPARENT OFF
 END
@@ -165,7 +165,7 @@ LAYER
   TYPE POINT
   DATA /home/wepp/GIS/raindata/20030505.shp
   PROJECTION
-   "proj=latlong"
+   "init=epsg:4326"
   END
 #  TRANSPARENCY 90
 END
@@ -296,11 +296,11 @@ LAYER
 	NAME 'smalltxt'
 	LABEL
       COLOR 250 250 250
-      BACKGROUNDCOLOR 0 0 0
+      #BACKGROUNDCOLOR 0 0 0
       SHADOWSIZE 1 1
       SHADOWCOLOR 0 0 0
-      BACKGROUNDSHADOWCOLOR 0 0 0
-      BACKGROUNDSHADOWSIZE 1 1
+      #BACKGROUNDSHADOWCOLOR 0 0 0
+      #BACKGROUNDSHADOWSIZE 1 1
       TYPE BITMAP
 	  SIZE MEDIUM
       POSITION CR
@@ -312,12 +312,13 @@ END
 
 LAYER
   NAME dm
-  STATUS ON
-  TYPE LINE   DATA /mesonet/data/gis/shape/4326/us/usdm/dm_current.shp
+  STATUS OFF
+  TYPE LINE   
+  DATA /mesonet/data/gis/shape/4326/us/usdm/projected.shp
   PROJECTION
    "init=epsg:4326"
   END
-  CLASSITEM "DCAT"
+  CLASSITEM "DM"
   LABELCACHE OFF
   CLASS
     EXPRESSION /0/
@@ -331,7 +332,7 @@ LAYER
   END
   CLASS
     EXPRESSION /1/
-    COLOR 120 0 0
+    COLOR 200 0 0
     TEXT "D1"
     SIZE 4
     SYMBOL 'circle'
