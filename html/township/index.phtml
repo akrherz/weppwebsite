@@ -64,7 +64,7 @@ $iatwp->set("status", MS_ON);
 
 $img = $map->prepareImage();
 $ref = $map->drawReferenceMap();
-$refurl = $ref->saveWebImage('');
+$refurl = $ref->saveWebImage();
                                                                                 
 $background->draw($img);
 $states->draw($img);
@@ -76,7 +76,7 @@ $cities->draw($img);
 $iatwp->draw($img);
 $counties->draw($img);
 $map->drawLabelCache($img);
-$url = $img->saveWebImage('');
+$url = $img->saveWebImage();
 
 
 ?>
