@@ -3,8 +3,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import mx.DateTime
 
-sts = mx.DateTime.DateTime(2005,7,1)
-ets = mx.DateTime.DateTime(2005,8,1)
+sts = mx.DateTime.DateTime(2007,8,1)
+ets = mx.DateTime.DateTime(2007,9,1)
 font = ImageFont.truetype('Vera.ttf', 22)
 
 yheader = 44
@@ -13,7 +13,7 @@ draw = ImageDraw.Draw(out)
 #draw.rectangle( [280,220,360,260], fill="#000000" )
 #now = mx.DateTime.now()
 #str = now.strftime("%I:%M")
-draw.text((1120,1), "July 2005", font=font)
+draw.text((1120,1), "March 2007", font=font)
 draw.text((160,20), "SUN", font=font)
 draw.text((480,20), "MON", font=font)
 draw.text((800,20), "TUE", font=font)
