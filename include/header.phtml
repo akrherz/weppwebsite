@@ -1,26 +1,76 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title><?php echo isset($TITLE) ? $TITLE: "Iowa Daily Erosion Project"; ?></title>
-<link rel="stylesheet" type="text/css" href="<?php echo $_WEBBASE; ?>/css/content.css" />
-<link rel="icon" href="<?php echo $_WEBBASE; ?>images/icon.gif" type="image/gif">
-<script language="JavaScript" type="text/javascript">
+	<meta charset="utf-8">
+	<title><?php echo isset($TITLE) ? $TITLE: "Iowa Daily Erosion Project"; ?></title>
+	<link href="/css/base.css" media="all" rel="stylesheet">
+	<link href="/css/content.css" media="all" rel="stylesheet">
+	<link rel="icon" href="/images/icon.gif" type="image/gif">
+	<!--[if lt IE 9]>
+		<style>
+			ul.left > li, ul.right > li{ *display: inline; }
+			#ribbon form > input[type="submit"]{ *vertical-align: baseline; }
+		</style>
+	<![endif]--> 
+	<script language="JavaScript" type="text/javascript">
 window.name = "content";
 function new_window(url) {
  link = window.open(url,"Link","toolbar=0,location=0,directories=0,status=0,menubar=no,scrollbars=yes,resizable=yes,width=810,height=810");
 } 
-</script>
-<?php if (isset($HEADEXTRA)) echo $HEADEXTRA; ?>
+	</script>
+	<?php if (isset($HEADEXTRA)) echo $HEADEXTRA; ?>
 </head>
-
 <body>
-<?php include("$_BASE/include/webring.html"); ?>
-<div id="wepp-header">
- <div id="wepp-header-logo"><img src="<?php echo $_WEBBASE; ?>/images/erosion.gif"></div>
- <h1>Iowa Daily Erosion Project</h1>
- <div id="wepp-header-rlogo"><a href="http://www.agron.iastate.edu/initiatives/default.html"><img src="<?php echo $_WEBBASE; ?>/images/ptfmark.gif"></a></div>
-</div>
+	<div class="skip"><a accesskey="2" href="#container">Skip Navigation</a></div>
+	<div class="hwrapper" id="header">
+		<div id="top-strip">
+			<div class="grids-24">
+				<div class="grid-8">
+					<ul class="left">
+						<li><a href="http://mesonet.agron.iastate.edu/">Iowa Mesonet</a></li>
+						<li class="last"><a href="http://iowa.cocorahs.org/">Iowa CoCoRaHS</a></li>
+					</ul>
+				</div>
+				<div class="grid-16">
+					<ul class="right">
+						<li class="idx"><a href="http://www.iastate.edu/index/A/">A</a></li><li class="idx"><a href="http://www.iastate.edu/index/B/">B</a></li><li class="idx"><a href="http://www.iastate.edu/index/C/">C</a></li><li class="idx"><a href="http://www.iastate.edu/index/D/">D</a></li><li class="idx"><a href="http://www.iastate.edu/index/E/">E</a></li><li class="idx"><a href="http://www.iastate.edu/index/F/">F</a></li><li class="idx"><a href="http://www.iastate.edu/index/G/">G</a></li><li class="idx"><a href="http://www.iastate.edu/index/H/">H</a></li><li class="idx"><a href="http://www.iastate.edu/index/I/">I</a></li><li class="idx"><a href="http://www.iastate.edu/index/J/">J</a></li><li class="idx"><a href="http://www.iastate.edu/index/K/">K</a></li><li class="idx"><a href="http://www.iastate.edu/index/L/">L</a></li><li class="idx"><a href="http://www.iastate.edu/index/M/">M</a></li><li class="idx"><a href="http://www.iastate.edu/index/N/">N</a></li><li class="idx"><a href="http://www.iastate.edu/index/O/">O</a></li><li class="idx"><a href="http://www.iastate.edu/index/P/">P</a></li><li class="idx"><a href="http://www.iastate.edu/index/Q/">Q</a></li><li class="idx"><a href="http://www.iastate.edu/index/R/">R</a></li><li class="idx"><a href="http://www.iastate.edu/index/S/">S</a></li><li class="idx"><a href="http://www.iastate.edu/index/T/">T</a></li><li class="idx"><a href="http://www.iastate.edu/index/U/">U</a></li><li class="idx"><a href="http://www.iastate.edu/index/V/">V</a></li><li class="idx"><a href="http://www.iastate.edu/index/W/">W</a></li><li class="idx"><a href="http://www.iastate.edu/index/X/">X</a></li><li class="idx"><a href="http://www.iastate.edu/index/Y/">Y</a></li><li class="idx"><a href="http://www.iastate.edu/index/Z/">Z</a></li>
+						<li class="border first"><a href="http://info.iastate.edu/">Directory</a></li>
+						<li class="border"><a href="http://www.fpm.iastate.edu/maps/">Maps</a></li>
+						<li class="border last"><a href="http://www.iastate.edu/contact/">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="ribbon">
+			<div class="grids-24">
+				<div class="grid-16">
+					<h1 class="nameplate">
+						<a accesskey="1" href="http://www.iastate.edu/">
+							<img alt="Iowa State University" src="/img/sprite.png"/>
+						</a>
+					</h1>
+				</div>
+				<div class="grid-8">
+					<form action="http://google.iastate.edu/search" method="GET">
+						<input name="output" type="hidden" value="xml_no_dtd"/>
+						<input name="client" type="hidden" value="default_frontend"/>
+						<input name="sitesearch" type="hidden" value=""/>
+						<input name="proxystylesheet" type="hidden" value="default_frontend"/>
+						<input accesskey="s" name="q" placeholder="Search" tabindex="1" type="text"/>
+						<input name="btnG" title="Search" type="submit" value=""/>
+					</form>
+				</div>
+			</div>
+			<div class="grids-24">
+				<div class="grid-12">
+					<h2 class="site-title"><a href="/">Iowa Daily Erosion Project, Department of Agronomy</a></h2>
+				</div>
+				<div class="grid-12">
+					<h2 class="site-tagline"></h2>
+				</div>
+			</div>
+		</div>
+	</div>
 
 <?php
 
@@ -59,30 +109,32 @@ $_pages = Array(
 );
 
 $THISPAGE = isset($THISPAGE) ? $THISPAGE : "networks-base";
-$ar = split("-", $THISPAGE);
+$ar = preg_split("/-/", $THISPAGE);
 if (sizeof($ar) == 1) $ar[1] = "";
-echo "<div id=\"iem_nav\"><ul>\n";
-$b = "";
+echo "<div id=\"container\">
+		<div class=\"grids-24\">
+			<div class=\"grid-5 sidebar\" id=\"left-sidebar\">
+				<ul class=\"navigation\">
+				";
 while( list($idx, $page) = each($_pages) )
 {
-  echo sprintf("<li%s><a href=\"%s\">%s</a></li>", 
+	/* Section header */
+	echo sprintf("<li%s><a href=\"%s\">%s</a><ul>", 
       ($ar[0] == $idx) ? " class=\"selected\"" : " ",
       $_WEBBASE . $page["base"]["url"], $page["base"]["title"]);
-  if ($ar[0] == $idx)
-  {
-    $b .= "<div id=\"iem_subnav\"><ul>\n";
-    while( list($idx2, $page2) = each($page) )
-    {
-       if ($idx2 == "base") continue;
-       $b .= sprintf("<li%s><a href=\"%s\">%s</a></li>", 
+  	if ($ar[0] == $idx)
+  	{
+    	while( list($idx2, $page2) = each($page) )
+    	{
+       		if ($idx2 == "base") continue;
+       		echo sprintf("<li%s><a href=\"%s\">%s</a></li>", 
          ($ar[1] == $idx2) ? " class=\"selected\"" : " ",
           $_WEBBASE . $page[$idx2]["url"], 
-     ($ar[1] == $idx2) ? "[ ". $page[$idx2]["title"] ." ]": $page[$idx2]["title"
-] );
+     ($ar[1] == $idx2) ? "[ ". $page[$idx2]["title"] ." ]": $page[$idx2]["title"] );
+    	}
     }
-    $b .= "</ul></div>\n";
-  }
+    echo "</ul></li>";
 }
-echo "</ul></div> $b";
+	echo "</div>";
 ?>
-<br clear="all" />
+<div class="grid-14" id="content">

@@ -1,24 +1,3 @@
-/* New WEPP master stylesheet */
-
-body {
-  margin: 5px;
-  padding: 0px;
-}
-a {
-	text-decoration: none;
-	}
-	
-a:link {
-	color: #06c;
-	}
-	
-a:visited {
-	color: #06c;
-	}
-h1 {
-  font-size: 1.30em;
-  margin-top: 1em;
-}
 
 #wepp-header {
  background-color: #455372;
