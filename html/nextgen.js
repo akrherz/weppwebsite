@@ -1,5 +1,10 @@
 var map, tms;
 var ltype = 'vsm';
+var appstate = {
+		lat: 42.0,
+		lon: -95.0,
+		date: null
+};
 
 function get_my_url (bounds) {
         var res = this.map.getResolution();
@@ -7,12 +12,12 @@ function get_my_url (bounds) {
         var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
         var z = this.map.getZoom();
 
-        var path = z + "/" + x + "/" + y + "." + this.type +"?"+ parseInt(Math.random()*9999);
+        var path = z + "/" + x + "/" + y + "." + this.type ;
         var url = this.url;
         if (url instanceof Array) {
             url = this.selectUrl(path, url);
         }
-        this.layername = 'idep::'+ ltype +'::'+$.datepicker.formatDate("yy-mm-dd", $("#datepicker").datepicker("getDate"));
+        this.layername = 'idep::'+ ltype +'::'+$.datepicker.formatDate("yy-mm-dd", appstate.date);
         return url + this.service +"/"+ this.layername +"/"+ path;
 
    }
@@ -24,8 +29,7 @@ function get_my_url2(bounds) {
                     / (res * this.tileSize.h));
     var z = this.map.getZoom();
 
-    var path = z + "/" + x + "/" + y + "." + this.type + "?"
-                    + parseInt(Math.random() * 9999);
+    var path = z + "/" + x + "/" + y + "." + this.type ;
     var url = this.url;
     if (url instanceof Array) {
             url = this.selectUrl(path, url);
@@ -33,7 +37,24 @@ function get_my_url2(bounds) {
     return url + this.service + "/" + this.layername + "/" + path;
 
 }
-  
+function updateDetails(){
+	$('#details').html('Loading...');
+    $.get('nextgen-details.php', {lat: appstate.lat, lon: appstate.lon,
+		date: $.datepicker.formatDate("yy-mm-dd", appstate.date)},
+		function(data){
+			$('#details').html(data);
+	});
+
+}
+function remap(){
+	tms.redraw();
+}
+function setDate(year, month, date){
+	appstate.date = new Date(year+"/"+ month +"/"+ date);
+	$('#datepicker').datepicker("setDate", appstate.date);
+	remap();
+	updateDetails();
+}
 function init(){
 	markers = new OpenLayers.Layer.Vector( "Query" );
 
@@ -79,14 +100,9 @@ function init(){
             onComplete: function(feature, pixel) {
                     geo = feature.geometry.clone();
                     geo.transform(map.getProjectionObject(), p4326);
-                    $('#details').html('Loading...');
-                    
-                    $.get('nextgen-details.php', {lat: geo.y, lon: geo.x,
-                    		date: $.datepicker.formatDate("yy-mm-dd", $("#datepicker").datepicker("getDate"))},
-                    		function(data){
-                    			$('#details').html(data);
-                    });
-                    
+                    appstate.lat = geo.y;
+                    appstate.lon = geo.x;
+                    updateDetails();
             }
     })
 
@@ -136,23 +152,29 @@ function init(){
       map.zoomToExtent(extent);
 
       $("#datepicker").datepicker({
-    	   onSelect: function(dateText, inst) { 
-    		   tms.redraw(); 
+    	  dateFormat: 'M d, yy',
+    	   onSelect: function(dateText, inst) {
+    		   appstate.date = $("#datepicker").datepicker("getDate");
+    		   remap(); 
+    		   updateDetails();
     	   }
       });
       var d = new Date();
       d.setDate( d.getDate() - 1 );
+      appstate.date = d;
       $("#datepicker").datepicker('setDate', d);
       
       $( "#radio" ).buttonset();
       $( '#radio input[type=radio]').change(function(){
     	  tms.redraw();
     	  ltype = this.value;
+    	  $('#rampimg').attr('src',"images/"+ ltype +"-ramp.png");
       });
-      var point = new OpenLayers.Geometry.Point(-92., 42.);
+      var point = new OpenLayers.Geometry.Point(appstate.lon, appstate.lat);
       var pointFeature = new OpenLayers.Feature.Vector(point.transform(p4326,p900913),null,style_blue);
       markers.addFeatures([pointFeature]);
       
       controls.drag.activate();
+      updateDetails();
       
 } /* End of init() */
