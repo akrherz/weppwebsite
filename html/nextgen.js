@@ -78,7 +78,7 @@ function init(){
 	var p900913 = new OpenLayers.Projection('EPSG:900913');
     tms = new OpenLayers.Layer.TMS(
             'IDEP Data Layer',
-            'http://iem.local/cache/tile.py/',
+            'http://mesonet.agron.iastate.edu/cache/tile.py/',
             {layername      : 'idep',
             service         : '1.0.0',
             type            : 'png',
@@ -113,7 +113,7 @@ function init(){
     });
     */
     var counties = new OpenLayers.Layer.TMS('US Counties',
-            'http://iem.local/c/c.py/', {
+            'http://mesonet.agron.iastate.edu/c/c.py/', {
                     layername : 'c-900913',
                     service : '1.0.0',
                     type : 'png',
@@ -123,7 +123,7 @@ function init(){
                     isBaseLayer : false
             });
     var states = new OpenLayers.Layer.TMS('US States',
-            'http://iem.local/c/c.py/', {
+            'http://mesonet.agron.iastate.edu/c/c.py/', {
                     layername : 's-900913',
                     service : '1.0.0',
                     type : 'png',
