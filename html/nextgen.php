@@ -59,7 +59,8 @@ float: left;
 <body onload="init()">
 <div id="detailsContainer">
 	<div id="details">
-		<p>Location Details!</p>
+		<div id="details_loading"><img src="images/wait24trans.gif" /> Loading...</div>
+		<div id="details_details"></div>
 	</div>
 </div>
 <div id="controller">

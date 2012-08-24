@@ -38,11 +38,14 @@ function get_my_url2(bounds) {
 
 }
 function updateDetails(){
-	$('#details').html('Loading...');
+	$('#details_details').css('display', 'none');
+	$('#details_loading').css('display', 'block');
     $.get('nextgen-details.php', {lat: appstate.lat, lon: appstate.lon,
 		date: $.datepicker.formatDate("yy-mm-dd", appstate.date)},
 		function(data){
-			$('#details').html(data);
+			$('#details_details').css('display', 'block');
+			$('#details_loading').css('display', 'none');
+			$('#details_details').html(data);
 	});
 
 }
@@ -107,11 +110,13 @@ function init(){
     })
 
     };
-    /*
-    var osm = new OpenLayers.Layer.OSM('OpenStreetMap', null, {
-        transitionEffect: 'resize'
+    
+    var osm = new OpenLayers.Layer.OSM('OpenStreetMap (Internet)', null, {
+        transitionEffect: 'resize',
+        visibility : false,
+        isBaseLayer : true
     });
-    */
+    
     var counties = new OpenLayers.Layer.TMS('US Counties',
             'http://mesonet.agron.iastate.edu/c/c.py/', {
                     layername : 'c-900913',
@@ -142,7 +147,7 @@ function init(){
           //restrictedExtent : extent,
           projection: new OpenLayers.Projection("EPSG:900913"),
           theme: null,
-          layers: [blank, tms, counties, states, markers],
+          layers: [blank, osm, tms, counties, states, markers],
           center: new OpenLayers.LonLat(-95, 42),
           zoom: 1
       });
