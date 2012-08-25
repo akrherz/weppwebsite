@@ -166,17 +166,21 @@ function init(){
       }
       map.zoomToExtent(extent);
 
+      var d = new Date();
+      d.setDate( d.getDate() - 1 );
+      appstate.date = d;
+      
       $("#datepicker").datepicker({
     	  dateFormat: 'M d, yy',
+    	  minDate: new Date(2002, 1, 1),
+    	  maxDate: d,
     	   onSelect: function(dateText, inst) {
     		   appstate.date = $("#datepicker").datepicker("getDate");
     		   remap(); 
     		   updateDetails();
     	   }
       });
-      var d = new Date();
-      d.setDate( d.getDate() - 1 );
-      appstate.date = d;
+
       $("#datepicker").datepicker('setDate', d);
       
       $( "#radio" ).buttonset();

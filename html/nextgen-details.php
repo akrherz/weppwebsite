@@ -42,8 +42,21 @@ $rs = timeit($dbconn, "HSELECT", Array('POINT('.$lon .' '. $lat .')'));
 $row = pg_fetch_assoc($rs,0);
 $hrap_i = $row["hrap_i"];
 
+/* Get daily total */
+$rs = pg_prepare($dbconn, "RAINFALL0", "select rainfall / 25.4 as rainfall
+		from daily_rainfall_$year
+		WHERE valid = $1 and hrap_i = $2");
+$rs = timeit($dbconn, "RAINFALL0", Array(date("Y-m-d", $date), $hrap_i));
+if (pg_num_rows($rs) == 0){
+	echo "<br /><strong>Rainfall:</strong> Missing";
+} else{
+	$row = pg_fetch_assoc($rs, 0);
+	echo "<br /><strong>Rainfall:</strong> ". sprintf("%.2f in", $row["rainfall"]);
+}
+
+
 /* Get monthly total */
-$rs = pg_prepare($dbconn, "RAINFALL2", "select avg(rainfall) / 25.4 as rainfall
+$rs = pg_prepare($dbconn, "RAINFALL2", "select rainfall / 25.4 as rainfall
 		from monthly_rainfall_$year
 		WHERE valid = $1 and hrap_i = $2");
 $rs = timeit($dbconn, "RAINFALL2", Array(date("Y-m-01", $date), $hrap_i));
@@ -54,13 +67,13 @@ if (pg_num_rows($rs) == 0){
 	echo "<br /><strong>". date("M", $date) ." Rainfall:</strong> ". sprintf("%.2f in", $row["rainfall"]);
 }
 
-/* Get monthly total */
+/* Get yearly total */
 $rs = pg_prepare($dbconn, "RAINFALL3", "select avg(rainfall) / 25.4 as rainfall
 		from yearly_rainfall
 		WHERE valid = $1 and hrap_i = $2");
 $rs = timeit($dbconn, "RAINFALL3", Array(date("Y-01-01", $date), $hrap_i));
 if (pg_num_rows($rs) == 0){
-	echo "<br /><strong>$year Rainfall:</strong> Missing";
+	echo "<br /><strong>$year Rainfall:</strong> 0.00 in";
 } else{
 	$row = pg_fetch_assoc($rs, 0);
 	echo "<br /><strong>$year Rainfall:</strong> ". sprintf("%.2f in", $row["rainfall"]);
@@ -71,7 +84,7 @@ $rs = pg_prepare($dbconn, "RES", "select * from results_by_twp WHERE
 		valid = $1 and model_twp = $2");
 $rs = timeit($dbconn, "RES", Array(date("Y-m-d", $date), $model_twp));
 if (pg_num_rows($rs) == 0){
-	echo "<br /><strong>Erosion Results are missing!</strong>";
+	echo "<br /><strong>No Erosion/Runoff</strong>";
 } else{
 	$row = pg_fetch_assoc($rs, 0);
 	echo "<br />--- Township Summary ---";
@@ -87,12 +100,13 @@ $rs = timeit($dbconn, "TRES", Array($model_twp));
 if (pg_num_rows($rs) == 0){
 	echo "<br /><strong>Top events are missing!</strong>";
 } else{
-	echo "<br /><strong>Top 10 Events:</strong> ";
+	echo "<br /><strong>Top 10 Events:</strong><br />";
 	for ($i=0;$row=@pg_fetch_assoc($rs,$i);$i++){
 		$ts = strtotime($row["valid"]);
-		echo sprintf("<a href='javascript:setDate(%s,%s,%s);'>%s</a>, ",
+		if ($i > 0 && $i % 2 == 0){ echo "<br />"; }
+		echo sprintf("<a href='javascript:setDate(%s,%s,%s);'>%s</a> &nbsp; ",
 				date("Y", $ts), date("m", $ts), date("d", $ts),
-				date("M d, Y", $ts));
+				date("M j, Y", $ts));
 	}
 }
 

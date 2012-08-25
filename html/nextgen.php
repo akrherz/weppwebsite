@@ -4,9 +4,9 @@
  <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.22.custom.css" rel="stylesheet" />
  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
  <script type="text/javascript" src="js/jquery-ui-1.8.22.custom.min.js"></script>
- <script src='http://openlayers.org/api/2.12/OpenLayers.js'></script>
+ <script src='js/OpenLayers.js'></script>
  <link rel='stylesheet' 
-  href='http://openlayers.org/api/2.12/theme/default/style.css' type='text/css'>
+  href='css/default/style.css' type='text/css'>
           <style type="text/css">
      .dp {
      border: 0px;
@@ -37,17 +37,17 @@ float: left;
             }
             #controller {
                 position: absolute;
-                bottom: 1em;
-                left: 1em;
-                width: 600px;
+                bottom: 0.5em;
+                left: 0.5em;
+                padding-right: 0.5em;
                 background-color: #000;
-                z-index: 20000;
+                z-index: 20001;
                 padding-left: 0.5em;
             }
             #ramp {
                 position: absolute;
-                bottom: 150px;
-                left: 5px;
+                bottom: 50px;
+                left: 0.5em;
                 background-color: #000;
                 z-index: 20000;
                 padding-left: 0.5em;
@@ -106,7 +106,13 @@ var tilecache = "<?php echo TILECACHE; ?>";
 	</form>
 	</div>
 </div>
-<div id="ramp"><img src="images/vsm-ramp.png" id="rampimg" /></div>
+<div id="ramp">
+<img src="images/vsm-ramp.png" id="rampimg" />
+<br /> &nbsp; 
+<br /> &nbsp; 
+<br /> &nbsp; 
+<br /> &nbsp; 
+</div>
 <div id="map"></div>
 </body>
 </html>
