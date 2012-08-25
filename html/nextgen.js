@@ -1,11 +1,21 @@
 var map, tms;
-var ltype = 'vsm';
 var appstate = {
 		lat: 42.0,
 		lon: -95.0,
-		date: null
+		date: null,
+		ltype: 'vsm'
 };
-
+var events = {
+		1 : {year: 2007, month: 5, day: 6},
+		2 : {year: 2004, month: 5, day: 24},
+		3 : {year: 2004, month: 9, day: 14},
+};
+function selectEvent(e){
+	setDate( events[e].year, events[e].month, events[e].day);
+}
+function setType(t){
+	$('#'+ t +'_opt').click();
+}
 function get_my_url (bounds) {
         var res = this.map.getResolution();
         var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
@@ -17,7 +27,7 @@ function get_my_url (bounds) {
         if (url instanceof Array) {
             url = this.selectUrl(path, url);
         }
-        this.layername = 'idep::'+ ltype +'::'+$.datepicker.formatDate("yy-mm-dd", appstate.date);
+        this.layername = 'idep::'+ appstate.ltype +'::'+$.datepicker.formatDate("yy-mm-dd", appstate.date);
         return url + this.service +"/"+ this.layername +"/"+ path;
 
    }
@@ -81,7 +91,7 @@ function init(){
 	var p900913 = new OpenLayers.Projection('EPSG:900913');
     tms = new OpenLayers.Layer.TMS(
             'IDEP Data Layer',
-            'http://mesonet.agron.iastate.edu/cache/tile.py/',
+            tilecache +'/c/tile.py/',
             {layername      : 'idep',
             service         : '1.0.0',
             type            : 'png',
@@ -118,7 +128,7 @@ function init(){
     });
     
     var counties = new OpenLayers.Layer.TMS('US Counties',
-            'http://mesonet.agron.iastate.edu/c/c.py/', {
+            tilecache +'/c/c.py/', {
                     layername : 'c-900913',
                     service : '1.0.0',
                     type : 'png',
@@ -128,7 +138,7 @@ function init(){
                     isBaseLayer : false
             });
     var states = new OpenLayers.Layer.TMS('US States',
-            'http://mesonet.agron.iastate.edu/c/c.py/', {
+    			tilecache +'/c/c.py/', {
                     layername : 's-900913',
                     service : '1.0.0',
                     type : 'png',
@@ -172,8 +182,8 @@ function init(){
       $( "#radio" ).buttonset();
       $( '#radio input[type=radio]').change(function(){
     	  tms.redraw();
-    	  ltype = this.value;
-    	  $('#rampimg').attr('src',"images/"+ ltype +"-ramp.png");
+    	  appstate.ltype = this.value;
+    	  $('#rampimg').attr('src',"images/"+ appstate.ltype +"-ramp.png");
       });
       var point = new OpenLayers.Geometry.Point(appstate.lon, appstate.lat);
       var pointFeature = new OpenLayers.Feature.Vector(point.transform(p4326,p900913),null,style_blue);

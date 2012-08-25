@@ -52,11 +52,41 @@ float: left;
                 z-index: 20000;
                 padding-left: 0.5em;
             }
-
+			#quick {
+				position: absolute;
+				top: 0px;
+				left: 50px;
+				z-index: 20000;
+			}
+			#quick ul {
+				float: right;
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				margin-right: -2px;
+			}
+			#quick li {
+				float: left;
+				margin: 0;
+				border: 1px solid #999;
+				padding: 6px 8px 3px 8px;
+				margin-left: -1px;
+				background: white;
+			}
         </style>
+        <script type="text/javascript">
+var tilecache = "<?php echo TILECACHE; ?>";
+        </script>
  <script src='nextgen.js'></script>
 </head>
 <body onload="init()">
+<div id="quick">
+<ul>
+	<li><a href="javascript: selectEvent(1);">May6, 07</a></li>
+	<li><a href="javascript: selectEvent(2);">May24, 04</a></li>
+	<li><a href="javascript: selectEvent(3);">Sep14, 04</a></li>
+</ul>
+</div>
 <div id="detailsContainer">
 	<div id="details">
 		<div id="details_loading"><img src="images/wait24trans.gif" /> Loading...</div>
@@ -69,10 +99,10 @@ float: left;
 	<span style="font-size: 1.3em; color:#FFF; font-weight:bolder;">Iowa Daily Erosion Project</span>
 	<br clear="both"/>&nbsp;<br />
 	<div id="radio">
-		<input type="radio" id="radio4" name="radio" value="loss" /><label for="radio4">Erosion</label>
-		<input type="radio" id="radio2" name="radio" value="precip-in" /><label for="radio2">Precipitation</label>
-		<input type="radio" id="radio3" name="radio" value="runoff" /><label for="radio3">Runoff</label>
-		<input type="radio" id="radio1" name="radio" value="vsm" checked="checked" /><label for="radio1">Soil Moisture</label>
+		<input type="radio" id="loss_opt" name="radio" value="loss" /><label for="loss_opt">Erosion</label>
+		<input type="radio" id="precip-in_opt" name="radio" value="precip-in" /><label for="precip-in_opt">Precipitation</label>
+		<input type="radio" id="runoff_opt" name="radio" value="runoff" /><label for="runoff_opt">Runoff</label>
+		<input type="radio" id="vsm_opt" name="radio" value="vsm" checked="checked" /><label for="vsm_opt">Soil Moisture</label>
 	</form>
 	</div>
 </div>
