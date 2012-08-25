@@ -313,8 +313,8 @@ END
 LAYER
   NAME dm
   STATUS OFF
-  TYPE LINE   
-  DATA /mesonet/data/gis/shape/4326/us/usdm/projected.shp
+  TYPE POLYGON  
+  DATA /home/ldm/data/gis/shape/4326/us/dm_current.shp
   PROJECTION
    "init=epsg:4326"
   END
@@ -322,52 +322,87 @@ LAYER
   LABELCACHE OFF
   CLASS
     EXPRESSION /0/
-    COLOR 100 0 0
-    SIZE 4
+    STYLE
+      COLOR -1 -1 -1
+      OUTLINECOLOR 255 0 0
+      WIDTH 4.0
+    END
     TEXT "D0"
-    SYMBOL 'circle'
+    SYMBOL 0
     LABEL
-      COLOR 255 255 255
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 255
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
     END
   END
   CLASS
     EXPRESSION /1/
-    COLOR 200 0 0
+    STYLE
+      COLOR -1 -1 -1
+      OUTLINECOLOR 255 0 0
+      WIDTH 4.0
+    END
     TEXT "D1"
-    SIZE 4
-    SYMBOL 'circle'
+    SYMBOL 0
     LABEL
-      COLOR 255 255 255
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 255
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
     END
   END
   CLASS
     EXPRESSION /2/
-    COLOR 160 0 0
+    STYLE
+      COLOR -1 -1 -1
+      OUTLINECOLOR 255 0 0
+      WIDTH 4.0
+    END
     TEXT "D2"
-    SIZE 4
-    SYMBOL 'circle'
+    SYMBOL 0
     LABEL
-      COLOR 255 255 255
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 255
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
     END
   END
   CLASS
     EXPRESSION /3/
-    COLOR 200 0 0
+    STYLE
+      COLOR -1 -1 -1
+      OUTLINECOLOR 214 0 214
+      WIDTH 4.0
+    END
     TEXT "D3"
-    SYMBOL 'circle'
-    SIZE 4
+    SYMBOL 0
     LABEL
-      COLOR 255 255 255
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 255
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
     END
   END
   CLASS
     EXPRESSION /4/
-    COLOR 255 0 0
-    SIZE 4
-    SYMBOL 'circle'
+    STYLE
+      COLOR -1 -1 -1
+      OUTLINECOLOR 255 0 0
+      WIDTH 4.0
+    END
+    SYMBOL 0
     TEXT "D4"
     LABEL
-      COLOR 255 255 255
+      COLOR 0 0 0
+      OUTLINECOLOR 255 255 255
+      TYPE TRUETYPE
+      SIZE 16
+      FONT 'arial'
     END
   END
 END
