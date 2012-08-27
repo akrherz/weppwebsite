@@ -104,7 +104,8 @@ var tilecache = "<?php echo TILECACHE; ?>";
 		<input type="radio" id="loss_opt" name="radio" value="loss" /><label for="loss_opt">Erosion</label>
 		<input type="radio" id="precip-in_opt" name="radio" value="precip-in" /><label for="precip-in_opt">Precipitation</label>
 		<input type="radio" id="runoff_opt" name="radio" value="runoff" /><label for="runoff_opt">Runoff</label>
-		<input type="radio" id="vsm_opt" name="radio" value="vsm" checked="checked" /><label for="vsm_opt">Soil Moisture</label>
+		<input type="radio" id="vsm_opt" name="radio" value="vsm" checked="checked" /><label for="vsm_opt">Root Zone Soil Moisture</label>
+		<input type="radio" id="sm10_opt" name="radio" value="sm10" checked="checked" /><label for="sm10_opt">0-4in Soil Moisture</label>
 	</form>
 	</div>
 </div>
