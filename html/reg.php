@@ -132,7 +132,7 @@ function formHandler(){
         <dt>* Cell Phone &amp; Email only used to contact prize winners.
         
         <dd><input id="submitbutton" type="submit" name="submit" 
-        	value="1 am over 18 and please submit registration" onclick="formHandler(); return false;"></dd>
+        	value="I am over 18 and please submit registration" onclick="formHandler(); return false;"></dd>
     </dl>
 </form>
 
