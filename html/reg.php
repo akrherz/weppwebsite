@@ -34,6 +34,10 @@ if (isset($_REQUEST["last_name"])){
 function init(){
 	//$('#submitbutton').attr("disabled", "disabled");
 }
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+} 
 function popup(content, title){
 	$('#dialog').html(content);
 	$('#dialog').dialog({modal: true,
@@ -62,6 +66,10 @@ function formHandler(){
 	email = $('#email').attr('value');
 	if (email.trim() == ""){
 		popup('Please fill out email', 'Error');
+		return;
+	}
+	if (! validateEmail(email)){
+		popup('Invalid email address entered', 'Error');
 		return;
 	}
 	$.get('reg.php', {first_name: first_name, last_name: last_name,
@@ -132,7 +140,7 @@ function formHandler(){
         <dt>* Cell Phone &amp; Email only used to contact prize winners.
         
         <dd><input id="submitbutton" type="submit" name="submit" 
-        	value="I am over 18 and please submit registration" onclick="formHandler(); return false;"></dd>
+        	value="I am over 18 and click to enter this registration" onclick="formHandler(); return false;"></dd>
     </dl>
 </form>
 
