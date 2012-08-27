@@ -3,7 +3,7 @@ var appstate = {
 		lat: 42.0,
 		lon: -95.0,
 		date: null,
-		ltype: 'vsm'
+		ltype: 'sm10'
 };
 var events = {
 		1 : {year: 2007, month: 5, day: 6},
