@@ -9,6 +9,8 @@ var events = {
 		1 : {year: 2007, month: 5, day: 6},
 		2 : {year: 2004, month: 5, day: 24},
 		3 : {year: 2004, month: 9, day: 14},
+		4 : {year: 2012, month: 8, day: 25},
+		5 : {year: 2012, month: 8, day: 26}
 };
 function selectEvent(e){
 	setDate( events[e].year, events[e].month, events[e].day);

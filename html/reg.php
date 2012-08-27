@@ -30,12 +30,6 @@ if (isset($_REQUEST["last_name"])){
 	 <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.22.custom.css" rel="stylesheet" />
  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
  <script type="text/javascript" src="js/jquery-ui-1.8.22.custom.min.js"></script>
-	<!--[if lt IE 9]>
-		<style>
-			ul.left > li, ul.right > li{ *display: inline; }
-			#ribbon form > input[type="submit"]{ *vertical-align: baseline; }
-		</style>
-	<![endif]--> 
 	<script language="JavaScript" type="text/javascript">
 function init(){
 	//$('#submitbutton').attr("disabled", "disabled");
@@ -101,7 +95,7 @@ function formHandler(){
 			</div>
 			<div class="grids-24">
 				<div class="grid-12">
-					<h2 class="site-title"><a href="/">Department of Agronomy</a></h2>
+					<h2 class="site-title"><a href="/"> </a></h2>
 				</div>
 				<div class="grid-12">
 					<h2 class="site-tagline"></h2>
@@ -138,7 +132,7 @@ function formHandler(){
         <dt>* Cell Phone &amp; Email only used to contact prize winners.
         
         <dd><input id="submitbutton" type="submit" name="submit" 
-        	value="Submit Registration" onclick="formHandler(); return false;"></dd>
+        	value="1 am over 18 and please submit registration" onclick="formHandler(); return false;"></dd>
     </dl>
 </form>
 

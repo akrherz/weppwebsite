@@ -85,6 +85,8 @@ var tilecache = "<?php echo TILECACHE; ?>";
 	<li><a href="javascript: selectEvent(1);">May6, 07</a></li>
 	<li><a href="javascript: selectEvent(2);">May24, 04</a></li>
 	<li><a href="javascript: selectEvent(3);">Sep14, 04</a></li>
+	<li><a href="javascript: selectEvent(4);">Aug25, 12</a></li>
+	<li><a href="javascript: selectEvent(5);">Aug26, 12</a></li>
 </ul>
 </div>
 <div id="detailsContainer">
