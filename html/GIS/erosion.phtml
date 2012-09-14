@@ -9,6 +9,9 @@ $year = $tokens[2];
 $month = $tokens[0];
 $day = $tokens[1];
 
+$ts = mktime(0, 0, 0, $month, $day, $year);
+$nicedate = strftime("%d %b %Y", $ts);
+
 $oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
 $zoom     = isset($_GET['zoom']) ? $_GET['zoom'] : 0;
 $pvar = isset($_GET["pvar"]) ? $_GET['pvar'] : "avg_loss_acre";
@@ -195,7 +198,12 @@ while( list($k,$v) = each($plotables) )
  }
 </script>
 
-<b>Map Controls:</b>
+<p>Download shapefile options: <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/idep2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=<?php echo $day; ?>">1 day: <?php echo $nicedate; ?></a> or <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/idep2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=1&monthly=yes">1 month: <?php echo date("M Y", $ts); ?></a>
+<?php if ($days > 1){
+  echo sprintf(" or <a href=\"http://mesonet.agron.iastate.edu/cgi-bin/wepp/idep2shape.py?year=%s&month=%s&day=%s&interval=%s\">%s Day Interval</a>",$year, $month, $day, $days, $days);
+} ?>
+
+<p><b>Map Controls:</b>
 <img src="../imagenav/button_zoomfull_off.png" name="zoomfullButton" alt="Full Extents"
   onClick="javascript: resetButtons(); document.zoomfullButton.src = '../imagenav/button_zoomfull_on.png'; document.myform.zoom.value = 99; document.myform.submit();">
 <img src="../imagenav/button_zoomin_off.png" name="zoominButton" alt="Zoom In"
