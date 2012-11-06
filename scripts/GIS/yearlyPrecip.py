@@ -30,7 +30,7 @@ hrapi = ohrap.keys()
 hrapi.sort()
 
 fileName = "%srain.nc" % (yr,)
-nc = netCDF4.Dataset(fileName, 'w')
+nc = netCDF4.Dataset(fileName, 'w', mode='NETCDF3_CLASSIC')
 
 nc.createDimension("hrap_i", 173)
 nc.createDimension("hrap_j", 134)
