@@ -2,7 +2,6 @@
 Generate summary shapefile of yearly precip, include monthly totals as attribs
 """
 
-import pg
 import dbflib
 import mx.DateTime
 import shutil
