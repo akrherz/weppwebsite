@@ -700,7 +700,6 @@ add_and_draw("counties");
 if ($scenario != ""){
   $param["title"] .= " Scenario: '$scenario'";
 }
-
 /*
 $dm = $map->getlayerbyname("dm");
 $dm->set("status", MS_ON);
@@ -710,22 +709,22 @@ $dm->draw($img);
 $bar = $map->getlayerbyname("bar");
 $credits = $map->getLayerByName("credits");
 $cl = $credits->getClass(0);
-$cl->label->color->setRGB(255, 255, 255);
-$cl->label->set("type", MS_TRUETYPE);
-$cl->label->set("font", "arial");
-$cl->label->set("size", $fontsz);
-$cl->label->set("position", MS_UR);
-$cl->label->set("offsetx", 0);
-$cl->label->set("offsety", 0);
+$cl->getLabel(0)->color->setRGB(255, 255, 255);
+$cl->getLabel(0)->set("type", MS_TRUETYPE);
+$cl->getLabel(0)->set("font", "arial");
+$cl->getLabel(0)->set("size", $fontsz);
+$cl->getLabel(0)->set("position", MS_UR);
+$cl->getLabel(0)->set("offsetx", 0);
+$cl->getLabel(0)->set("offsety", 0);
 
 $cl = $credits->getClass(1);
-$cl->label->color->setRGB(255, 255, 255);
-$cl->label->set("type", MS_TRUETYPE);
-$cl->label->set("font", "arial");
-$cl->label->set("size", $fontsz/1.5);
-$cl->label->set("position", MS_UR);
-$cl->label->set("offsetx", 0);
-$cl->label->set("offsety", 0);
+$cl->getLabel(0)->color->setRGB(255, 255, 255);
+$cl->getLabel(0)->set("type", MS_TRUETYPE);
+$cl->getLabel(0)->set("font", "arial");
+$cl->getLabel(0)->set("size", $fontsz/1.5);
+$cl->getLabel(0)->set("position", MS_UR);
+$cl->getLabel(0)->set("offsetx", 0);
+$cl->getLabel(0)->set("offsety", 0);
 
 /* Draw Bottom Bar for title */
 $rt = ms_newRectObj();
