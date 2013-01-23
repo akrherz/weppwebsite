@@ -774,13 +774,14 @@ for ($k=11;$k>=0;$k--){
  $st = ms_newStyleObj($cl);
  $st->color->setRGB($colors[$k]['r'], $colors[$k]['g'], $colors[$k]['b']);
  $st->outlinecolor->setRGB(255, 255, 255);
- $cl->label->color->setRGB(255, 255, 255);
- $cl->label->set("type", MS_TRUETYPE);
- $cl->label->set("font", "arial");
- $cl->label->set("size", $fontsz/1.5);
- $cl->label->set("position", MS_CC);
- $cl->label->set("offsetx", $width*1.6);
- $cl->label->set("offsety", 0 - $height/2);
+ $l = $cl->addLabel(new labelObj());
+ $cl->getLabel(0)->color->setRGB(255, 255, 255);
+ $cl->getLabel(0)->set("type", MS_TRUETYPE);
+ $cl->getLabel(0)->set("font", "arial");
+ $cl->getLabel(0)->set("size", $fontsz/1.5);
+ $cl->getLabel(0)->set("position", MS_CC);
+ $cl->getLabel(0)->set("offsetx", $width*1.6);
+ $cl->getLabel(0)->set("offsety", 0 - $height/2);
  $p->draw($map, $layer, $img, 11- $k, @$param["ramp"][$k]);
 
  $y = $y + $height;
