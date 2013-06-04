@@ -1,42 +1,42 @@
 
-if ($# == 4) then
+if [ $# -eq 4 ]
+then
 	# Historical Run
-	set yyyy=$1
-	set mm=$2
-	set dd=$3
-	set hr=$4
-endif
+	yyyy=$1
+	mm=$2
+	dd=$3
+	hr=$4
+fi
 
-if ($# == 0) then
+if [ $# -eq 0 ]
+then
 	# RT Run
-	set yyyy="`date -u --date '4 hours ago' +'%Y'`"
-	set mm="`date -u --date '4 hours ago' +'%m'`"
-	set dd="`date -u --date '4 hours ago' +'%d'`"
-	set hr="`date -u --date '4 hours ago' +'%H'`"
-endif
+	yyyy=$(date -u --date '4 hours ago' +'%Y')
+	mm=$(date -u --date '4 hours ago' +'%m')
+	dd=$(date -u --date '4 hours ago' +'%d')
+	hr=$(date -u --date '4 hours ago' +'%H')
+fi
 
-if ($# == 1) then
+if [ $# -eq 1 ]
+then
 	# We specify an hours delay
-	set yyyy="`date -u --date '${1} hours ago' +'%Y'`"
-	set mm="`date -u --date '${1} hours ago' +'%m'`"
-	set dd="`date -u --date '${1} hours ago' +'%d'`"
-	set hr="`date -u --date '${1} hours ago' +'%H'`"
-endif
+	yyyy=$(date -u --date "${1} hours ago" +'%Y')
+	mm=$(date -u --date "${1} hours ago" +'%m')
+	dd=$(date -u --date "${1} hours ago" +'%d')
+	hr=$(date -u --date "${1} hours ago" +'%H')
+fi
 
 # First we clean!
 rm -f tmp/* 
 rm -f nexrad_hrap/*
 rm -f ncep_hrap/*
 
-cd scripts
+for rad in $(echo "DMX DVN ARX MPX FSD OAX"); do
+	sh convertZNIDS.sh $rad $yyyy $mm $dd $hr
+	python create15minRef.py $rad $yyyy $mm $dd $hr
+done
 
-foreach rad (DMX DVN ARX MPX FSD OAX)
-	./convertZNIDS.sh $rad $yyyy $mm $dd $hr
-	./create15minRef.py $rad $yyyy $mm $dd $hr
-end
+csh getStage4.csh $yyyy $mm $dd $hr $1
+csh processStage4.csh $yyyy $mm $dd $hr
 
-#echo "./getStage4.csh $yyyy $mm $dd $hr $1"
-./getStage4.csh $yyyy $mm $dd $hr $1
-./processStage4.csh $yyyy $mm $dd $hr
-
-./combine.py $yyyy $mm $dd $hr
+python combine.py $yyyy $mm $dd $hr
