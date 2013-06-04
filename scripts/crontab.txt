@@ -25,4 +25,4 @@ S=/mesonet/www/apps/weppwebsite/scripts
 
 ###
 # Clean out the job queue table
-#10 2,8,14,20 * * * cd $S; sh cleandb.sh
+#10 2,8,14,20 * * * cd $S/util; sh cleandb.sh
