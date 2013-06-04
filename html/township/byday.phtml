@@ -94,12 +94,6 @@ $HEADEXTRA = "<script language=\"JavaScript\" src=\"calendar2.js\"></script><!--
  $THISPAGE = "township-daily"; include("../../include/header.phtml");
   $side_bytwp = 1; include("../../include/side.phtml");
 ?>
-  
-<!-- content BEGIN -->
-<div id="wepp-middle-two">
-<div id="wepp-content">
-<div id="page-main">
-
 <form method="GET" action="byday.phtml" name="myform">
 
 <div class="table">
@@ -174,9 +168,4 @@ while (list ($key, $val) = each ($fa))  {
 // if ($i == 0) echo "<tr><th colspan=7>No Events Found</th></tr>";
 
 echo "</tbody></table></div>";
-?>
-</div>
-</div>
-</div>
-  
-<?php include("../../include/footer.phtml"); ?>
+ include("../../include/footer.phtml"); ?>

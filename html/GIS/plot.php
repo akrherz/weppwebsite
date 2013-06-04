@@ -706,7 +706,7 @@ $dm->set("status", MS_ON);
 $dm->draw($img);
 */
 /* Need something to draw bars! */
-$bar = $map->getlayerbyname("bar");
+
 $credits = $map->getLayerByName("credits");
 $cl = $credits->getClass(0);
 $cl->getLabel(0)->color->setRGB(255, 255, 255);
@@ -726,17 +726,26 @@ $cl->getLabel(0)->set("position", MS_UR);
 $cl->getLabel(0)->set("offsetx", 0);
 $cl->getLabel(0)->set("offsety", 0);
 
-/* Draw Bottom Bar for title */
-$rt = ms_newRectObj();
-$rt->setextent(0, $map_height, $map_width, $map_height - $fontsz - 3);
-$rt->draw($map, $bar, $img, 0, "");
-
-
-/* Draw Top Bar for title */
-$rt = ms_newRectObj();
-$rt->setextent(0, $fontsz+3+5, $map_width, 0);
-$rt->draw($map, $bar, $img, 0, "");
-
+$bar = $map->getlayerbyname("bar");
+/* Top Bar */
+$wkt = sprintf("POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))", 
+		0, 0,
+		$map_width, 0,
+		$map_width,  $fontsz + 10,
+		0, $fontsz + 10,
+		0, 0
+		);
+$bar->addFeature(ms_shapeObjFromWkt($wkt));
+/* Bottom Bar */
+$wkt = sprintf("POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))",
+		0, $map_height,
+		0, $map_height - ($fontsz + 3),
+		$map_width,  $map_height - ($fontsz + 3),
+		$map_width, $map_height,
+		0, $map_height
+);
+$bar->addFeature(ms_shapeObjFromWkt($wkt));
+$bar->draw($img);
 
 /* Write Title at the top */
 $point = ms_newpointobj();

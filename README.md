@@ -6,4 +6,4 @@ replaced by IDEPv2
 
 Directory Paths
     /mesonet/www/apps/weppwebsite -- Codez
-    /mnt/idep  -- Data
+    /mesonet/wepp  -- Data
