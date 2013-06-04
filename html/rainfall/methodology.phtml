@@ -1,0 +1,103 @@
+<?php
+ /** Rainfall Homepage */
+ include("../../etc/config.inc.php");
+ 
+ $THISPAGE = "rainfall-methodology"; include("../../include/header.phtml");
+?>
+ 
+<p><h1>Rainfall Estimates Methodology</h1></p>
+
+<p><h3>Introduction:</h3></p>
+
+<p>The most important variable in our erosion modeling effort is the
+estimation of rainfall.  This page describes the process by which these
+estimates are made.  The most important point is to understand that our
+rainfall product is an estimate.  There are simply not enough observing 
+platforms in the state to create a high resolution depiction of rainfall
+that is needed for this project.</p>
+
+<p><h3>Rainfall Grid</h3></p>
+
+<div style="padding: 3px; border: 2px solid #000; float: left; margin: 5px;"><img src="../images/precip_grid.png" style="float: none; padding: 2px; border: 1px;"><br />Rainfall cells over Polk County</div>
+
+<p>Our rainfall estimates are produced on the HRAP (Hydrologic Rainfall 
+Analysis Project) grid.  The HRAP grid has square cells on polar stereographic map projection with vertical longitude ("standard longitude") 105&deg; W and "standard latitude" 60&deg; N.  This grid was choosen, since it is the grid on which the
+Stage 4 precipitation analysis is produced on.</p>
+
+<br clear="all" />
+<p style="float: none;"><h3>Stage 4 Precipitation:</h3></p>
+
+<p>The stage 4 (stage4 hereafter) precipitation product is produced at the
+National Center for Environmental Prediction (NCEP).  The stage4 product is
+a nationwide composite of regional analyses made at the 12 River Forecast
+Centers (RFC).  The advantage of this product is that some manual quality 
+control is done at the RFCs.  The disadvantage is that it can sometimes take
+many hours for this product to be posted at NCEP.</p>
+
+<p>The stage4 product is derived from multiple data sources including the National
+Weather Service (NWS) NEXRAD system.  This data is analyzed in hourly intervals.
+For the purposes of this project, sub hourly data is needed, so we needed a 
+way to temporally downscale the stage4 rainfall product.</p>
+
+<p><h3>Downscaling the Hourly Stage4 data:</h3></p>
+
+<p>The stage4 information is produced at hourly intervals.  To downscale this
+to 15 minute intervals, we derived a method to use NEXRAD derived rainfall
+rates at 15 minute intervals to give us a template for downscaling the hourly
+stage4 data.  We now present the procedure of this downscaling.</p>
+
+<p><h4>Ingesting NEXRAD information:</h4></p>
+
+<p>Information from these six NWS WSR-88D radars are used to distribute the
+hourly stage4 data into 15 minute bins.  Their site identifiers and names are:</p>
+
+<ul>
+ <li>KDVN: Davenport, Iowa</li>
+ <li>KDMX: Des Moines, Iowa</li>
+ <li>KARX: LaCrosse, Wisconsin</li>
+ <li>KMPX: Minneapolis, Minnesota</li>
+ <li>KOAX: Omaha, Nebraska</li>
+ <li>KFSD: Sioux Falls, South Dakota</li>
+</ul>
+
+<p>The NIDS Composite Reflectivity product is used from the radars to generate
+a rainfall rate via the standard Z-R relationship.  This rainfall rate is
+assumed to be an accumulation over 15 minute periods.  So for a given hour,
+four values of rainfall are produced for each individual cell in the HRAP 
+grid.</p>
+
+<p><h4>Comparison with Stage4 Product</h4></p>
+
+<p>After the NEXRAD 15 minute estimates are made, a program compares the stage4
+precipitation estimates with the 15 minute NEXRAD estimates to distribute
+the hourly stage4 data into 15 minute bins.  Here is the logic for each
+cell in the HRAP grid:</p>
+
+<p>First, lets define the 4 NEXRAD 15 minute estimates as <i>N0, N1, N2, & N3</i>, the sum of these 15 minute NEXRAD estimates as NT, the hourly stage4 data as ST and the resulting estimates as <i>E0, E1, E2, & E3.</i></p>
+
+<p><i>If ST equals zero, then E0, E1, E2, & E3 are set 
+to zero.</i>  <b>Justification:</b>  The process of distributing the stage4 
+data into 15 minute bins does not produce more rainfall than what orginally 
+existed in the hourly data.  Even if the NEXRAD estimates were greater than
+zero, the stage4 zero sum is maintained in the estimates.</p>
+
+<p><i>If ST is greater than zero and ET is zero, then E0, E1, E2, & E3 are 
+simply set to ST/4.</i> <b>Justification:</b> Since the NEXRAD is not providing
+us  with any insight into the sub-hourly distribution, we simply assume an 
+even distribution.</p>
+
+<p><i>If ET and ST are greater than zero, E0 is set to (ST/NT)*N0, E1 is set to
+(ST/NT)*N1, E2 is set to (ST/NT)*N2, and E3 is set to (ST/NT)*N3.</i>
+<b>Justification:</b> If both the stage4 and NEXRAD data is indicating 
+rainfall, then we want to distribute the hourly stage4 data into 15 minute 
+bins using the same temporal distribution as is found in the NEXRAD information.</p>
+
+<p><h3>Result:</h3></p>
+
+<p>The result of this methodology is hourly stage4 data distributed into 15
+minute bins.  Accumulated stage4 rainfall is maintained, while we also try 
+to get a better depiction of the high intensity rainfalls that produce erosion.</p>
+
+<p><i>Revised:</i> 5 Jun 2004.</p>
+
+<?php include("../../include/footer.phtml"); ?>

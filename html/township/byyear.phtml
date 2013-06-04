@@ -1,0 +1,102 @@
+<?php
+$uri = 'byyear.phtml';
+include("../../etc/config.inc.php");
+include("../../include/forms.php");
+/* Request vars */
+$request_twp = 1;
+
+$twp = isset($_GET["twp"]) ? $_GET["twp"] : "T85NR17W";
+$year = isset($_GET["year"])? $_GET["year"] : date("Y", time() - 86400);
+
+$c = pg_connect($weppdb);
+$q = "select * from results_by_twp WHERE extract(year from valid) = $year
+      and model_twp = '$twp' ORDER by valid ASC";
+$rs = pg_exec($c, $q);
+?>
+
+<?php
+  $THISPAGE = "township-yearly"; include("../../include/header.phtml");
+  $side_bytwp = 1; include("../../include/side.phtml");
+?>
+   
+<!-- content BEGIN -->
+<div id="wepp-middle-two">
+<div id="wepp-content">
+<div id="page-main">
+
+<p>This page displays daily erosion estimates for a given year and given 
+township.  You can click on the date to get a mode detailed look at the
+estimates for that day.
+
+<h3><?php echo $year; ?> summary for township: <?php echo $twp; ?></h3>
+
+<form method="GET" action="<?php echo $uri; ?>" name="setyear">
+<input type="hidden" name="twp" value="<?php echo $twp; ?>">
+<p><b>Select Year:</b>
+<?php 
+  echo yearSelect(2002, $year, "year"); ?>
+<input type="submit" value="View Year"></form></p>
+
+<table border=1>
+<?php
+$divider = "<tr>
+  <th rowspan=2>Date:</th>
+  <th rowspan=2># Runs:</th>
+  <th colspan=3>Rainfall [in]</th><td>&nbsp;</td>
+  <th colspan=3>Soil Loss [ton/acre]</th><td>&nbsp;</td>
+  <th colspan=3>Runoff [in]</th><td>&nbsp;</td>
+  <th colspan=2>Variance Estimator</th> 
+</tr>
+<tr>
+  <th>Min:</th><th>Avg:</th><th>Max:</th><td>&nbsp;</td>
+  <th>Min:</th><th>Avg:</th><th>Max:</th><td>&nbsp;</td>
+  <th>Min:</th><th>Avg:</th><th>Max:</th><td>&nbsp;</td>
+  <th>Loss [tons/acre]</th><th>Runoff [inches]</th>
+</tr>";
+
+$sum_min_precip = 0; $sum_avg_precip = 0; $sum_max_precip = 0;
+$sum_min_loss = 0; $sum_avg_loss = 0; $sum_max_loss = 0;
+$sum_min_runoff = 0; $sum_avg_runoff = 0; $sum_max_runoff = 0;
+$mymonth = 0;
+for( $i=0; $row = @pg_fetch_array($rs,$i); $i++) {
+  $sum_min_precip += ($row["min_precip"] / 25.4);
+  $sum_avg_precip += ($row["avg_precip"] / 25.4);
+  $sum_max_precip += ($row["max_precip"] / 25.4);
+  $sum_min_loss   += ($row["min_loss"] * 4.463);
+  $sum_avg_loss   += ($row["avg_loss"] * 4.463);
+  $sum_max_loss   += ($row["max_loss"] * 4.463);
+  $sum_min_runoff += ($row["min_runoff"] / 25.4);
+  $sum_avg_runoff += ($row["avg_runoff"] / 25.4);
+  $sum_max_runoff += ($row["max_runoff"] / 25.4);
+  $ts = strtotime($row["valid"]);
+  $m = date("m", $ts);
+  if ($mymonth != $m){ echo $divider; $mymonth = $m; }
+  $url = "byday.phtml?twp=$twp&dstr=". strftime("%m/%d/%Y", $ts);
+  echo "<tr><td><a href=\"$url\">". $row["valid"] ."</a></td>
+    <td>". $row["run_points"] ."</td>
+    <td>". round($row["min_precip"] / 25.4, 2)."</td>
+    <td>". round($row["avg_precip"] / 25.4, 2) ."</td>
+    <td>". round($row["max_precip"] / 25.4, 2) ."</td><td>&nbsp;</td>
+    <td>". round($row["min_loss"] * 4.463, 2) ."</td>
+    <td>". round($row["avg_loss"] * 4.463, 2) ."</td>
+    <td>". round($row["max_loss"] * 4.463, 2)."</td><td>&nbsp;</td>
+    <td>". round($row["min_runoff"] / 25.4, 2) ."</td>
+    <td>". round($row["avg_runoff"] / 25.4, 2) ."</td>
+    <td>". round($row["max_runoff"] / 25.4, 2) ."</td><td>&nbsp;</td>
+    <td>". round($row["ve_loss"] *4.463, 5) ."</td>
+    <td>". round($row["ve_runoff"] / 25.4, 5) ."</td>
+  </tr>";
+}
+echo "<tr><td>Total:</td><td></td>
+ <td>". round($sum_min_precip,2) ."</td><td>". round($sum_avg_precip,2) ."</td><td>". round($sum_max_precip,2) ."</td><td></td>
+ <td>". round($sum_min_loss,2) ."</td><td>". round($sum_avg_loss,2) ."</td><td>". round($sum_max_loss,2) ."</td><td></td>
+ <td>". round($sum_min_runoff,2) ."</td><td>". round($sum_avg_runoff,2) ."</td><td>". round($sum_max_runoff,2) ."</td><td></td>
+<td></td><td></td></tr>";
+echo "</table>";
+?>
+
+</div>
+</div>
+</div>
+   
+<?php include("../../include/footer.phtml"); ?>

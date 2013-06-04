@@ -1,0 +1,15 @@
+ 4.30
+   1   1   0
+   Station:  DES MOINES WB AP IA                            CLIGEN VERSION 4.3
+ Latitude Longitude Elevation (m) Obs. Years   Beginning year  Years simulated
+    41.53   -93.65         289          44       1997                14
+ Observed monthly ave max temperature (C
+  -2.0   1.2   7.5  16.2  22.6  27.8  30.2  29.0  24.3  18.1   8.6   0.9
+ Observed monthly ave min temperature (C)
+ -11.5  -8.6  -2.8   4.3  10.9  16.2  18.9  17.6  12.3   5.9  -1.6  -8.2
+ Observed monthly ave solar radiation (Langleys/day)
+ 176.0 255.0 328.0 405.0 482.0 542.0 538.0 462.0 369.0 276.0 189.0 145.0
+ Observed monthly ave precipitation (mm)
+  26.2  28.4  58.0  79.0  99.9 107.9  93.3 100.8  76.2  58.3  45.7  31.8
+ day mon year nbrkpt tmax  tmin    rad   w-vel  w-dir   dew
+             (mm)    (C)   (C) (ly/day) m/sec    deg    (C)

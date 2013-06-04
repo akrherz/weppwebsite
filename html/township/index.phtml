@@ -1,0 +1,140 @@
+<?php 
+/* township.phtml */
+include("../../etc/config.inc.php");
+
+/* Request vars */
+$request_twp = 1;
+if (isset($_GET["twp"]))
+{
+  header("Location: byday.phtml?twp=". $_GET["twp"] );
+  die();
+}
+$twp = isset($_GET["twp"]) ? $_GET["twp"] : "T85NR17W";
+$oextents = isset($_GET['extents']) ? $_GET['extents'] : "160000, 4450000, 760000, 4850000";
+$zoom     = isset($_GET['zoom']) ? $_GET['zoom'] : 0;
+if ($zoom == 99){
+        $oextents = "160000, 4450000, 760000, 4850000";
+}
+$a = explode(",", $oextents);
+if ( ($a[2] - $a[0]) != 600000 && $zoom == -8 ) $zoom = -2;
+
+ $imgwidth = 640;
+ $imgheight = 480;
+ if ( isset($_GET['img_x']) ){
+   include("$_BASE/include/click2geo.inc.php");
+   $extents = click2geo($oextents, $_GET['img_x'], $_GET['img_y'],
+     $_GET['map_width'], $_GET['map_height'], $zoom);
+ } else {
+   $extents = $oextents;
+ }
+
+if (! extension_loaded('MapScript') ) dl($mapscript);
+$map = ms_newMapObj("$_BASE/data/gis/map/wepp.map");
+$arExtents = explode(",", $extents);
+$map->setextent($arExtents[0], $arExtents[1], $arExtents[2], $arExtents[3]);
+$mapscale = $arExtents[2] - $arExtents[0];
+
+$counties = $map->getlayerbyname("counties");
+$counties->set("status", MS_ON);
+
+$background = $map->getlayerbyname("background");
+$background->set("status", MS_ON);
+
+$states = $map->getlayerbyname("states");
+$states->set("status", MS_ON);
+
+$cities = $map->getlayerbyname("cities");
+$cities->set("status", MS_ON);
+
+//$roads = $map->getlayerbyname("roads");
+//$roads->set("status", MS_ON);
+
+//$roads_label = $map->getlayerbyname("roads_label");
+//$roads_label->set("status", MS_ON);
+
+$interstates = $map->getlayerbyname("interstates");
+$interstates->set("status", MS_ON);
+
+//$interstates_label = $map->getlayerbyname("interstates_label");
+//$interstates_label->set("status", MS_ON);
+
+$iatwp = $map->getlayerbyname("iatwp");
+$iatwp->set("status", MS_ON);
+//$iatwp->set("maxscale", 2000000);
+
+$img = $map->prepareImage();
+$ref = $map->drawReferenceMap();
+$refurl = $ref->saveWebImage();
+                                                                                
+$background->draw($img);
+$states->draw($img);
+//$roads->draw($img);
+//$roads_label->draw($img);
+$interstates->draw($img);
+//$interstates_label->draw($img);
+$cities->draw($img);
+$iatwp->draw($img);
+$counties->draw($img);
+$map->drawLabelCache($img);
+$url = $img->saveWebImage();
+
+
+?>
+<?php
+/* Start HTML Stuff */
+  $THISPAGE = "township-base"; include("../../include/header.phtml");
+?>
+
+<table><tr><td valign="top">
+<?php $uri = 'index.phtml'; $side_bytwp = 1; include("../../include/side.phtml"); ?>
+</td><td>
+
+<h3>Select Your Township:</h3>
+
+<p>Our project produces estimates valid for each model township in Iowa. If 
+you know the township ID, you can enter it on the left hand side of this page.
+Or you can zoom in with this map to help find your township.  Once you have
+found your township, click on the 'i' button and then on the map over the 
+location of your township.</p>
+
+<form action="index.phtml" method="GET" name="myform">
+<input type="hidden" name="map_height" value="<?php echo $map->height; ?>">
+<input type="hidden" name="map_width" value="<?php echo $map->width; ?>">
+<input type="hidden" name="extents" value="<?php echo $map->extent->minx .",".$map->extent->miny .",".$map->extent->maxx .",".$map->extent->maxy ; ?>">
+<input type="hidden" name="zoom" value="1">
+<input type="hidden" name="ul_x" value="<?php echo $map->extent->minx; ?>">
+<input type="hidden" name="ul_y" value="<?php echo $map->extent->maxy ; ?>">
+<input type="hidden" name="lr_x" value="<?php echo $map->extent->maxx; ?>">
+<input type="hidden" name="lr_y" value="<?php echo $map->extent->miny ; ?>">
+
+
+<script Language="JavaScript">
+ function resetButtons(){
+   document.myform.action = 'index.phtml';
+   document.panButton.src = '../imagenav/button_pan_off.png';
+   document.zoominButton.src = '../imagenav/button_zoomin_off.png';
+   document.zoomoutButton.src = '../imagenav/button_zoomout_off.png';
+   document.queryButton.src = '../imagenav/button_query_off.png';
+ }
+</script>
+
+<b>Map Controls:</b>
+<img src="../imagenav/button_zoomfull_off.png" name="zoomfullButton" alt="Full Extents"
+  onClick="javascript: resetButtons(); document.zoomfullButton.src = '../imagenav/button_zoomfull_on.png'; document.myform.zoom.value = 99; document.myform.submit();">
+<img src="../imagenav/button_zoomin_off.png" name="zoominButton" alt="Zoom In"
+  onClick="javascript: resetButtons(); document.zoominButton.src = '../imagenav/button_zoomin_on.png'; document.myform.zoom.value = -8;" style="<?php if ($mapscale < 75001) echo "visibility: hidden;"; ?>">
+<img src="../imagenav/button_pan_on.png" name="panButton" alt="Pan"
+  onClick="javascript: resetButtons(); document.panButton.src = '../imagenav/button_pan_on.png'; document.myform.zoom.value = 1;">
+<img src="../imagenav/button_zoomout_off.png" name="zoomoutButton" alt="Zoom Out"
+  onClick="javascript: resetButtons(); document.zoomoutButton.src = '../imagenav/button_zoomout_on.png'; document.myform.zoom.value = 2;">
+<img src="../imagenav/button_query_off.png" name="queryButton" alt="Query"
+  onClick="javascript: resetButtons(); document.queryButton.src = '../imagenav/button_query_on.png'; document.myform.action = '../GIS/click.php';">
+
+<p><input type="image" name="img" src="<?php echo $url; ?>" border=1>
+
+</form>
+
+</td></tr></table>
+ 
+<?php include("../../include/footer.phtml"); ?>
+
