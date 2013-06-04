@@ -1,17 +1,20 @@
-#!/mesonet/python/bin/python
-# Pull out yearly precipitation
-# Daryl Herzmann 26 Jul 2004
+#!/usr/bin/env python
 
-import pg, dbflib, mx.DateTime, shutil, os, sys
+import pg
+import dbflib
+import mx.DateTime
+import shutil
+import os
+import sys
 mydb = pg.connect('wepp','iemdb')
 
 if len(sys.argv) == 1:
-  now = mx.DateTime.now() - mx.DateTime.RelativeDateTime(days=1)
-  sts = now + mx.DateTime.RelativeDateTime(day=1)
-  ets = sts + mx.DateTime.RelativeDateTime(months=1)
+    now = mx.DateTime.now() - mx.DateTime.RelativeDateTime(days=1)
+    sts = now + mx.DateTime.RelativeDateTime(day=1)
+    ets = sts + mx.DateTime.RelativeDateTime(months=1)
 else:
-  sts = mx.DateTime.DateTime(int(sys.argv[1]),1,1)
-  ets = mx.DateTime.DateTime(int(sys.argv[1]),12,2)
+    sts = mx.DateTime.DateTime(int(sys.argv[1]),1,1)
+    ets = mx.DateTime.DateTime(int(sys.argv[1]),12,2)
 
 interval = mx.DateTime.RelativeDateTime(months=+1)
 

@@ -3,19 +3,19 @@ Generate summary shapefile of yearly precip, include monthly totals as attribs
 """
 
 import dbflib
-import mx.DateTime
+import datetime
 import shutil
 import sys
 import numpy
 import netCDF4
-import iemdb
-WEPP = iemdb.connect('wepp', bypass=True)
+import psycopg2
+WEPP = psycopg2.connect(database='wepp', host='iemdb', user='nobody')
 wcursor = WEPP.cursor()
 
-if (len(sys.argv) > 1):
+if len(sys.argv) > 1:
     yr = sys.argv[1]
 else:
-    yr = mx.DateTime.now().year
+    yr = datetime.datetime.now().year
 
 ohrap = {}
 wcursor.execute("SELECT hrap_i from hrap_utm ORDER by hrap_i ASC")
@@ -92,9 +92,6 @@ ncrain[:] = rain
 nc.close()
 
 del dbf
-#shutil.copy("static/hrap_polygon_4326.shp", "%s_rain.shp" % (yr, ) )
-#shutil.copy("static/hrap_polygon_4326.shx", "%s_rain.shx" % (yr, ) )
-#shutil.copy("static/hrap_polygon_4326.prj", "%srain.prj" % (yr, ) )
 fn = "%srain.nc" % (yr,)
 shutil.copyfile(fn, "/mesonet/wepp/data/rainfall/netcdf/yearly/"+fn)
 fn = "%s_rain.dbf" % (yr,)
