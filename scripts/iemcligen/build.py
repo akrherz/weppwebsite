@@ -34,10 +34,6 @@ clh = {}
 def doBreakPoint(hrap_i):
 	data15 = data[hrap_i - 1]
 	threshold = 0.1 * 25.4  # Threshold is 2/10 of an inch
-	accum = 0.00
-	writeAccum = 0.00
-	lastTime = 0
-	lines = 0
 	bkTxt = ""
 	cliFrmt = "%-12s%-12.3f\n"
 
@@ -77,7 +73,7 @@ def loadClimateHeaders():
 	clh['SE'] = open('headers/9.dat', 'r').read()
 
 def loadTimes():
-        times[0] = "00.14"
+	times[0] = "00.14"
 	for i in range(1,96):
 		myts = ts + mx.DateTime.RelativeDateTime(seconds=+ i*900)
 		hr = myts.strftime("%H")
@@ -97,7 +93,7 @@ def loadRainfall():
 		gts = myts.gmtime()
 		# fRef = ts.strftime("data/"+jDay+"/io%H%M."+jDay+".dat")
 		# fRef = ts.strftime("data/"+str(yr)+"/"+jDay+"/io%Y%m%d_%H%M.dat")
-		fRef = gts.strftime("../data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
+		fRef = gts.strftime("/mesonet/wepp/data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
 		#print "Processing:", fRef
 		try:
 			f = numpy.fromfile(fRef, sep=' ')
