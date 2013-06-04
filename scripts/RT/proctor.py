@@ -1,25 +1,4 @@
 """
-# Do the runs!
-# Daryl Herzmann 5 Mar 2003
-# 14 Apr 2003	NRI Table changed...
-# 21 Apr 2003	Change now this is run.  First load up a dictionary of refs
-#		between the various data components and then check to see 
-#		the runs that need to be made...
-# 27 May 2003	I had a bad dream that this code was not plexing correctly
-#		and sure enough, it was the case.  Before we were just
-#		running once per HRAP, now we actually plex the run!
-#  8 Jul 2003	We begin migrating to a request, process and then request
-#		again process
-#  9 Jul 2003	More cleanups and actually make this beast work.
-# 30 Jul 2003	No longer use the township table, I am not sure why we
-#		even used it in the first place
-# 23 Sep 2003	Block combo ID 144381 from doing any damage, like hanging WEPP
-# 14 Dec 2003	Add a db check for if the combo ID is actually run for, not
-#		all combos are now run for, since we don't have a soil for em
-#  7 Jan 2004	The mkrun constraint was causing headaches for sometimes it 
-#		would stop the proctor runs because there would be no valid
-#		enteries
-# 21 Jan 2004	Lets crank 1000 runs at a time, less time spent in postgres
 """
 
 import weppRun
@@ -41,8 +20,6 @@ wblog.addHandler(fh)
 
 sts = mx.DateTime.DateTime(1997,1,1)
 ets = mx.DateTime.now() + mx.DateTime.RelativeDateTime(days=-1,hour=0,minute=0,second=0)
-wbfindline = (ets - sts).days + 14
-
 
 class WeppThread( threading.Thread ):
     """ I am a processing thread that will do some work """
@@ -117,7 +94,7 @@ def runwepp(row):
     saveo = open('output/%s.txt'%(cid,),'w')
     saveo.write( r )
     saveo.close()
-    if (r[-13:-1] != "SUCCESSFULLY"):
+    if r[-13:-1] != "SUCCESSFULLY":
         e = open('error/%s.txt'%(cid,),'w')
         e.write( r )
         e.close()
@@ -130,7 +107,7 @@ def runwepp(row):
       cnt += 1
 
 for x in range(3):
-    if (x > 0):
+    if x > 0:
         time.sleep( random.random() * 10 ) # Initial jitter
     WeppThread().start()
 

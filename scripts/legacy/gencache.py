@@ -4,8 +4,8 @@
 
 import mx.DateTime, os
 
-s = mx.DateTime.DateTime(1997,1,1)
-e = mx.DateTime.DateTime(2004,1,1)
+s = mx.DateTime.DateTime(2013,1,1)
+e = mx.DateTime.DateTime(2013,1,31)
 interval = mx.DateTime.RelativeDateTime(days=+1)
 
 now = s

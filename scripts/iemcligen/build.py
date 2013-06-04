@@ -2,12 +2,9 @@
 import cliFile
 import mx.DateTime
 import pg
-import os
 import sys
-import pickle
 import editclifile
 import cliRecord
-import netCDF4
 import numpy
 
 # Connect to the WEPP database
@@ -52,11 +49,10 @@ def doBreakPoint(hrap_i):
 		if (rAccum > threshold):
 			bkTxt += cliFrmt % (times[tstep], tAccum)
 			rAccum = 0
-                                                                                
 	if (rAccum > 0):
 		bkTxt += cliFrmt % (times[tstep], tAccum)
-                                                                                
-                                                                                
+
+
 	return bkTxt
 
 def loadClimate():
@@ -130,7 +126,7 @@ def main():
 		mgtzone = rs[i]['mgtzone']
 		bktxt = doBreakPoint(hrap_i)
 		#if (len(bktxt) > 0 or len(sys.argv) == 4):
-		cf = editclifile.editclifile('clifiles/%s.dat' % (hrap_i,) )
+		cf = editclifile.editclifile('/mesonet/wepp/data/clifiles/%s.dat' % (hrap_i,) )
 		cr = cliRecord.cliRecord(ts)
 		cr.BPset(bktxt)
 		cr.CLset(cl[mgtzone][0])
