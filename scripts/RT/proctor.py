@@ -21,6 +21,8 @@ wblog.addHandler(fh)
 sts = mx.DateTime.DateTime(1997,1,1)
 ets = mx.DateTime.now() + mx.DateTime.RelativeDateTime(days=-1,hour=0,minute=0,second=0)
 
+wbfindline = int((ets - sts).days + 20.0)
+
 class WeppThread( threading.Thread ):
     """ I am a processing thread that will do some work """
     chunksize = 1000
@@ -99,12 +101,10 @@ def runwepp(row):
         e.write( r )
         e.close()
         return
-    cnt = 0
-    for line in open('wb/%s.wb' % (cid,),'r'):
-      if cnt == wbfindline:
-        wblog.debug("%s %s" % (cid, line.strip()) )
-        break
-      cnt += 1
+    for linenum, line in enumerate(open('wb/%s.wb' % (cid,))):
+        if linenum == wbfindline:
+            wblog.debug("%s %s" % (cid, line.strip()) )
+            break
 
 for x in range(3):
     if x > 0:
