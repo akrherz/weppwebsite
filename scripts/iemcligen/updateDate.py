@@ -66,7 +66,7 @@ def main():
         mgtzone = row['mgtzone']
         cf = editclifile.editclifile('/mesonet/wepp/data/clifiles/%s.dat' % (hrap_i,) )
         cr = cliRecord.cliRecord(ts)
-        cr.CLset(cl[mgtzone][0])
+        cr.CLset(cl[mgtzone])
         cf.editDaySavePrecip(ts, cr)
         del(cf)
         del(cr)
