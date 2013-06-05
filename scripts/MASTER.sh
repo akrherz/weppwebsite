@@ -7,7 +7,7 @@ date
 cd iemcligen
 python grids2shp.py
 
-set direct=`date --date '1 day ago' +'%Y/%m/%d'`
+direct=`date --date '1 day ago' +'%Y/%m/%d'`
 mkdir -p /mesonet/wepp/data/static/$direct
 
 cd /mesonet/www/apps/weppwebsite/html/GIS
