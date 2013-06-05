@@ -170,6 +170,7 @@ if __name__ == "__main__":
 
 	main(year, month, day, update_monthly)
 	if len(sys.argv) == 1:
-		subprocess.call("psql -h iemdb -f %s wepp" % (TMPFN,),
-					shell=True)
+		proc = subprocess.Popen("psql -h iemdb -f %s wepp" % (TMPFN,),
+					shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stderr = proc.stderr.read()
 	os.unlink(TMPFN)
