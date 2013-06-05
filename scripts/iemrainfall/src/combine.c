@@ -35,14 +35,14 @@ main()
 
 
   /* open list of NWS files */
-  fplstNWS=fopen("../tmp/S4_files.dat","r");
+  fplstNWS=fopen("tmp/S4_files.dat","r");
 
   /* open list of output files */
-  fplstOUT=fopen("../tmp/combout.dat","r");
+  fplstOUT=fopen("tmp/combout.dat","r");
 
 
   /* open list of WSI files */
-  fplstWSI=fopen("../tmp/NEX_files.dat","r");
+  fplstWSI=fopen("tmp/NEX_files.dat","r");
 
   for (j=0; j<1; j++)
 	{
