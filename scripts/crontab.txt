@@ -1,6 +1,7 @@
 # Stored on github, don't edit locally!
 
 MAILTO=akrherz@iastate.edu
+PYTHONPATH=/mesonet/www/apps/iemwebsite/scripts/lib
 S=/mesonet/www/apps/weppwebsite/scripts
 
 ###
