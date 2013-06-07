@@ -2,9 +2,7 @@
 """
 
 import weppRun
-import os
-import shutil
-import sys
+import subprocess
 import threading
 import time
 import random
@@ -91,8 +89,9 @@ def runwepp(row):
     if (wr.error > 0):
         return
 
-    si, so = os.popen4("./wepp < runfiles/wepp.%s" % (cid,))
-    r = so.read()
+    proc = subprocess.Popen("./wepp < runfiles/wepp.%s" % (cid,),
+                            stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    r = proc.stdout.read()
     saveo = open('output/%s.txt'%(cid,),'w')
     saveo.write( r )
     saveo.close()
