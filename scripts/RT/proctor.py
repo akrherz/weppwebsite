@@ -89,7 +89,7 @@ def runwepp(row):
     if (wr.error > 0):
         return
 
-    proc = subprocess.Popen("./wepp < runfiles/wepp.%s" % (cid,),
+    proc = subprocess.Popen("./wepp < runfiles/wepp.%s" % (cid,), shell=True,
                             stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     r = proc.stdout.read()
     saveo = open('output/%s.txt'%(cid,),'w')
