@@ -133,15 +133,15 @@ def main(year, month, day):
             twpDict[model_twp]['ve_loss'] = 0
             twpDict[model_twp]['ve_runoff'] = 0
 
-    # Now we insert values!
-    wcursor.execute("""INSERT into results_by_twp(model_twp, valid, avg_precip,
-      max_precip, min_loss, avg_loss, max_loss, min_runoff, avg_runoff,
-      max_runoff, run_points, min_precip, ve_loss, ve_runoff ) values 
-      ('%(model_twp)s', '%(valid)s', 
-      %(avg_precip)s, %(max_precip)s, %(min_loss)s, %(avg_loss)s,
-      %(max_loss)s, %(min_runoff)s, %(avg_runoff)s, 
-      %(max_runoff)s, %(run_points)s, %(min_precip)s, %(ve_loss)s, 
-      %(ve_runoff)s )""" % twpDict[model_twp] )
+        # Now we insert values!
+        wcursor.execute("""INSERT into results_by_twp(model_twp, valid, 
+        avg_precip, max_precip, min_loss, avg_loss, max_loss, min_runoff, 
+        avg_runoff, max_runoff, run_points, min_precip, ve_loss, ve_runoff ) 
+        values ('%(model_twp)s', '%(valid)s', 
+        %(avg_precip)s, %(max_precip)s, %(min_loss)s, %(avg_loss)s,
+        %(max_loss)s, %(min_runoff)s, %(avg_runoff)s, 
+        %(max_runoff)s, %(run_points)s, %(min_precip)s, %(ve_loss)s, 
+        %(ve_runoff)s )""" % twpDict[model_twp] )
 
     # Now we update the yearly totals...  Delete old records first
     sql = """DELETE from results_twp_year WHERE   
