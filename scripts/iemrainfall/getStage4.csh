@@ -24,7 +24,7 @@ set staget="ST2ml${YYYY}${MO}${DD}${HR}.Grb.Z"
 
 # First, lets always try to get stage2 data
 mkdir -p /mesonet/wepp/data/rainfall/stage2/$dir
-wget -q -O $staget ${ncep}/nam_pcpn_anal.${YYYY}${MO}${DD}/ST2ml${YYYY}${MO}${DD}${HR}.Grb.gz
+wget -q -O $staget ${ncep}/nam_pcpn_anal.${YYYY}${MO}${DD}/ST2ml${YYYY}${MO}${DD}${HR}.Grb.Z
 set l="`wc -l $staget | cut -f 1 -d ' '`"
 if (${l} == 0 && ${DELAY} < 18) then
 	echo "DANGER DANGER. stage2 missing! $staget"
@@ -40,7 +40,7 @@ endif
 
 
 mkdir -p /mesonet/wepp/data/rainfall/stage4/$dir
-wget -q -O $stagef ${ncep}/nam_pcpn_anal.${YYYY}${MO}${DD}/ST4.${YYYY}${MO}${DD}${HR}.01h.gz
+wget -q -O $stagef ${ncep}/nam_pcpn_anal.${YYYY}${MO}${DD}/ST4.${YYYY}${MO}${DD}${HR}.01h.Z
 set l="`wc -l $stagef | cut -f 1 -d ' '`"
 if (${l} > 0) then
   cp $stagef /mesonet/wepp/data/rainfall/stage4/$dir/$stagef 
