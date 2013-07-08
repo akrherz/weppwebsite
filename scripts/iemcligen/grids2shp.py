@@ -173,4 +173,4 @@ if __name__ == "__main__":
 		proc = subprocess.Popen("psql -h iemdb -f %s wepp" % (TMPFN,),
 					shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stderr = proc.stderr.read()
-	os.unlink(TMPFN)
+		os.unlink(TMPFN)
