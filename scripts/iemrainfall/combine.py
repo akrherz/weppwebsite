@@ -17,8 +17,8 @@ for mi in [15,30,45,60]:
 	fp = "nexrad_hrap/HRAP_RAIN_%s" % (mi,)
 	rads += "%s\n" % (fp,)
 
-	ofp = "/mesonet/wepp/data/rainfall/product/%s/%s/IA%s.dat" % (t.year, t.strftime("%Y%m%d"), \
-		t.strftime("%Y%m%d_%H%M") )
+	ofp = "/mesonet/wepp/data/rainfall/product/%s/%s/IA%s.dat" % (t.year, 
+							t.strftime("%Y%m%d"), t.strftime("%Y%m%d_%H%M") )
 	if (not os.path.isdir("/mesonet/wepp/data/rainfall/product/%s/%s" % (t.year, t.strftime("%Y%m%d") ) )):
 		os.makedirs("/mesonet/wepp/data/rainfall/product/%s/%s" % (t.year, t.strftime("%Y%m%d") ) )
 	prods += "%s\n" % (ofp,)

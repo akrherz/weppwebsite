@@ -1,6 +1,6 @@
 
 if ($# != 4) then
-        echo "Usage:: csh getStage4.csh YYYY MO DD HR"
+        echo "Usage:: csh processStage4.csh YYYY MO DD HR"
         exit 0
 endif
   
