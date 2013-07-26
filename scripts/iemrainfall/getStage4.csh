@@ -19,8 +19,8 @@ set DD="`echo $nh | cut -c 7-8`"
 set HR="`echo $nh | cut -c 9-10`"
 
 set dir="${YYYY}/${YYYY}${MO}${DD}"
-set stagef="ST4.${YYYY}${MO}${DD}${HR}.01h.gz"
-set staget="ST2ml${YYYY}${MO}${DD}${HR}.Grb.gz"
+set stagef="ST4.${YYYY}${MO}${DD}${HR}.01h.Z"
+set staget="ST2ml${YYYY}${MO}${DD}${HR}.Grb.Z"
 
 # First, lets always try to get stage2 data
 mkdir -p /mesonet/wepp/data/rainfall/stage2/$dir
