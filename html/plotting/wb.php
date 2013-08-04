@@ -11,7 +11,7 @@ $rs = pg_prepare($conn, "metadata", "SELECT t.county as cname, c.hrap_i, s.name 
 $rs = pg_prepare($conn, "rainfall", "SELECT valid, rainfall / 25.4 as ra from daily_rainfall_$year WHERE hrap_i = $1 ORDER by valid ASC");
 
 
-$fcontents = file("/mnt/mesonet/wepp/RT/wb/${runid}.wb");
+$fcontents = file("/mnt/idep/RT/wb/${runid}.wb");
 $now = time();
 $lbound = mktime(0,0,0,1,1,$year);
 $obound = mktime(0,0,0,1,1,$year +1);
