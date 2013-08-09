@@ -1,4 +1,8 @@
-
+'''
+ A straight copy of ISUAG solar radiation data to IDEPv1 climate sector data,
+ if data is not found from the ISUAG network, then the previous year's value
+ is used.  Lame yes, but will be improved with IDEPv2
+'''
 import psycopg2
 ISUAG = psycopg2.connect(database='isuag', host='iemdb')
 icursor = ISUAG.cursor()
@@ -29,11 +33,12 @@ def process(ts):
           WHERE day = %s and sector = %s """, (row[0], day, sector))
 
 #"""
-ts = datetime.datetime.now() - datetime.timedelta(days=1)
-if len(sys.argv) == 4:
-    ts = datetime.datetime( int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
-process(ts)
+if __name__ == '__main__':
+    ts = datetime.datetime.now() - datetime.timedelta(days=1)
+    if len(sys.argv) == 4:
+        ts = datetime.datetime( int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+    process(ts)
 
-wcursor.close()
-WEPP.commit()
-WEPP.close()
+    wcursor.close()
+    WEPP.commit()
+    WEPP.close()
