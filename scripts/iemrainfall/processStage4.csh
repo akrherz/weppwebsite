@@ -29,7 +29,7 @@ if (! -f ${fn}) then
 	echo "Missing both stage2 and stage4, using empty HRAP"
 	cp lib/empty.hrap ncep_hrap/S4_${YYYY}${MO}${DD}${HR}
 else
-	bin/wgrib $fn | grep P | bin/wgrib $unfp -i -o $out > tmp/wgrib.dat
+	bin/wgrib $fn | grep P | bin/wgrib $fn -i -o $out > tmp/wgrib.dat
 
 	if (${YYYY} < 2002) then
 		echo "Using Old ST4 Reader..."
