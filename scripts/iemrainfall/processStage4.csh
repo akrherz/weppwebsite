@@ -31,9 +31,6 @@ if (! -f ${fn}) then
 else
 	bin/wgrib $fn | grep P | bin/wgrib $unfp -i -o $out > tmp/wgrib.dat
 
-	gzip -c $unfp > $fp
-	rm -f $unfp
-
 	if (${YYYY} < 2002) then
 		echo "Using Old ST4 Reader..."
 		bin/readST4-old $out
