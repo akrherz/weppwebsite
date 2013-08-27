@@ -36,7 +36,7 @@ for rad in $(echo "DMX DVN ARX MPX FSD OAX"); do
 	python create15minRef.py $rad $yyyy $mm $dd $hr
 done
 
-csh getStage4.csh $yyyy $mm $dd $hr $1
+#csh getStage4.csh $yyyy $mm $dd $hr $1
 csh processStage4.csh $yyyy $mm $dd $hr
 
 python combine.py $yyyy $mm $dd $hr

@@ -16,25 +16,20 @@ set DD="`echo $nh | cut -c 7-8`"
 set HR="`echo $nh | cut -c 9-10`" 
 
 set dir="${YYYY}/${YYYY}${MO}${DD}"
-set stage="ST4.${YYYY}${MO}${DD}${HR}.01h.Z"
-set unstage="ST4.${YYYY}${MO}${DD}${HR}.01h"
-set fp="/mesonet/wepp/data/rainfall/stage4/$dir/$stage"
-set unfp="/mesonet/wepp/data/rainfall/stage4/$dir/$unstage"
-if (! -f ${fp} ) then
-	set stage="ST2ml${YYYY}${MO}${DD}${HR}.Grb.Z"
-	set unstage="ST2ml${YYYY}${MO}${DD}${HR}.Grb"
-	set fp="/mesonet/wepp/data/rainfall/stage2/$dir/$stage"
-	set unfp="/mesonet/wepp/data/rainfall/stage2/$dir/$unstage"
+set stage="ST4.${YYYY}${MO}${DD}${HR}.01h.grib"
+set fn="/mesonet/ARCHIVE/data/${YYYY}/${MO}/${DD}/stage4/$stage"
+if (! -f ${fn} ) then
+	set stage="ST2ml.${YYYY}${MO}${DD}${HR}.01h.grib"
+	set fn="/mesonet/ARCHIVE/data/${YYYY}/${MO}/${DD}/stage4/$stage"
 endif
 
 set out="tmp/S4_${YYYY}${MO}${DD}${HR}"
 
-if (! -f ${fp}) then
+if (! -f ${fn}) then
 	echo "Missing both stage2 and stage4, using empty HRAP"
 	cp lib/empty.hrap ncep_hrap/S4_${YYYY}${MO}${DD}${HR}
 else
-	gunzip $fp
-	bin/wgrib $unfp | grep P | bin/wgrib $unfp -i -o $out > tmp/wgrib.dat
+	bin/wgrib $fn | grep P | bin/wgrib $unfp -i -o $out > tmp/wgrib.dat
 
 	gzip -c $unfp > $fp
 	rm -f $unfp
