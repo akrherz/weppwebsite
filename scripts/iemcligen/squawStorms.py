@@ -19,7 +19,7 @@ def process(ts, hrap_i, basinid):
     gx = (hrap_i - 1) % 173
     gy = (hrap_i - 1) / 173
 
-    fp = ts.strftime("/mesonet/wepp/data/rainfall/netcdf/daily/%Y/%m/%Y%m%d_rain.nc")
+    fp = ts.strftime("/mnt/idep/data/rainfall/netcdf/daily/%Y/%m/%Y%m%d_rain.nc")
     if (not os.path.isfile(fp)):
         return
     nc = netCDF4.Dataset(fp, 'r')

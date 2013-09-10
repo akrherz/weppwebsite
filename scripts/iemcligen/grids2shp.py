@@ -16,7 +16,7 @@ TMPFN = '/tmp/idep_rainfall.sql'
 
 def createNETCDF(s):
 	""" create a netcdf file """
-	dirPre = s.strftime("/mesonet/wepp/data/rainfall/netcdf/daily/%Y/%m/")
+	dirPre = s.strftime("/mnt/idep/data/rainfall/netcdf/daily/%Y/%m/")
 	if not os.path.isdir(dirPre):
 		os.makedirs(dirPre)
 	fileName = dirPre + s.strftime("%Y%m%d_rain.nc")
@@ -35,8 +35,8 @@ def createNETCDF(s):
 	r1d = nc.createVariable("rainfall_1day", numpy.float, ('hrap_j', 'hrap_i'))
 	r1d.units = "mm"
 
-	lat[:] = numpy.fromfile("/mesonet/wepp/GIS/lats.dat", sep=' ')
-	lon[:] = numpy.fromfile("/mesonet/wepp/GIS/lons.dat", sep=' ')
+	lat[:] = numpy.fromfile("/mnt/idep/GIS/lats.dat", sep=' ')
+	lon[:] = numpy.fromfile("/mnt/idep/GIS/lons.dat", sep=' ')
 	nc.sync()
 	return nc, r1d, r15m, tm
 
@@ -55,7 +55,7 @@ def createSQLFILE(s, update_monthly):
 
 def createGIS(s):
 	""" Create the shapefiles """
-	dirname = s.strftime("/mesonet/wepp/data/rainfall/shape/daily/%Y/%m/")
+	dirname = s.strftime("/mnt/idep/data/rainfall/shape/daily/%Y/%m/")
 	fname = s.strftime("%Y%m%d_rain")
 
 	if not os.path.isdir(dirname):
@@ -83,7 +83,7 @@ def main(year, month, day, update_monthly):
 	i = 0
 	while now < e:
 		gts = now.astimezone(pytz.timezone('UTC'))
-		fn = gts.strftime("/mesonet/wepp/data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
+		fn = gts.strftime("/mnt/idep/data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
 		#print 'Processing: %s' % (fp,)
 		nc_tm[i] = i * 15
 		if os.path.isfile(fn):
@@ -109,8 +109,8 @@ def main(year, month, day, update_monthly):
 	nc.close()
 
 	stringDate = s.strftime("%Y-%m-%d")
-	lats = numpy.fromfile("/mesonet/wepp/GIS/lats.dat", sep=' ')
-	lons = numpy.fromfile("/mesonet/wepp/GIS/lons.dat", sep=' ')
+	lats = numpy.fromfile("/mnt/idep/GIS/lats.dat", sep=' ')
+	lons = numpy.fromfile("/mnt/idep/GIS/lons.dat", sep=' ')
 	i = 0
 	max_rainfall = 0
 	lats = numpy.reshape(lats, (rows, cols))

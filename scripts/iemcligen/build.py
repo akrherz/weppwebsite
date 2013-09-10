@@ -93,7 +93,7 @@ def loadRainfall():
 		gts = myts.gmtime()
 		# fRef = ts.strftime("data/"+jDay+"/io%H%M."+jDay+".dat")
 		# fRef = ts.strftime("data/"+str(yr)+"/"+jDay+"/io%Y%m%d_%H%M.dat")
-		fRef = gts.strftime("/mesonet/wepp/data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
+		fRef = gts.strftime("/mnt/idep/data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
 		#print "Processing:", fRef
 		try:
 			f = numpy.fromfile(fRef, sep=' ')
@@ -122,7 +122,7 @@ def main():
 		mgtzone = rs[i]['mgtzone']
 		bktxt = doBreakPoint(hrap_i)
 		#if (len(bktxt) > 0 or len(sys.argv) == 4):
-		cf = editclifile.editclifile('/mesonet/wepp/data/clifiles/%s.dat' % (hrap_i,) )
+		cf = editclifile.editclifile('/mnt/idep/data/clifiles/%s.dat' % (hrap_i,) )
 		cr = cliRecord.cliRecord(ts)
 		cr.BPset(bktxt)
 		cr.CLset(cl[mgtzone][0])

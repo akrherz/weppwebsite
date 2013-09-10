@@ -64,7 +64,7 @@ def main():
     for row in wcursor:
         hrap_i = row['hrap_i']
         mgtzone = row['mgtzone']
-        cf = editclifile.editclifile('/mesonet/wepp/data/clifiles/%s.dat' % (hrap_i,) )
+        cf = editclifile.editclifile('/mnt/idep/data/clifiles/%s.dat' % (hrap_i,) )
         cr = cliRecord.cliRecord(ts)
         cr.CLset(cl[mgtzone])
         cf.editDaySavePrecip(ts, cr)

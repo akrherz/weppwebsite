@@ -53,7 +53,7 @@ while now < ets:
                              hrap[key]['mrain'] ) )
 
     del dbf
-    outdir = "/mesonet/wepp/data/rainfall/shape/monthly/%s" % (now.year,)
+    outdir = "/mnt/idep/data/rainfall/shape/monthly/%s" % (now.year,)
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
     shutil.copy(dbfname+".dbf", outdir)

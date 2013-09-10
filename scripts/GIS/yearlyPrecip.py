@@ -41,8 +41,8 @@ lon = nc.createVariable("longitude", 'f', ('hrap_j', 'hrap_i') )
 ncrain = nc.createVariable("yrrain", 'f', ('hrap_j', 'hrap_i'))
 ncrain.units = "inch"
 
-lat[:] = numpy.genfromtxt("/mesonet/wepp/GIS/lats.dat")
-lon[:] = numpy.genfromtxt("/mesonet/wepp/GIS/lons.dat")
+lat[:] = numpy.genfromtxt("/mnt/idep/GIS/lats.dat")
+lon[:] = numpy.genfromtxt("/mnt/idep/GIS/lons.dat")
 nc.sync()
 
 
@@ -93,6 +93,6 @@ nc.close()
 
 del dbf
 fn = "%srain.nc" % (yr,)
-shutil.copyfile(fn, "/mesonet/wepp/data/rainfall/netcdf/yearly/"+fn)
+shutil.copyfile(fn, "/mnt/idep/data/rainfall/netcdf/yearly/"+fn)
 fn = "%s_rain.dbf" % (yr,)
-shutil.copy(fn, "/mesonet/wepp/data/rainfall/shape/yearly/"+fn)
+shutil.copy(fn, "/mnt/idep/data/rainfall/shape/yearly/"+fn)
