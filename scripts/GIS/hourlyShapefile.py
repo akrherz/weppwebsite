@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Need to generate a shapefile with hourly rainfall totals in it!
 # Daryl Herzmann 28 May 2004
 

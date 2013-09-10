@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 
 from PIL import Image, ImageDraw, ImageFont
 import mx.DateTime

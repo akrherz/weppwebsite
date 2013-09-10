@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Build the IEM climate database template
 # Daryl Herzmann 4 Mar 2003
 

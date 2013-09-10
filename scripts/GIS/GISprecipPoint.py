@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Generate a shapefile from our current understanding of points
 # Daryl Herzmann 21 Jan 2003
 #  20 Feb 2003:	Insert this information into the spatial DB as well

@@ -4,14 +4,14 @@ from pyiem.plot import MapPlot
 import numpy
 
 maxi = numpy.zeros((134,173), 'f')
-sts = datetime.datetime(2013,1,1)
-ets = datetime.datetime(2013,7,2)
+sts = datetime.datetime(2008,7,27)
+ets = datetime.datetime(2008,7,28)
 now = sts
 while now < ets:
-    print now, numpy.max(maxi)
     nc = netCDF4.Dataset( now.strftime("/mnt/idep/data/rainfall/netcdf/daily/%Y/%m/%Y%m%d_rain.nc"), 'r')
     precip = numpy.max(nc.variables['rainfall_15min'][:],0) / 24.5 * 4.0
     maxi = numpy.max([precip, maxi], 0)
+    print now, numpy.max(maxi), numpy.max(precip)
     if now == sts:
         lat = nc.variables['latitude'][:]
         lon = nc.variables['longitude'][:]

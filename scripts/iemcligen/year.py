@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 
 from Scientific.IO.NetCDF import *
 #from Scientific.IO.FortranFormat import *

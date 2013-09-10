@@ -1,11 +1,11 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Need something to cache the historical images
 # Daryl Herzmann 2 Oct 2004
 
 import mx.DateTime, os
 
-s = mx.DateTime.DateTime(2013,1,1)
-e = mx.DateTime.DateTime(2013,1,31)
+s = mx.DateTime.DateTime(2013,6,1)
+e = mx.DateTime.DateTime(2013,6,26)
 interval = mx.DateTime.RelativeDateTime(days=+1)
 
 now = s

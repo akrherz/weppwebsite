@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Need something to generate shapes!
 
 import wellknowntext, pg, shapelib

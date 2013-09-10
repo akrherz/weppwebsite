@@ -1,4 +1,4 @@
-#!/mesonet/python-2.4/bin/python
+#!/usr/bin/env python
 # Daryl Herzmann 28 May 2004
 
 import pg, shapelib, dbflib, re, mx.DateTime, sys, os

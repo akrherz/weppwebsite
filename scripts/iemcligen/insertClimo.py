@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # We need something to insert climo values into the database
 # There is a problem with generating climate files before anything
 # from the ag climate network comes in...

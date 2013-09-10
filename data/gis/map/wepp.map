@@ -323,7 +323,8 @@ LAYER
   CLASS
     EXPRESSION /0/
     STYLE
-      COLOR -1 -1 -1
+      OPACITY 23
+      COLOR 0 0 0
       OUTLINECOLOR 255 0 0
       WIDTH 4.0
     END
@@ -340,7 +341,8 @@ LAYER
   CLASS
     EXPRESSION /1/
     STYLE
-      COLOR -1 -1 -1
+      OPACITY 46
+      COLOR 0 0 0
       OUTLINECOLOR 255 0 0
       WIDTH 4.0
     END
@@ -357,7 +359,8 @@ LAYER
   CLASS
     EXPRESSION /2/
     STYLE
-      COLOR -1 -1 -1
+      OPACITY 69
+      COLOR 0 0 0
       OUTLINECOLOR 255 0 0
       WIDTH 4.0
     END

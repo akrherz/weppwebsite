@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # I wanna rebuild the climate files, one file at a time! :)
 # Daryl Herzmann 5 Apr 2006
 

@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # This script will update the climate DB with new and exciting info!!
 # Daryl Herzmann 4 Mar 2003
 

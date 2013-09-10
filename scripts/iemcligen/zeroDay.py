@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Zero out rainfall for a day!!!
 
 import mx.DateTime, sys, shutil

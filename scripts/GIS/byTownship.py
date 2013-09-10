@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Output by township
 
 import pg, shapelib, dbflib

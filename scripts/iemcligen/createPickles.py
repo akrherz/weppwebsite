@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Create the pickled iem_cligen files!
 # Daryl Herzmann 6 Jun 2004
 

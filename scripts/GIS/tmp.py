@@ -1,4 +1,4 @@
-#!/mesonet/python-2.4/bin/python
+#!/usr/bin/env python
 # Pull out yearly precipitation
 
 import pg, dbflib, mx.DateTime, shutil, sys, Numeric

@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Something to generate GIS output of WEPP Runs!
 # Daryl Herzmann 2 Apr 2004
 # 12 Apr 2004	Fix my db hack. To make things a bit nicer...

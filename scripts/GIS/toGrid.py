@@ -1,4 +1,4 @@
-#!/mesonet/python/bin/python
+#!/usr/bin/env python
 # Convert a column file into a quick and dirty space seperated values file
 
 import re
