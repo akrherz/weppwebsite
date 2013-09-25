@@ -6,7 +6,7 @@ S=/mesonet/www/apps/weppwebsite/scripts
 
 ###
 # IEM Rainfall!
-47 * * * * cd $S/iemrainfall; sh RT.sh
+54 * * * * cd $S/iemrainfall; sh RT.sh
 
 ###
 # Input Squaw Storms
