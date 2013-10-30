@@ -24,7 +24,7 @@ $clickx = ($map_x * (0 - $dx) ) + $ul_x;
 $clicky = ($map_y * (0 - $dy) ) + $ul_y;
 
 $c = pg_connect("host=iemdb port=5432 dbname=wepp user=nobody");
-$q = "select * from iatwp WHERE within(geometryfromtext('POINT($clickx $clicky)', 26915), the_geom)";
+$q = "select * from iatwp WHERE ST_within(ST_geometryfromtext('POINT($clickx $clicky)', 26915), the_geom)";
 $rs = pg_exec($c, $q);
 
 $row = @pg_fetch_array($rs, 0);
