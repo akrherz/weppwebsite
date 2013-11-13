@@ -166,9 +166,9 @@ $imgurl = "plot.php?duration=$duration&var=$pvar&extents=$extents&dstr=$dstr&day
    document.queryButton.src = '../imagenav/button_query_off.png';
  }
 </script>
-Download shapefile options: <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=<?php echo $day; ?>">1 day: <?php echo $nicedate; ?></a> or <a href="http://mesonet.agron.iastate.edu/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=1&monthly=yes">1 month: <?php echo date("M Y", $ts); ?></a>
+Download shapefile options: <a href="/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=<?php echo $day; ?>">1 day: <?php echo $nicedate; ?></a> or <a href="/cgi-bin/wepp/sm2shape.py?year=<?php echo $year; ?>&month=<?php echo $month; ?>&day=1&monthly=yes">1 month: <?php echo date("M Y", $ts); ?></a>
 <?php if ($days > 1){
-  echo sprintf(" or <a href=\"http://mesonet.agron.iastate.edu/cgi-bin/wepp/sm2shape.py?year=%s&month=%s&day=%s&interval=%s\">%s Day Interval</a>",$year, $month, $day, $days, $days);
+  echo sprintf(" or <a href=\"/cgi-bin/wepp/sm2shape.py?year=%s&month=%s&day=%s&interval=%s\">%s Day Interval</a>",$year, $month, $day, $days, $days);
 } ?>
 
 

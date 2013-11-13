@@ -4,17 +4,17 @@ Provide IDEP soil moisture on a per township basis
 """
 import sys
 sys.path.insert(0, '/mesonet/www/apps/iemwebsite/scripts/lib')
-import iemdb
 import wellknowntext
 import shapelib
 import dbflib
 import os
 import cgi
-import mx.DateTime
 import sys
+import mx.DateTime
 import zipfile
 import shutil
-WEPP = iemdb.connect('wepp', bypass=True)
+import psycopg2
+WEPP = psycopg2.connect(database='wepp', host='iemdb', user='nobody')
 wcursor = WEPP.cursor()
 
 os.chdir('/tmp/')
@@ -43,16 +43,16 @@ print
 
 # Maybe our data is already cached, lets hope so!
 if os.path.isfile(fp+".zip"):
-  print file(fp+".zip", 'r').read(),
-  sys.exit(0)
+    print file(fp+".zip", 'r').read(),
+    sys.exit(0)
 
 
 # Load up the township GIS stuff
 twp = {}
 
-sql = "SELECT astext(transform(the_geom,4326)) as tg, model_twp from iatwp"
+sql = "SELECT ST_astext(ST_transform(the_geom,4326)) as tg, model_twp from iatwp"
 if form.has_key("point"):
-  sql = """SELECT astext(transform(centroid(the_geom),4326)) as tg, model_twp 
+    sql = """SELECT ST_astext(ST_transform(ST_centroid(the_geom),4326)) as tg, model_twp 
       from iatwp"""
 wcursor.execute( sql )
 for row in wcursor:
@@ -83,9 +83,9 @@ if monthly is not None:
 wcursor.execute( sql )
 
 if form.has_key("point"):
-  shp = shapelib.create(fp, shapelib.SHPT_POINT)
+    shp = shapelib.create(fp, shapelib.SHPT_POINT)
 else:
-  shp = shapelib.create(fp, shapelib.SHPT_POLYGON)
+    shp = shapelib.create(fp, shapelib.SHPT_POLYGON)
 dbf = dbflib.create(fp)
 dbf.add_field("DAY_STA", dbflib.FTString, 8, 0)
 dbf.add_field("DAY_END", dbflib.FTString, 8, 0)
@@ -97,20 +97,20 @@ dbf.add_field("S20CM", dbflib.FTDouble, 8, 4)
 
 i = 0
 for row in wcursor:
-  m = row[0]
-  vsm = row[1]
-  vsms = row[2]
-  s10 = row[3]
-  s20 = row[4]
+    m = row[0]
+    vsm = row[1]
+    vsms = row[2]
+    s10 = row[3]
+    s20 = row[4]
 
-  f = wellknowntext.convert_well_known_text( twp[m] )
-  if form.has_key("point"):
-    obj = shapelib.SHPObject(shapelib.SHPT_POINT, 1, [[f]] )
-  else:
-    obj = shapelib.SHPObject(shapelib.SHPT_POLYGON, 1, f )
-  shp.write_object(-1, obj)
-  dbf.write_record(i, (day1,day2,m,vsm,vsms,s10,s20) )
-  i += 1
+    f = wellknowntext.convert_well_known_text( twp[m] )
+    if form.has_key("point"):
+        obj = shapelib.SHPObject(shapelib.SHPT_POINT, 1, [[f]] )
+    else:
+        obj = shapelib.SHPObject(shapelib.SHPT_POLYGON, 1, f )
+    shp.write_object(-1, obj)
+    dbf.write_record(i, (day1,day2,m,vsm,vsms,s10,s20) )
+    i += 1
 
 del(dbf)
 del(shp)
