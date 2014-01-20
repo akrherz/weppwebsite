@@ -130,7 +130,7 @@ No
 0
 """ % ("wepp.out", "wb/"+ str(self.run_id)+".wb", "env/"+ str(self.run_id)+".env", \
  "managements/"+ self.mfile+".man", "slopes/"+ str(self.nri_id)+".slp", \
- "clifiles/"+ str(self.hrap_i)+".dat", "soils/"+ str(self.nri_id)+".sol", 16) )
+ "clifiles/"+ str(self.hrap_i)+".dat", "soils/"+ str(self.nri_id)+".sol", 17) )
 #""" % ("wepp.out", "wb/"+ str(self.run_id)+".wb", "env/"+ str(self.run_id)+".env", \
     o.close()
 
