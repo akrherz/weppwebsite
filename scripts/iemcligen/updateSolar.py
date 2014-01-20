@@ -12,15 +12,15 @@ import sys
 import datetime
 
 
-cref = {'A131299': 1, 'A134309': 2, 'A135879': 3, 
-        'A131299': 4, 'A130209': 5, 'A135849': 6,
-        'A134759': 7, 'A131559': 8, 'A131909': 9}
+cref = {1: 'A131299', 2: 'A134309', 3: 'A135879', 
+        4: 'A130209', 5: 'A130209', 6: 'A135849',
+        7: 'A134759', 8: 'A131909', 9: 'A131909'}
 
 # c80 is solar rad
 def process(ts):
-    for st in cref.keys():
+    for sector in cref.keys():
         tbl = "daily"
-        sector = cref[st]
+        st = cref[sector]
         day = ts.strftime("%Y-%m-%d")
         sql = """SELECT c80 from %s WHERE valid = '%s' and station = '%s'""" % (
                                         tbl, day, st)
