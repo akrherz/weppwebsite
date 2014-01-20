@@ -2,7 +2,9 @@
  Class for Wepp runs
 '''
 import os
+import datetime
 
+YRS = datetime.datetime.now().year - 1997 + 1
 
 class weppRun:
     run_id = None
@@ -128,7 +130,7 @@ No
        "managements/"+ self.mfile+".man", 
        "slopes/"+ str(self.nri_id)+".slp", 
        "clifiles/"+ str(self.hrap_i)+".dat", 
-       "soils/"+ str(self.nri_id)+".sol", 17) )
+       "soils/"+ str(self.nri_id)+".sol", YRS) )
 #""" % ("wepp.out", "wb/"+ str(self.run_id)+".wb", "env/"+ str(self.run_id)+".env", \
         o.close()
 
