@@ -142,7 +142,7 @@ def main(year, month, day):
 
     # Now we update the yearly totals...  Delete old records first
     wcursor.execute("""DELETE from results_twp_year WHERE   
-         valid = %s""", (ts, ))
+         valid = '%s-01-01'""" %  (ts.year, ))
     print 'Removed %s rows from results_twp_year' % (wcursor.rowcount,)
 
     sql = """insert into results_twp_year (model_twp, valid, avg_loss, 
@@ -164,7 +164,7 @@ def main(year, month, day):
 
     # Now we update the monthly totals... Delete old records first
     wcursor.execute("""DELETE from results_twp_month WHERE 
-         valid = %s""", (ts, ))
+         valid = '%s-%s-01'""" % (ts.year, ts.month))
 
     sql = """insert into results_twp_month (model_twp, valid, avg_loss, avg_runoff,
     min_loss, max_loss, min_runoff, max_runoff, ve_runoff, ve_loss) 
