@@ -12,25 +12,27 @@ import sys
 import datetime
 
 
-cref = {1: 'A134309', 2: 'A134309', 3: 'A135879', 
-        4: 'A130209', 5: 'A130209', 6: 'A135849',
-        7: 'A134759', 8: 'A131909', 9: 'A131909'}
+cref = {1: 'DONI4', 2: 'KNAI4', 3: 'NASI4', 
+        4: 'CNAI4', 5: 'AEEI4', 6: 'CIRI4',
+        7: 'OKLI4', 8: 'CHAI4', 9: 'CRFI4'}
 
 # c80 is solar rad
 def process(ts):
     for sector in cref.keys():
-        tbl = "daily"
         st = cref[sector]
         day = ts.strftime("%Y-%m-%d")
-        sql = """SELECT c80 from %s WHERE valid = '%s' and station = '%s'""" % (
-                                        tbl, day, st)
+        sql = """SELECT slrmj_tot from sm_daily 
+              WHERE valid = '%s' and station = '%s'""" % (
+                                        day, st)
         icursor.execute(sql)
         if icursor.rowcount == 0:
             print "Missing Solar for sector: %s station: %s" % (sector, st)
             continue
         row = icursor.fetchone()
+        # convert mj to langleys
+        rad = row[0] * 23.9
         wcursor.execute("""UPDATE climate_sectors SET rad = %s 
-          WHERE day = %s and sector = %s """, (row[0], day, sector))
+          WHERE day = %s and sector = %s """, (rad, day, sector))
 
 #"""
 if __name__ == '__main__':
