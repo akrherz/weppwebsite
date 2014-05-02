@@ -22,8 +22,8 @@ def process(ts):
         st = cref[sector]
         day = ts.strftime("%Y-%m-%d")
         sql = """SELECT slrmj_tot from sm_daily 
-              WHERE valid = '%s' and station = '%s'""" % (
-                                        day, st)
+              WHERE valid = '%s' and station = '%s' and slrmj_tot is not null
+              """ % (day, st)
         icursor.execute(sql)
         if icursor.rowcount == 0:
             print "Missing Solar for sector: %s station: %s" % (sector, st)
