@@ -9,21 +9,15 @@ $twp = isset($_GET["twp"]) ? $_GET["twp"] : "T85NR17W";
 $year = isset($_GET["year"])? $_GET["year"] : date("Y", time() - 86400);
 
 $c = pg_connect($weppdb);
-$q = "select * from results_by_twp WHERE extract(year from valid) = $year
-      and model_twp = '$twp' ORDER by valid ASC";
-$rs = pg_exec($c, $q);
-?>
+$q = pg_prepare($c, "YRSELECT", "select * from results_by_twp 
+		WHERE extract(year from valid) = $1
+      and model_twp = $2 ORDER by valid ASC");
+$rs = pg_execute($c, "YRSELECT", Array($year, $twp));
 
-<?php
   $THISPAGE = "township-yearly"; include("../../include/header.phtml");
   $side_bytwp = 1; include("../../include/side.phtml");
 ?>
    
-<!-- content BEGIN -->
-<div id="wepp-middle-two">
-<div id="wepp-content">
-<div id="page-main">
-
 <p>This page displays daily erosion estimates for a given year and given 
 township.  You can click on the date to get a mode detailed look at the
 estimates for that day.
@@ -95,8 +89,5 @@ echo "<tr><td>Total:</td><td></td>
 echo "</table>";
 ?>
 
-</div>
-</div>
-</div>
    
 <?php include("../../include/footer.phtml"); ?>

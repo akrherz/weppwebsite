@@ -606,7 +606,7 @@ if (isset($param["sql"]))
 $bins = $param["ramp"];
 
 $cz = ms_newClassObj($rainfall);
-$cz->setexpression("([da] == 0)");
+$cz->setexpression("([da] = 0.0000)");
 
 $c0 = ms_newClassObj($rainfall);
 $c0->setexpression("([da] < ". $bins[0] .")");
