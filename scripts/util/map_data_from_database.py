@@ -1,7 +1,7 @@
 '''
 Explore mapping IDEPv1 data direct from the database with matplotlib
 '''
-from pyiem.plot import MapPlot, maue
+from pyiem.plot import MapPlot, maue, james2
 from shapely.wkb import loads
 import psycopg2
 import sys
@@ -9,25 +9,34 @@ import numpy as np
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 import matplotlib.colors as mpcolors
+import matplotlib.cm as cm
 
-DBCONN = psycopg2.connect(database='wepp', host='iemdb', user='nobody')
+DBCONN = psycopg2.connect(database='wepp', host='mesonet.agron.iastate.edu', user='nobody')
 cursor = DBCONN.cursor()
 
 yr = int(sys.argv[1])
 
 m = MapPlot(sector='iowa',
-            title='%s IDEPv1 Township Average Soil Displacement' % (yr,))
+            title='%s IDEPv1 Peak Rainfall Intensity' % (yr,))
 
-cursor.execute("""select ST_Transform(the_geom,4326), total from 
-    
-    (SELECT model_twp, sum(avg_loss) * 4.463 as total from results_by_twp WHERE
-    valid between '%s-01-01' and '%s-01-01' GROUP by model_twp) as foo
-    
-    JOIN iatwp t on (t.model_twp = foo.model_twp) ORDER by total DESC
-    """ % (yr, yr+1))
+cursor.execute("""
+
+    SELECT ST_Transform(the_geom,4326), foo.val from
+    (SELECT hrap_i, max(peak_15min) / 25.4 * 4.0 as val from daily_rainfall_%s
+     GROUP by hrap_i) as foo 
+    JOIN hrap_polygons p on (p.hrap_i = foo.hrap_i)
+
+    --- select ST_Transform(the_geom,4326), total from 
+    ---
+    ---(SELECT model_twp, sum(avg_loss) * 4.463 as total from results_by_twp WHERE
+    ---valid between '%s-01-01' and '%s-01-01' GROUP by model_twp) as foo
+    ---
+    ---JOIN iatwp t on (t.model_twp = foo.model_twp) ORDER by total DESC
+    """ % (yr, yr, yr+1))
 
 bins = np.array([0,0.1,0.5,0.75,1,2,3,4,5,7,10,15,20,25])
-cmap = maue()
+bins = np.arange(0,6.1,0.5)
+cmap = cm.get_cmap('jet') #james2()
 norm = mpcolors.BoundaryNorm(bins, cmap.N)
 patches = []
 for row in cursor:
@@ -42,7 +51,7 @@ for row in cursor:
 
           
 m.ax.add_collection(PatchCollection(patches,match_original=True))
-m.draw_colorbar(bins, cmap, norm, units='tons per acre')
+m.draw_colorbar(bins, cmap, norm, units='inches per hour')
 
 m.drawcounties()
-m.postprocess(filename='/tmp/%serosion.png' % (yr,))
+m.postprocess(filename='%srainfall.png' % (yr,))
