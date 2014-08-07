@@ -31,6 +31,11 @@ def process(ts):
         row = icursor.fetchone()
         # convert mj to langleys
         rad = row[0] * 23.9
+        # Crude bounds
+        if rad < 0.01 or rad > 800:
+            print 'IDEPv1 updateSolar.py FAIL sector: %s station: %s rad: %.1f' % (
+                                            sector, st, rad)
+            continue
         wcursor.execute("""UPDATE climate_sectors SET rad = %s 
           WHERE day = %s and sector = %s """, (rad, day, sector))
 
