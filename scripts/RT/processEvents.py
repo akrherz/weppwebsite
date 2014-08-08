@@ -33,28 +33,25 @@ fp = open("insert.sql", "w")
 fp.write("DELETE from results WHERE valid = '%s';\n" % ( ots.strftime("%Y-%m-%d") ) )
 fp.write("COPY results FROM stdin;\n")
 
-j = 0
 for filename in files:
     run_id = filename[:-4]
     o = open("env/"+ filename , 'r')
-    rowcnt = 0
-    for line in o:
-        rowcnt += 1
-        if (rowcnt < 4): continue
-        tokens = re.split("[\s]+", line)
+    for linenum, line in enumerate(o):
+        if linenum < 3:
+            continue
+        tokens = line.split()
         try:
-            ts = datetime.datetime(int(tokens[3]) + 1996, int(tokens[2]), int(tokens[1]))
+            ts = datetime.datetime(int(tokens[2]) + 1996, int(tokens[1]), 
+                                   int(tokens[0]))
         except:
-            print file, tokens
+            print "processEvents file: %s line:%s tokens:%s" % (filename, 
+                                                            linenum, tokens)
             continue
         if (ts != ots):
             continue
-        trunoff = tokens[5]
-        tloss = tokens[7]
-        tprecip = tokens[4]
-        if (j % 1000 == 0 and j != 0):
-            fp.write("\.\nCOPY results from STDIN;\n")
-        j = j + 1
+        trunoff = tokens[4]
+        tloss = tokens[6]
+        tprecip = tokens[3]
         fp.write("%s\t%s\t%s\t%5.2f\t%s\n" % (run_id, ts.strftime("%Y-%m-%d"), 
                         trunoff, float(tloss) * upfact[int(run_id)] , tprecip))
 
