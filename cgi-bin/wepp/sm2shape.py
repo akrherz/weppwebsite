@@ -3,13 +3,11 @@
 Provide IDEP soil moisture on a per township basis
 """
 import sys
-sys.path.insert(0, '/mesonet/www/apps/iemwebsite/scripts/lib')
-import wellknowntext
+import pyiem.wellknowntext as wellknowntext
 import shapelib
 import dbflib
 import os
 import cgi
-import sys
 import mx.DateTime
 import zipfile
 import shutil

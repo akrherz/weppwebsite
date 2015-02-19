@@ -3,8 +3,7 @@
 Provide IDEP output on a per township basis
 """
 import sys
-sys.path.insert(0, '/mesonet/www/apps/iemwebsite/scripts/lib')
-import wellknowntext
+import pyiem.wellknowntext as wellknowntext
 import shapelib
 import dbflib
 import os
