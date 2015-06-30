@@ -772,7 +772,7 @@ $width = intval($map_width / 30);
 /* Draw Bar for legned */
 $rt = ms_newRectObj();
 $rt->setextent(0, $map_height, $width + 5 + ($fontsz * 2), $y-3);
-$rt->draw($map, $bar, $img, 0, "");
+$rt->draw($map, $bar, $img, 0);
 
 
 $layer = $map->getLayerByName("singlebox");
@@ -791,10 +791,15 @@ for ($k=11;$k>=0;$k--){
  $cl->getLabel(0)->set("position", MS_CC);
  $cl->getLabel(0)->set("offsetx", $width*1.6);
  $cl->getLabel(0)->set("offsety", 0 - $height/2);
- $p->draw($map, $layer, $img, 11- $k, @$param["ramp"][$k]);
-
+ $txt = isset($param["ramp"][$k])? $param["ramp"][$k]: null;
+ if ($txt == null){
+ 	$p->draw($map, $layer, $img, 11- $k);
+ } else {
+ 	$p->draw($map, $layer, $img, 11- $k, $txt);
+ }
  $y = $y + $height;
 }
+$map->drawLabelCache($img);
 
 if (isset($_GET["dl"])){
  header("Content-type: application/octet-stream");
