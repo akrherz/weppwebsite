@@ -119,7 +119,7 @@ WEPP.close()
 o = open(fp+".txt", 'w')
 o.write("""
 WEPP Modelled Erosion from the Iowa Daily Erosion Project
-http://wepp.mesonet.agron.iastate.edu
+http://idep-legacy.agron.iastate.edu
 
 DBF Columns are:
   DAY_STA   Start date of the period data is valid for YYYYMMDD
