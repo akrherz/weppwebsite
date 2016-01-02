@@ -7,22 +7,23 @@ date
 cd iemcligen
 python grids2shp.py
 
-direct=`date --date '1 day ago' +'%Y/%m/%d'`
-mkdir -p /mnt/idep/data/static/$direct
+#direct=`date --date '1 day ago' +'%Y/%m/%d'`
+#mkdir -p /mnt/idep/data/static/$direct
 
-cd /mesonet/www/apps/weppwebsite/html/GIS
-php -q plot.php width=320 height=240 > /mnt/idep/data/static/${direct}_daily_rainfall_in.png
-php -q plot.php var=avg_runoff_in width=320 height=240 > /mnt/idep/data/static/${direct}_daily_avg_runoff_in.png
-php -q plot.php var=avg_loss_acre width=320 height=240 > /mnt/idep/data/static/${direct}_daily_avg_loss_acre.png 
-php -q plot.php var=vsm width=320 height=240 > /mnt/idep/data/static/${direct}_daily_vsm.png 
+#cd /mesonet/www/apps/weppwebsite/html/GIS
+#php -q plot.php width=320 height=240 > /mnt/idep/data/static/${direct}_daily_rainfall_in.png
+#php -q plot.php var=avg_runoff_in width=320 height=240 > /mnt/idep/data/static/${direct}_daily_avg_runoff_in.png
+#php -q plot.php var=avg_loss_acre width=320 height=240 > /mnt/idep/data/static/${direct}_daily_avg_loss_acre.png 
+#php -q plot.php var=vsm width=320 height=240 > /mnt/idep/data/static/${direct}_daily_vsm.png 
 
-cd /mesonet/www/apps/weppwebsite/scripts/iemcligen
-python build.py
+#cd /mesonet/www/apps/weppwebsite/scripts/iemcligen
+#python build.py
 
 cd ../GIS
 python yearlyPrecip.py
 python monthlyPrecip.py
 
+exit
 
 cd /mnt/idep/RT
 rm -Rf error
