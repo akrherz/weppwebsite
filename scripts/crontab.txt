@@ -22,7 +22,7 @@ S=/mesonet/www/apps/weppwebsite/scripts
 32  1 * * * cd $S/iemcligen; python updateDay.py
 30 22 * * * cd $S/iemcligen; python updateDate.py
 14 23 * * * cd $S/iemcligen; python grids2shp.py
-44 23 * * * cd $S/iemcligen; python build.py yes
+#44 23 * * * cd $S/iemcligen; python build.py yes
 
 ###
 # Clean out the job queue table
