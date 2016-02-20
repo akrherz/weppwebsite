@@ -1,8 +1,5 @@
 # Make the 'real-time' runs!!!
 
-echo -n "Begin Daily IDEP Run: "
-date
-
 # Convert our 15minute data into a local day's worth
 cd iemcligen
 python grids2shp.py
