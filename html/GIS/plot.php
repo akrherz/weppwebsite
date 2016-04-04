@@ -710,7 +710,6 @@ $dm->draw($img);
 $credits = $map->getLayerByName("credits");
 $cl = $credits->getClass(0);
 $cl->getLabel(0)->color->setRGB(255, 255, 255);
-$cl->getLabel(0)->set("type", MS_TRUETYPE);
 $cl->getLabel(0)->set("font", "arial");
 $cl->getLabel(0)->set("size", $fontsz);
 $cl->getLabel(0)->set("position", MS_UR);
@@ -719,7 +718,6 @@ $cl->getLabel(0)->set("offsety", 0);
 
 $cl = $credits->getClass(1);
 $cl->getLabel(0)->color->setRGB(255, 255, 255);
-$cl->getLabel(0)->set("type", MS_TRUETYPE);
 $cl->getLabel(0)->set("font", "arial");
 $cl->getLabel(0)->set("size", $fontsz/1.5);
 $cl->getLabel(0)->set("position", MS_UR);
@@ -785,7 +783,6 @@ for ($k=11;$k>=0;$k--){
  $st->outlinecolor->setRGB(255, 255, 255);
  $l = $cl->addLabel(new labelObj());
  $cl->getLabel(0)->color->setRGB(255, 255, 255);
- $cl->getLabel(0)->set("type", MS_TRUETYPE);
  $cl->getLabel(0)->set("font", "arial");
  $cl->getLabel(0)->set("size", $fontsz/1.5);
  $cl->getLabel(0)->set("position", MS_CC);
