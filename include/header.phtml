@@ -121,7 +121,7 @@ while( list($idx, $page) = each($_pages) )
 	/* Section header */
 	echo sprintf("<li%s><a href=\"%s\">%s</a><ul>", 
       ($ar[0] == $idx) ? " class=\"selected\"" : " ",
-      $_WEBBASE . $page["base"]["url"], $page["base"]["title"]);
+      $page["base"]["url"], $page["base"]["title"]);
   	if ($ar[0] == $idx)
   	{
     	while( list($idx2, $page2) = each($page) )
@@ -129,7 +129,7 @@ while( list($idx, $page) = each($_pages) )
        		if ($idx2 == "base") continue;
        		echo sprintf("<li%s><a href=\"%s\">%s</a></li>", 
          ($ar[1] == $idx2) ? " class=\"selected\"" : " ",
-          $_WEBBASE . $page[$idx2]["url"], 
+          $page[$idx2]["url"], 
      ($ar[1] == $idx2) ? "[ ". $page[$idx2]["title"] ." ]": $page[$idx2]["title"] );
     	}
     }
