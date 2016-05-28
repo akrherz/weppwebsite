@@ -30,7 +30,8 @@ def process(ts):
         day = ts.strftime("%Y-%m-%d")
         for st in cref[sector]:
             sql = """SELECT slrmj_tot_qc from sm_daily
-              WHERE valid = '%s' and station = '%s' and slrmj_tot is not null
+              WHERE valid = '%s' and station = '%s' and
+              slrmj_tot_qc is not null
               """ % (day, st)
             icursor.execute(sql)
             if icursor.rowcount == 1:
