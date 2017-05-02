@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 """
 Provide IDEP soil moisture on a per township basis
 """
