@@ -1,40 +1,53 @@
-
-import mx.DateTime
+"""Combine"""
+import datetime
 import sys
 import os
 
-yyyy = int(sys.argv[1])
-mm = int(sys.argv[2])
-dd = int(sys.argv[3])
-hr = int(sys.argv[4])
+BASEDIR = "/mnt/idep/data/rainfall/product"
+TMP = "/mesonet/tmp"
 
-ts = mx.DateTime.DateTime(yyyy, mm, dd, hr)
 
-rads = ""
-prods = ""
-for mi in [15,30,45,60]:
-	t = ts + mx.DateTime.RelativeDateTime(minutes= + mi)
-	fp = "nexrad_hrap/HRAP_RAIN_%s" % (mi,)
-	rads += "%s\n" % (fp,)
+def main(argv):
+    """Go Main Go"""
+    yyyy = int(argv[1])
+    mm = int(argv[2])
+    dd = int(argv[3])
+    hr = int(argv[4])
 
-	ofp = "/mnt/idep/data/rainfall/product/%s/%s/IA%s.dat" % (t.year, 
-							t.strftime("%Y%m%d"), t.strftime("%Y%m%d_%H%M") )
-	if (not os.path.isdir("/mnt/idep/data/rainfall/product/%s/%s" % (t.year, t.strftime("%Y%m%d") ) )):
-		os.makedirs("/mnt/idep/data/rainfall/product/%s/%s" % (t.year, t.strftime("%Y%m%d") ) )
-	prods += "%s\n" % (ofp,)
+    ts = datetime.datetime(yyyy, mm, dd, hr)
 
-hts = ts + mx.DateTime.RelativeDateTime(hours=+1)
+    rads = ""
+    prods = ""
+    for mi in [15, 30, 45, 60]:
+        tstamp = ts + datetime.timedelta(minutes=mi)
+        fp = "%s/HRAP_RAIN_%s" % (TMP, mi)
+        rads += "%s\n" % (fp,)
 
-o = open("tmp/S4_files.dat", 'w')
-o.write("%s\n" % (hts.strftime("ncep_hrap/S4_%Y%m%d%H"),) )
-o.close()
+        ofp = ("%s/%s/%s/IA%s.dat"
+               ) % (BASEDIR, tstamp.year, tstamp.strftime("%Y%m%d"),
+                    tstamp.strftime("%Y%m%d_%H%M"))
+        if (not os.path.isdir("%s/%s/%s" % (BASEDIR, tstamp.year,
+                                            tstamp.strftime("%Y%m%d")))):
+            os.makedirs("%s/%s/%s" % (BASEDIR, tstamp.year,
+                                      tstamp.strftime("%Y%m%d")))
+        prods += "%s\n" % (ofp,)
 
-o = open("tmp/combout.dat", 'w')
-o.write(prods)
-o.close()
+    hts = ts + datetime.timedelta(hours=+1)
 
-o = open("tmp/NEX_files.dat", 'w')
-o.write(rads)
-o.close()
+    fp = open("%s/S4_files.dat" % (TMP, ), 'w')
+    fp.write("%s/%s\n" % (TMP, hts.strftime("S4_%Y%m%d%H"),))
+    fp.close()
 
-os.system("bin/combine")
+    fp = open("%s/combout.dat" % (TMP, ), 'w')
+    fp.write(prods)
+    fp.close()
+
+    fp = open("%s/NEX_files.dat" % (TMP, ), 'w')
+    fp.write(rads)
+    fp.close()
+
+    os.system("bin/combine")
+
+
+if __name__ == '__main__':
+    main(sys.argv)

@@ -23,13 +23,13 @@ if (! -f ${fn} ) then
 	set fn="/mesonet/ARCHIVE/data/${YYYY}/${MO}/${DD}/stage4/$stage"
 endif
 
-set out="tmp/S4_${YYYY}${MO}${DD}${HR}"
+set out="/mesonet/tmp/S4_${YYYY}${MO}${DD}${HR}"
 
 if (! -f ${fn}) then
 	echo "${YYYY}-${MO}-${DD} ${HR} UTC: Missing both stage2 and stage4, using empty HRAP"
-	cp lib/empty.hrap ncep_hrap/S4_${YYYY}${MO}${DD}${HR}
+	cp lib/empty.hrap /mesonet/tmp/S4_${YYYY}${MO}${DD}${HR}
 else
-	bin/wgrib $fn | grep P | bin/wgrib $fn -i -o $out > tmp/wgrib.dat
+	bin/wgrib $fn | grep P | bin/wgrib $fn -i -o $out > /mesonet/tmp/wgrib.dat
 
 	if (${YYYY} < 2002) then
 		echo "Using Old ST4 Reader..."
@@ -37,7 +37,7 @@ else
 	else
 		bin/readST4 $out
 	endif
-	mv outIowa.dat ncep_hrap/S4_${YYYY}${MO}${DD}${HR}
+	mv outIowa.dat /mesonet/tmp/S4_${YYYY}${MO}${DD}${HR}
 endif
 
-bin/killbigvalue ncep_hrap/S4_${YYYY}${MO}${DD}${HR}
+bin/killbigvalue /mesonet/tmp/S4_${YYYY}${MO}${DD}${HR}

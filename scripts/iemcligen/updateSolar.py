@@ -3,13 +3,14 @@
  if data is not found from the ISUAG network, then the previous year's value
  is used.  Lame yes, but will be improved with IDEPv2
 """
-import psycopg2
+from __future__ import print_function
 import sys
 import datetime
+from pyiem.util import get_dbconn
 
-ISUAG = psycopg2.connect(database='isuag', host='iemdb')
+ISUAG = get_dbconn('isuag')
 icursor = ISUAG.cursor()
-WEPP = psycopg2.connect(database='wepp', host='iemdb')
+WEPP = get_dbconn('wepp')
 wcursor = WEPP.cursor()
 
 
@@ -37,8 +38,8 @@ def process(ts):
             if icursor.rowcount == 1:
                 break
         if icursor.rowcount == 0:
-            print "Missing Solar for sector: %s station: %s" % (sector,
-                                                                cref[sector])
+            print(("Missing Solar for sector: %s station: %s"
+                   ) % (sector, cref[sector]))
             continue
         row = icursor.fetchone()
         # convert mj to langleys
@@ -50,6 +51,7 @@ def process(ts):
             continue
         wcursor.execute("""UPDATE climate_sectors SET rad = %s
           WHERE day = %s and sector = %s """, (rad, day, sector))
+
 
 if __name__ == '__main__':
     ts = datetime.datetime.now() - datetime.timedelta(days=1)

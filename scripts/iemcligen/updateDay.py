@@ -1,15 +1,15 @@
 
-import network
-nt = network.Table(("IA_ASOS", "AWOS"))
 import datetime
 import sys
-import psycopg2
+from pyiem.util import get_dbconn
+from pyiem.network import Table as NetworkTable
 
-WEPP = psycopg2.connect(database='wepp', host='iemdb')
+nt = NetworkTable(("IA_ASOS", "AWOS"))
+WEPP = get_dbconn('wepp')
 wcursor = WEPP.cursor()
-IEM = psycopg2.connect(database='iem', host='iemdb')
+IEM = get_dbconn('iem')
 icursor = IEM.cursor()
-ASOS = psycopg2.connect(database='asos', host='iemdb')
+ASOS = get_dbconn('asos')
 acursor = ASOS.cursor()
 
 ts = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -19,8 +19,8 @@ day = ts.strftime("%Y-%m-%d")
 
 
 targets = {'SUX': 1, 'MCW': 2, 'DBQ': 3, 
-        'DNS': 4, 'DSM': 5, 'CID': 6,
-        'ICL': 7, 'LWD': 8, 'BRL': 9}
+           'DNS': 4, 'DSM': 5, 'CID': 6,
+           'ICL': 7, 'LWD': 8, 'BRL': 9}
 
 # Lets find average wind speed, dew point for station
 sql = """SELECT avg(sknt) * 2 as wvl from t%s WHERE sknt >= 0 and 

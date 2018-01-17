@@ -27,9 +27,9 @@ then
 fi
 
 # First we clean!
-rm -f tmp/* 
-rm -f nexrad_hrap/*
-rm -f ncep_hrap/*
+#rm -f tmp/* 
+#rm -f nexrad_hrap/*
+#rm -f ncep_hrap/*
 
 for rad in $(echo "DMX DVN ARX MPX FSD OAX"); do
 	sh convertZNIDS.sh $rad $yyyy $mm $dd $hr
