@@ -59,13 +59,13 @@ for the 9 climate districts in Iowa.
 <tr>
 <td><a href="browse.phtml?dstr=<?php echo strftime("%m/%d/%Y", $ts - 86400); ?>"><?php echo date("d M Y", $ts - 86400); ?></a></td>
 <td><a href="browse.phtml?dstr=<?php echo strftime("%m/%d/%Y", $ts + 92000); ?>"><?php echo date("d M Y", $ts + 92000); ?></a></td>
-<td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" maxsize="10" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a></td>
+<td><input type="Text" name="dstr" value="<?php echo $dstr; ?>" size="12"><a href="javascript:cal.popup();"><img src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a></td>
 <td><input type="submit" value="Go to date"></td>
 </tr>
 </tbody>
 </table>
 </div>
-<script language="JavaScript">
+<script>
 <!-- // as
 var cal = new calendar2(document.forms['myform'].elements['dstr']);
 cal.year_scroll = true;
@@ -120,7 +120,7 @@ function printer($data, $sector, $var)
 function printIowa($data, $var, $title) {
 ?>
 <h4><?php echo $title; ?></h4>
-<table border="1" cellpadding="2" style="border: 2px solid #000;">
+<table border="1" style="border: 2px solid #000;">
 <tr>
   <td></td><th>West</th><th>Central</th><th>East</th></tr>
 
