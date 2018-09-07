@@ -11,8 +11,8 @@ import numpy as np
 
 def main():
     """Go Main Go"""
-    sts = datetime.date(2017, 3, 1)
-    ets = datetime.date(2017, 9, 30)
+    sts = datetime.date(2018, 3, 1)
+    ets = datetime.date(2018, 9, 1)
     interval = datetime.timedelta(days=1)
     now = sts
 
@@ -34,7 +34,7 @@ def main():
         jday += 1
 
     comp = dbf.Table('combined', ";".join(res))
-    comp.open()
+    comp.open(dbf.READ_WRITE)
     for i in range(23182):
         ar = tuple(precip[i, :])
         comp.append(ar)
