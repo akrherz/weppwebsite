@@ -28,7 +28,7 @@ def main(argv):
     # We look for radar data files, if found, we add them to dicts
     if yyyy >= 2002:
         for mi in range(60):
-            mybin = mi / 15
+            mybin = int(mi / 15)
             tstamp = ts + datetime.timedelta(minutes=mi)
             fp = "%s/%s_NCR_%s.ras" % (TMP, rad,
                                        tstamp.strftime("%Y%m%d_%H%M"))
