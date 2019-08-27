@@ -2,3 +2,6 @@
 /.buildpath
 /.project
 /.pydevproject
+/scripts/iemrainfall/tmp/*
+/scripts/iemrainfall/nexrad_hrap/**
+/scripts/iemrainfall/ncep_hrap/*
