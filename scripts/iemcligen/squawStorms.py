@@ -1,12 +1,10 @@
-"""
-"""
-import netCDF4
+"""Legacy stuff is fun."""
 import sys
 import datetime
 import os
 import numpy
-import psycopg2
-SQUAW = psycopg2.connect(database='squaw', host='iemdb')
+from pyiem.util import get_dbconn, ncopen
+SQUAW = get_dbconn('squaw')
 scursor = SQUAW.cursor()
 
 LOW_THRESHOLD = 0.10
@@ -15,14 +13,15 @@ storms = [0]*4
 for i in range(4):
     storms[i] = []
 
+
 def process(ts, hrap_i, basinid):
     gx = (hrap_i - 1) % 173
-    gy = (hrap_i - 1) / 173
+    gy = int((hrap_i - 1) / 173)
 
     fp = ts.strftime("/mnt/idep/data/rainfall/netcdf/daily/%Y/%m/%Y%m%d_rain.nc")
     if (not os.path.isfile(fp)):
         return
-    nc = netCDF4.Dataset(fp, 'r')
+    nc = ncopen(fp)
     p = nc.variables["rainfall_15min"]
     # Get me in inches
     minute15 = p[:,gy,gx] / 25.4
