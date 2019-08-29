@@ -3,6 +3,7 @@
 """
 from __future__ import print_function
 import datetime
+from collections import OrderedDict
 import shutil
 import os
 import sys
@@ -25,40 +26,35 @@ def main(argv):
         ets = datetime.datetime(int(argv[1]), 12, 31)
 
     now = sts
-    ohrap = {}
+    ohrap = OrderedDict()
     wcursor.execute("SELECT hrap_i from hrap_utm ORDER by hrap_i ASC")
     for row in wcursor:
         ohrap[row[0]] = {'rain': 0, 'hours': 0, 'mrain': 0}
 
-    hrapi = ohrap.keys()
-    hrapi.sort()
-
     while now < ets:
         shapefilename = "%s_rain" % (now.strftime("%Y%m"), )
-        shp = shapefile.Writer(shapeType=shapefile.POINT)
-        shp.field("RAINFALL", 'F', 8, 2)
-        shp.field("RAINHOUR", 'F', 8, 2)
-        shp.field("RAINPEAK", 'F', 8, 2)
 
-        wcursor.execute("""select hrap_i, rainfall /25.4 as rain,
+        wcursor.execute("""
+            select hrap_i, rainfall /25.4 as rain,
             peak_15min /25.4 * 4 as mrain, hr_cnt / 4.0 as hours from
             monthly_rainfall_%s  WHERE valid = '%s'
             ORDER by hrap_i ASC
-            """ % (now.strftime("%Y"), now.strftime("%Y-%m-%d")))
+        """ % (now.strftime("%Y"), now.strftime("%Y-%m-%d")))
 
-        hrap = ohrap
+        hrap = ohrap.copy()
         for row in wcursor:
             hrap[row[0]] = {'rain': row[1],
                             'hours': row[3], 'mrain': row[2]}
 
-        for i in range(len(hrapi)):
-            key = hrapi[i]
-            shp.point(1, 2)  # bogus
-            shp.record(hrap[key]['rain'], hrap[key]['hours'],
-                       hrap[key]['mrain'])
+        with shapefile.Writer(shapefilename) as shp:
+            shp.field("RAINFALL", 'F', 8, 2)
+            shp.field("RAINHOUR", 'F', 8, 2)
+            shp.field("RAINPEAK", 'F', 8, 2)
+            for key in ohrap:
+                shp.point(1, 2)  # bogus
+                shp.record(
+                    hrap[key]['rain'], hrap[key]['hours'], hrap[key]['mrain'])
 
-        shp.save(shapefilename)
-        del shp
         outdir = "/mnt/idep/data/rainfall/shape/monthly/%s" % (now.year,)
         if not os.path.isdir(outdir):
             os.makedirs(outdir)
