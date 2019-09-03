@@ -45,7 +45,8 @@ def main(argv):
                                                                TMP))
         if not os.path.isfile("SDUS53_RAIN.txt"):
             print("%s %s" % (rad, fbin[k]))
-        os.rename("SDUS53_RAIN.txt", "%s/%s_RAIN_%s.dat" % (TMP, rad, fbin[k]))
+        shutil.copy("SDUS53_RAIN.txt", "%s/%s_RAIN_%s.dat" % (TMP, rad, fbin[k]))
+        os.remove('SDUS53_RAIN.txt')
 
         if not os.path.isfile("%s/HRAP_RAIN_%s" % (TMP, fbin[k])):
             shutil.copy("lib/empty.hrap",
