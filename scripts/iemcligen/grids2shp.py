@@ -7,6 +7,7 @@ import sys
 import os
 import subprocess
 import traceback
+import shutil
 from io import BytesIO
 
 import pytz
@@ -128,7 +129,7 @@ def workflow(year, month, day, update_monthly):
     strdate = sts.strftime("%Y-%m-%d")
     lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=' ')
     lons = np.fromfile("/mnt/idep/GIS/lons.dat", sep=' ')
-    shp, shxio, shpio, dbfio = create_gis(sts)
+    shp, _shxio, _shpio, dbfio = create_gis(sts)
     i = 0
     max_rainfall = 0
     lats = np.reshape(lats, (rows, cols))
@@ -148,10 +149,14 @@ def workflow(year, month, day, update_monthly):
     basefn = sts.strftime("%Y%m%d_rain")
     with open("%s.dbf" % (basefn, ), 'wb') as fh:
         fh.write(dbfio.getvalue())
-    with open("%s.shx" % (basefn, ), 'wb') as fh:
-        fh.write(shpio.getvalue())
-    with open("%s.shp" % (basefn, ), 'wb') as fh:
-        fh.write(shxio.getvalue())
+    # with open("%s.shx" % (basefn, ), 'wb') as fh:
+    #    fh.write(shpio.getvalue())
+    # with open("%s.shp" % (basefn, ), 'wb') as fh:
+    #    fh.write(shxio.getvalue())
+    storagedir = IDEP + sts.strftime("/shape/daily/%Y/%m")
+    if not os.path.isdir(storagedir):
+        os.makedirs(storagedir)
+    shutil.move(basefn + ".dbf", storagedir)
 
     sql.write(r"\.\n")
     nextmonth = sts.replace(day=1) + datetime.timedelta(days=35)
