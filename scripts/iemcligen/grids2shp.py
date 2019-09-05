@@ -6,7 +6,6 @@ import datetime
 import sys
 import os
 import subprocess
-import traceback
 import shutil
 from io import BytesIO
 
@@ -104,14 +103,8 @@ def workflow(year, month, day, update_monthly):
         # print('Processing: %s' % (fp,))
         nc_tm[i] = i * 15
         if os.path.isfile(fn):
-            try:
-                grid = np.fromfile(fn, sep=' ')
-                grid = np.reshape(grid, (rows, cols))
-            except:
-                LOG.info("Error with %s", fn)
-                traceback.print_exc(file=sys.stdout)
-                LOG.info("------> Using zeros")
-                grid = np.zeros((rows, cols), np.float)
+            grid = np.fromfile(fn, sep=' ')
+            grid = np.reshape(grid, (rows, cols))
         else:
             LOG.info("------> MISSING [%s] Using zeros", fn)
             grid = np.zeros((rows, cols), np.float)
@@ -156,7 +149,9 @@ def workflow(year, month, day, update_monthly):
     storagedir = IDEP + sts.strftime("/shape/daily/%Y/%m")
     if not os.path.isdir(storagedir):
         os.makedirs(storagedir)
-    shutil.move(basefn + ".dbf", storagedir)
+    dbffn = basefn + ".dbf"
+    shutil.copyfile(dbffn, storagedir + "/" + dbffn)
+    os.unlink(dbffn)
 
     sql.write(r"\.\n")
     nextmonth = sts.replace(day=1) + datetime.timedelta(days=35)
