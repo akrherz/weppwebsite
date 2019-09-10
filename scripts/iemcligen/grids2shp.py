@@ -153,7 +153,7 @@ def workflow(year, month, day, update_monthly):
     shutil.copyfile(dbffn, storagedir + "/" + dbffn)
     os.unlink(dbffn)
 
-    sql.write(r"\.\n")
+    sql.write("\.\n")
     nextmonth = sts.replace(day=1) + datetime.timedelta(days=35)
     em = nextmonth.replace(day=1)
     sql.write("""
@@ -180,6 +180,7 @@ def workflow(year, month, day, update_monthly):
             hr_cnt) SELECT hrap_i, '%s-01-01', sum(rainfall), max(peak_15min),
             sum(hr_cnt) from monthly_rainfall_%s GROUP by hrap_i;
         """ % (sts.year, sts.year))
+    sql.close()
 
 
 def main(argv):
