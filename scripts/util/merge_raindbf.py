@@ -2,6 +2,8 @@
 Note that we can only have less than 255 columns in a dbf file
 
     rsync -a mesonet@mesonet:/mnt/idep/data/rainfall/shape/daily/2019/. .
+
+NOTE: go look here: DEV/iemre/daily_stage4_shapefile.py
 """
 from __future__ import print_function
 import datetime
@@ -35,7 +37,7 @@ def main():
         now += interval
         jday += 1
 
-    comp = dbf.Table('combined', ";".join(res))
+    comp = dbf.Table("combined", ";".join(res))
     comp.open(dbf.READ_WRITE)
     for i in range(23182):
         ar = tuple(precip[i, :])
@@ -44,5 +46,5 @@ def main():
     comp.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
