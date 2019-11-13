@@ -1,5 +1,7 @@
 """Combine the daily DBF files into a merged shapefile
 Note that we can only have less than 255 columns in a dbf file
+
+    rsync -a mesonet@mesonet:/mnt/idep/data/rainfall/shape/daily/2019/. .
 """
 from __future__ import print_function
 import datetime
@@ -11,8 +13,8 @@ import numpy as np
 
 def main():
     """Go Main Go"""
-    sts = datetime.date(2018, 3, 1)
-    ets = datetime.date(2018, 9, 1)
+    sts = datetime.date(2019, 3, 1)
+    ets = datetime.date(2019, 9, 1)
     interval = datetime.timedelta(days=1)
     now = sts
 
