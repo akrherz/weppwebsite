@@ -1,7 +1,6 @@
 """
  Convert the 15 minute rainfall product into various other forms
 """
-from __future__ import print_function
 import datetime
 import sys
 import os
@@ -14,8 +13,9 @@ import shapefile
 import numpy as np
 from pyiem.datatypes import distance
 from pyiem.util import utc, ncopen, logger
+
 LOG = logger()
-TMPFN = '/tmp/idep_rainfall.sql'
+TMPFN = "/tmp/idep_rainfall.sql"
 IDEP = "/mnt/idep/data/rainfall"
 
 
@@ -25,42 +25,48 @@ def create_netcdf(s):
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
     filename = dirname + s.strftime("%Y%m%d_rain.nc")
-    nc = ncopen(filename, 'w')
+    nc = ncopen(filename, "w")
 
     nc.createDimension("time", 96)
     nc.createDimension("hrap_i", 173)
     nc.createDimension("hrap_j", 134)
 
-    tm = nc.createVariable("time", np.int, ('time',))
+    tm = nc.createVariable("time", np.int, ("time",))
     tm.units = "minutes since %s" % (s.strftime("%Y-%m-%d %H:%M"),)
-    lat = nc.createVariable("latitude", np.float, ('hrap_j', 'hrap_i'))
-    lon = nc.createVariable("longitude", np.float, ('hrap_j', 'hrap_i'))
-    r15m = nc.createVariable("rainfall_15min", np.float,
-                             ('time', 'hrap_j', 'hrap_i'))
+    lat = nc.createVariable("latitude", np.float, ("hrap_j", "hrap_i"))
+    lon = nc.createVariable("longitude", np.float, ("hrap_j", "hrap_i"))
+    r15m = nc.createVariable(
+        "rainfall_15min", np.float, ("time", "hrap_j", "hrap_i")
+    )
     r15m.units = "mm"
-    r1d = nc.createVariable("rainfall_1day", np.float, ('hrap_j', 'hrap_i'))
+    r1d = nc.createVariable("rainfall_1day", np.float, ("hrap_j", "hrap_i"))
     r1d.units = "mm"
 
-    lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=' ')
+    lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=" ")
     lat[:] = lats[0]
-    lons = np.fromfile("/mnt/idep/GIS/lons.dat", sep=' ')
+    lons = np.fromfile("/mnt/idep/GIS/lons.dat", sep=" ")
     lon[:] = lons[0]
     nc.sync()
     return nc, r1d, r15m, tm
 
 
-def create_sql(s, update_monthly):
+def create_sql(s):
     """ Create the SQL file for this date """
-    sql = open(TMPFN, 'w')
-    if update_monthly:
-        sql.write("""
-        DELETE from monthly_rainfall_%s WHERE valid = '%s-01';
-        """ % (s.year, s.strftime("%Y-%m")))
+    sql = open(TMPFN, "w")
+    sql.write(
+        """
+    DELETE from monthly_rainfall_%s WHERE valid = '%s-01';
+    """
+        % (s.year, s.strftime("%Y-%m"))
+    )
 
-    sql.write("""
+    sql.write(
+        """
         DELETE from daily_rainfall_%s WHERE valid = '%s';
         COPY daily_rainfall_%s FROM stdin;
-    """ % (s.year, s.strftime("%Y-%m-%d"), s.year))
+    """
+        % (s.year, s.strftime("%Y-%m-%d"), s.year)
+    )
     return sql
 
 
@@ -76,12 +82,12 @@ def create_gis(s):
     dbfio = BytesIO()
 
     shp = shapefile.Writer(shx=shxio, shp=shpio, dbf=dbfio)
-    shp.field("RAINFALL", 'F', 5, 2)
+    shp.field("RAINFALL", "F", 5, 2)
 
     return shp, shxio, shpio, dbfio
 
 
-def workflow(year, month, day, update_monthly):
+def workflow(year, month, day):
     """ Go main Go , we start at 12:15 AM and collect up a days worth """
     # Getting a proper local timezone is oh so difficult
     sts = utc()
@@ -90,7 +96,7 @@ def workflow(year, month, day, update_monthly):
     ets = sts + datetime.timedelta(days=1)
 
     nc, nc_r1d, nc_r15m, nc_tm = create_netcdf(sts)
-    sql = create_sql(sts, update_monthly)
+    sql = create_sql(sts)
     rows = 134
     cols = 173
     rain15 = np.zeros((96, rows, cols), np.float)
@@ -100,10 +106,10 @@ def workflow(year, month, day, update_monthly):
     while now < ets:
         gts = now.astimezone(pytz.UTC)
         fn = gts.strftime(IDEP + "/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
-        # print('Processing: %s' % (fp,))
+        LOG.debug("processing %s", fn)
         nc_tm[i] = i * 15
         if os.path.isfile(fn):
-            grid = np.fromfile(fn, sep=' ')
+            grid = np.fromfile(fn, sep=" ")
             grid = np.reshape(grid, (rows, cols))
         else:
             LOG.info("------> MISSING [%s] Using zeros", fn)
@@ -115,13 +121,13 @@ def workflow(year, month, day, update_monthly):
     hr_cnt = np.sum(np.where(rain15 > 0, 1, 0), 0)
     nc_r15m[:] = rain15
     rain = np.sum(rain15, 0)
-    rain_inch = distance(rain, 'MM').value('IN')
+    rain_inch = distance(rain, "MM").value("IN")
     nc_r1d[:] = rain
     nc.close()
 
     strdate = sts.strftime("%Y-%m-%d")
-    lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=' ')
-    lons = np.fromfile("/mnt/idep/GIS/lons.dat", sep=' ')
+    lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=" ")
+    lons = np.fromfile("/mnt/idep/GIS/lons.dat", sep=" ")
     shp, _shxio, _shpio, dbfio = create_gis(sts)
     i = 0
     max_rainfall = 0
@@ -132,15 +138,22 @@ def workflow(year, month, day, update_monthly):
             shp.point(lons[row, col], lats[row, col])
             shp.record(rain_inch[row][col])
             if rain[row][col] > 0:
-                sql.write(("%s\t%s\t%s\t%s\t%s\n"
-                           ) % (i + 1, strdate, rain[row, col],
-                                max_rain15[row, col], hr_cnt[row, col]))
+                sql.write(
+                    ("%s\t%s\t%s\t%s\t%s\n")
+                    % (
+                        i + 1,
+                        strdate,
+                        rain[row, col],
+                        max_rain15[row, col],
+                        hr_cnt[row, col],
+                    )
+                )
             if rain[row, col] > max_rainfall:
                 max_rainfall = rain[row, col]
-            i = i+1
+            i = i + 1
 
     basefn = sts.strftime("%Y%m%d_rain")
-    with open("%s.dbf" % (basefn, ), 'wb') as fh:
+    with open("%s.dbf" % (basefn,), "wb") as fh:
         fh.write(dbfio.getvalue())
     # with open("%s.shx" % (basefn, ), 'wb') as fh:
     #    fh.write(shpio.getvalue())
@@ -156,30 +169,49 @@ def workflow(year, month, day, update_monthly):
     sql.write("\.\n")
     nextmonth = sts.replace(day=1) + datetime.timedelta(days=35)
     em = nextmonth.replace(day=1)
-    sql.write("""
+    sql.write(
+        """
         DELETE from rainfall_log WHERE valid = '%s' ;
-    """ % (sts.strftime("%Y-%m-%d"), ))
-    sql.write("""
+    """
+        % (sts.strftime("%Y-%m-%d"),)
+    )
+    sql.write(
+        """
         INSERT into rainfall_log (valid, max_rainfall) values ('%s', %s);
-    """ % (sts.strftime("%Y-%m-%d"), max_rainfall))
-    if update_monthly:
-        sql.write("""
-            INSERT into monthly_rainfall_%s (
-            hrap_i, valid, rainfall, peak_15min,
-            hr_cnt) SELECT hrap_i, '%s-01', sum(rainfall), max(peak_15min),
-            sum(hr_cnt) from daily_rainfall_%s WHERE
-            valid >= '%s-01' and valid < '%s-01' GROUP by hrap_i;
-        """ % (sts.year, sts.strftime("%Y-%m"), sts.year,
-               sts.strftime("%Y-%m"), em.strftime("%Y-%m")))
+    """
+        % (sts.strftime("%Y-%m-%d"), max_rainfall)
+    )
+    sql.write(
+        """
+        INSERT into monthly_rainfall_%s (
+        hrap_i, valid, rainfall, peak_15min,
+        hr_cnt) SELECT hrap_i, '%s-01', sum(rainfall), max(peak_15min),
+        sum(hr_cnt) from daily_rainfall_%s WHERE
+        valid >= '%s-01' and valid < '%s-01' GROUP by hrap_i;
+    """
+        % (
+            sts.year,
+            sts.strftime("%Y-%m"),
+            sts.year,
+            sts.strftime("%Y-%m"),
+            em.strftime("%Y-%m"),
+        )
+    )
 
-        sql.write("""
-            DELETE from yearly_rainfall WHERE valid = '%s-01-01';
-        """ % (sts.year))
-        sql.write("""
-            INSERT into yearly_rainfall (hrap_i, valid, rainfall, peak_15min,
-            hr_cnt) SELECT hrap_i, '%s-01-01', sum(rainfall), max(peak_15min),
-            sum(hr_cnt) from monthly_rainfall_%s GROUP by hrap_i;
-        """ % (sts.year, sts.year))
+    sql.write(
+        """
+        DELETE from yearly_rainfall WHERE valid = '%s-01-01';
+    """
+        % (sts.year)
+    )
+    sql.write(
+        """
+        INSERT into yearly_rainfall (hrap_i, valid, rainfall, peak_15min,
+        hr_cnt) SELECT hrap_i, '%s-01-01', sum(rainfall), max(peak_15min),
+        sum(hr_cnt) from monthly_rainfall_%s GROUP by hrap_i;
+    """
+        % (sts.year, sts.year)
+    )
     sql.close()
 
 
@@ -189,22 +221,20 @@ def main(argv):
         year = int(argv[1])
         month = int(argv[2])
         day = int(argv[3])
-        update_monthly = False
     else:
         # Run for yesterday
         ts = datetime.datetime.now() - datetime.timedelta(days=1)
         year, month, day = ts.year, ts.month, ts.day
-        update_monthly = True
-    if len(argv) == 5:
-        update_monthly = True
 
-    workflow(year, month, day, update_monthly)
-    if len(sys.argv) == 1:
-        proc = subprocess.Popen("psql -h iemdb.local -f %s wepp" % (TMPFN,),
-                                shell=True, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        proc.stderr.read()
-        os.unlink(TMPFN)
+    workflow(year, month, day)
+    proc = subprocess.Popen(
+        "psql -h iemdb-wepp.local -f %s wepp" % (TMPFN,),
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    proc.stderr.read()
+    os.unlink(TMPFN)
 
 
 if __name__ == "__main__":
