@@ -75,8 +75,6 @@ def main(argv):
         shutil.copy("%s.dbf" % (shapefilename,), outdir)
         for suffix in ["dbf", "shp", "shx"]:
             os.unlink("%s.%s" % (shapefilename, suffix))
-            os.unlink("%s.%s" % (shapefilename, suffix))
-            os.unlink("%s.%s" % (shapefilename, suffix))
 
         now += datetime.timedelta(days=31)
 
