@@ -61,10 +61,10 @@ def create_sql(s):
     )
 
     sql.write(
-        """
-        DELETE from daily_rainfall_%s WHERE valid = '%s';
-        COPY daily_rainfall_%s FROM stdin;
-    """
+        (
+            "DELETE from daily_rainfall_%s WHERE valid = '%s';\n"
+            "COPY daily_rainfall_%s FROM stdin;\n"
+        )
         % (s.year, s.strftime("%Y-%m-%d"), s.year)
     )
     return sql
@@ -233,7 +233,12 @@ def main(argv):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    proc.stderr.read()
+    stderr = proc.stderr.read()
+    stdout = proc.stdout.read()
+    if stderr != b"":
+        LOG.info(TMPFN)
+        LOG.info(stderr.encode("ascii"))
+        LOG.info(stdout.encode("ascii"))
     os.unlink(TMPFN)
 
 
