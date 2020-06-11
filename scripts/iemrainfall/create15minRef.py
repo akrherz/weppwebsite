@@ -5,7 +5,7 @@ import sys
 import shutil
 import datetime
 
-TMP = "/mesonet/tmp"
+TMP = "tmp"
 
 
 def main(argv):
@@ -30,31 +30,37 @@ def main(argv):
         for mi in range(60):
             mybin = int(mi / 15)
             tstamp = ts + datetime.timedelta(minutes=mi)
-            fp = "%s/%s_NCR_%s.ras" % (TMP, rad,
-                                       tstamp.strftime("%Y%m%d_%H%M"))
+            fp = "%s/%s_NCR_%s.ras" % (
+                TMP,
+                rad,
+                tstamp.strftime("%Y%m%d_%H%M"),
+            )
             if os.path.isfile(fp):
                 files[mybin] += "%s\n" % (fp,)
                 fcnt[mybin] += 1
 
     for k in fbin:
         fn = "%s/%s_%s.files15" % (TMP, rad, fbin[k])
-        fp = open(fn, 'w')
+        fp = open(fn, "w")
         fp.write(files[k])
         fp.close()
-        os.system("bin/create15minutes %s %i > %s/junk.dat" % (fn, fcnt[k],
-                                                               TMP))
+        os.system(
+            "bin/create15minutes %s %i > %s/junk.dat" % (fn, fcnt[k], TMP)
+        )
         if not os.path.isfile("SDUS53_RAIN.txt"):
             print("%s %s" % (rad, fbin[k]))
-        shutil.copy("SDUS53_RAIN.txt", "%s/%s_RAIN_%s.dat" % (TMP, rad, fbin[k]))
-        os.remove('SDUS53_RAIN.txt')
+        shutil.copy(
+            "SDUS53_RAIN.txt", "%s/%s_RAIN_%s.dat" % (TMP, rad, fbin[k])
+        )
+        os.remove("SDUS53_RAIN.txt")
 
         if not os.path.isfile("%s/HRAP_RAIN_%s" % (TMP, fbin[k])):
-            shutil.copy("lib/empty.hrap",
-                        "%s/HRAP_RAIN_%s" % (TMP, fbin[k]))
-        os.system(("bin/createHRAP lib/K%s.txt %s/%s_RAIN_%s.dat "
-                   "%s/HRAP_RAIN_%s"
-                   ) % (rad, TMP, rad, fbin[k], TMP, fbin[k]))
+            shutil.copy("lib/empty.hrap", "%s/HRAP_RAIN_%s" % (TMP, fbin[k]))
+        os.system(
+            ("bin/createHRAP lib/K%s.txt %s/%s_RAIN_%s.dat " "%s/HRAP_RAIN_%s")
+            % (rad, TMP, rad, fbin[k], TMP, fbin[k])
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv)

@@ -20,11 +20,11 @@ ncr_files=`ls -1 ${pattern}* 2> /dev/null`
 for F in ${ncr_files}
 do
 	# Unzip
-	./bin/ucnids $F /mesonet/tmp/`basename $F`
+	./bin/ucnids $F tmp/`basename $F`
 	# Convert it into an text array
-	./bin/read_raster_RLE /mesonet/tmp/`basename $F` > /mesonet/tmp/${RAD}_`basename $F`.dat
+	./bin/read_raster_RLE tmp/`basename $F` > tmp/${RAD}_`basename $F`.dat
 	# Get only the data
-	tail -463 /mesonet/tmp/${RAD}_`basename $F`.dat > /mesonet/tmp/${RAD}_`basename $F`.ras
+	tail -463 tmp/${RAD}_`basename $F`.dat > tmp/${RAD}_`basename $F`.ras
 	# Clean up after ourself...
-	rm -f /mesonet/tmp/`basename $F` /mesonet/tmp/${RAD}_`basename $F`.dat 
+	rm -f tmp/`basename $F` tmp/${RAD}_`basename $F`.dat 
 done
