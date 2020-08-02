@@ -29,7 +29,10 @@ if (! -f ${fn}) then
 	echo "${YYYY}-${MO}-${DD} ${HR} UTC: Missing both stage2 and stage4, using empty HRAP"
 	cp lib/empty.hrap tmp/S4_${YYYY}${MO}${DD}${HR}
 else
-	bin/wgrib $fn | grep P | bin/wgrib $fn -i -o $out > tmp/wgrib.dat
+    # 2020-07-29 changed to Grib2, so this code no longer works for that, use
+    # bin/wgrib $fn | grep P | bin/wgrib $fn -i -o $out > tmp/wgrib.dat
+    # https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/convert_wgrib2.html
+    wgrib2 $fn | wgrib2 -i $fn -bin $out > tmp/wgrib.dat
 
 	if (${YYYY} < 2002) then
 		echo "Using Old ST4 Reader..."
