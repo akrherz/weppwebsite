@@ -152,6 +152,7 @@ def workflow(year, month, day):
                 max_rainfall = rain[row, col]
             i = i + 1
 
+    shp.close()  # Important to get the dbf data synced.
     basefn = sts.strftime("%Y%m%d_rain")
     with open("%s.dbf" % (basefn,), "wb") as fh:
         fh.write(dbfio.getvalue())
