@@ -32,7 +32,7 @@ def process(ts):
     for sector in cref.keys():
         day = ts.strftime("%Y-%m-%d")
         for st in cref[sector]:
-            sql = """SELECT slrkj_tot_qc * 1000. from sm_daily
+            sql = """SELECT slrkj_tot_qc / 1000. from sm_daily
               WHERE valid = '%s' and station = '%s' and
               slrkj_tot_qc is not null
               """ % (
