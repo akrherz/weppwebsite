@@ -20,7 +20,7 @@ IDEP = "/mnt/idep/data/rainfall"
 
 
 def create_netcdf(s):
-    """ create a netcdf file """
+    """create a netcdf file"""
     dirname = s.strftime(IDEP + "/netcdf/daily/%Y/%m/")
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
@@ -31,15 +31,15 @@ def create_netcdf(s):
     nc.createDimension("hrap_i", 173)
     nc.createDimension("hrap_j", 134)
 
-    tm = nc.createVariable("time", np.int, ("time",))
+    tm = nc.createVariable("time", int, ("time",))
     tm.units = "minutes since %s" % (s.strftime("%Y-%m-%d %H:%M"),)
-    lat = nc.createVariable("latitude", np.float, ("hrap_j", "hrap_i"))
-    lon = nc.createVariable("longitude", np.float, ("hrap_j", "hrap_i"))
+    lat = nc.createVariable("latitude", float, ("hrap_j", "hrap_i"))
+    lon = nc.createVariable("longitude", float, ("hrap_j", "hrap_i"))
     r15m = nc.createVariable(
-        "rainfall_15min", np.float, ("time", "hrap_j", "hrap_i")
+        "rainfall_15min", float, ("time", "hrap_j", "hrap_i")
     )
     r15m.units = "mm"
-    r1d = nc.createVariable("rainfall_1day", np.float, ("hrap_j", "hrap_i"))
+    r1d = nc.createVariable("rainfall_1day", float, ("hrap_j", "hrap_i"))
     r1d.units = "mm"
 
     lats = np.fromfile("/mnt/idep/GIS/lats.dat", sep=" ")
@@ -51,7 +51,7 @@ def create_netcdf(s):
 
 
 def create_sql(s):
-    """ Create the SQL file for this date """
+    """Create the SQL file for this date"""
     sql = open(TMPFN, "w")
     sql.write(
         """
@@ -71,7 +71,7 @@ def create_sql(s):
 
 
 def create_gis(s):
-    """ Create the shapefiles """
+    """Create the shapefiles"""
     dirname = s.strftime(IDEP + "/shape/daily/%Y/%m/")
 
     if not os.path.isdir(dirname):
@@ -88,7 +88,7 @@ def create_gis(s):
 
 
 def workflow(year, month, day):
-    """ Go main Go , we start at 12:15 AM and collect up a days worth """
+    """Go main Go , we start at 12:15 AM and collect up a days worth"""
     # Getting a proper local timezone is oh so difficult
     sts = utc()
     sts = sts.astimezone(pytz.timezone("America/Chicago"))
@@ -99,7 +99,7 @@ def workflow(year, month, day):
     sql = create_sql(sts)
     rows = 134
     cols = 173
-    rain15 = np.zeros((96, rows, cols), np.float)
+    rain15 = np.zeros((96, rows, cols), float)
     interval = datetime.timedelta(minutes=+15)
     now = sts
     i = 0
@@ -113,7 +113,7 @@ def workflow(year, month, day):
             grid = np.reshape(grid, (rows, cols))
         else:
             LOG.info("------> MISSING [%s] Using zeros", fn)
-            grid = np.zeros((rows, cols), np.float)
+            grid = np.zeros((rows, cols), float)
         rain15[i] = grid
         now += interval
         i += 1
