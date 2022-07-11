@@ -1,6 +1,6 @@
-'''
+"""
 Explore mapping IDEPv1 data direct from the database with matplotlib
-'''
+"""
 from pyiem.plot import MapPlot, maue, james2
 from shapely.wkb import loads
 import psycopg2
@@ -11,15 +11,17 @@ from matplotlib.collections import PatchCollection
 import matplotlib.colors as mpcolors
 import matplotlib.cm as cm
 
-DBCONN = psycopg2.connect(database='wepp', host='mesonet.agron.iastate.edu', user='nobody')
+DBCONN = psycopg2.connect(
+    database="wepp", host="mesonet.agron.iastate.edu", user="nobody"
+)
 cursor = DBCONN.cursor()
 
 yr = int(sys.argv[1])
 
-m = MapPlot(sector='iowa',
-            title='%s IDEPv1 Peak Rainfall Intensity' % (yr,))
+m = MapPlot(sector="iowa", title="%s IDEPv1 Peak Rainfall Intensity" % (yr,))
 
-cursor.execute("""
+cursor.execute(
+    """
 
     SELECT ST_Transform(the_geom,4326), foo.val from
     (SELECT hrap_i, max(peak_15min) / 25.4 * 4.0 as val from daily_rainfall_%s
@@ -32,26 +34,34 @@ cursor.execute("""
     ---valid between '%s-01-01' and '%s-01-01' GROUP by model_twp) as foo
     ---
     ---JOIN iatwp t on (t.model_twp = foo.model_twp) ORDER by total DESC
-    """ % (yr, yr, yr+1))
+    """
+    % (yr, yr, yr + 1)
+)
 
-bins = np.array([0,0.1,0.5,0.75,1,2,3,4,5,7,10,15,20,25])
-bins = np.arange(0,6.1,0.5)
-cmap = cm.get_cmap('jet') #james2()
+bins = np.array([0, 0.1, 0.5, 0.75, 1, 2, 3, 4, 5, 7, 10, 15, 20, 25])
+bins = np.arange(0, 6.1, 0.5)
+cmap = cm.get_cmap("jet")  # james2()
 norm = mpcolors.BoundaryNorm(bins, cmap.N)
 patches = []
 for row in cursor:
-    geom = loads( row[0].decode('hex') )
+    geom = loads(row[0].decode("hex"))
     for polygon in geom:
         a = np.asarray(polygon.exterior)
-        x,y = m.map(a[:,0], a[:,1])
-        a = zip(x,y)
-        c = cmap( norm([float(row[1]),]) )[0]
-        p = Polygon(a,fc=c,ec='None',zorder=2, lw=.1)
+        x, y = m.map(a[:, 0], a[:, 1])
+        a = zip(x, y)
+        c = cmap(
+            norm(
+                [
+                    float(row[1]),
+                ]
+            )
+        )[0]
+        p = Polygon(a, fc=c, ec="None", zorder=2, lw=0.1)
         patches.append(p)
 
-          
-m.ax.add_collection(PatchCollection(patches,match_original=True))
-m.draw_colorbar(bins, cmap, norm, units='inches per hour')
+
+m.ax.add_collection(PatchCollection(patches, match_original=True))
+m.draw_colorbar(bins, cmap, norm, units="inches per hour")
 
 m.drawcounties()
-m.postprocess(filename='%srainfall.png' % (yr,))
+m.postprocess(filename="%srainfall.png" % (yr,))

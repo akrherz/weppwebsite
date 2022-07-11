@@ -4,11 +4,12 @@
 #  20 Feb 2003:	Insert this information into the spatial DB as well
 
 import shapelib, dbflib, pg
-mydb = pg.connect('wepp')
+
+mydb = pg.connect("wepp")
 
 points = 23182
-lats = [0]*points
-lons = [0]*points
+lats = [0] * points
+lons = [0] * points
 
 lat0 = 40.000
 lon0 = -97.000
@@ -16,8 +17,8 @@ latn = 44.000
 lonn = -89.000
 x = 173.0000
 y = 134.0000
-dlat = (lat0 - latn ) / y
-dlon = (lon0 - lonn ) / x
+dlat = (lat0 - latn) / y
+dlon = (lon0 - lonn) / x
 
 dbf = dbflib.create("precip_points")
 dbf.add_field("SID", dbflib.FTString, 1, 0)
@@ -26,16 +27,22 @@ dbf.add_field("SITE_NAME", dbflib.FTString, 1, 0)
 shp = shapelib.create("precip_points", shapelib.SHPT_POINT)
 
 for i in range(points):
-  row = i / int(x)
-  col = i % int(x)
-  lat = lat0 - ( row * dlat )
-  lon = lon0 - ( col * dlon )
-  mydb.query("INSERT into precip_points(point, geom) values( \
-   "+ str(i) +", 'SRID=-1;POINT("+ str(lon) +" "+ str(lat) +");')")
+    row = i / int(x)
+    col = i % int(x)
+    lat = lat0 - (row * dlat)
+    lon = lon0 - (col * dlon)
+    mydb.query(
+        "INSERT into precip_points(point, geom) values( \
+   "
+        + str(i)
+        + ", 'SRID=-1;POINT("
+        + str(lon)
+        + " "
+        + str(lat)
+        + ");')"
+    )
 
-  obj = shapelib.SHPObject(shapelib.SHPT_POINT, i, [[(lon, lat)]] )
-  shp.write_object(-1, obj)
-  dbf.write_record(i, ("b", "b") )
-  del obj
-
-
+    obj = shapelib.SHPObject(shapelib.SHPT_POINT, i, [[(lon, lat)]])
+    shp.write_object(-1, obj)
+    dbf.write_record(i, ("b", "b"))
+    del obj
