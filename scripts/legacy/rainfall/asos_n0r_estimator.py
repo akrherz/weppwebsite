@@ -8,4 +8,3 @@ For an hour we...
  3) Use 15 minute nexrad to smear out this data
  4) Write it to 1km 15min PNG files?
 """
-
