@@ -4,8 +4,10 @@
  is used.  Lame yes, but will be improved with IDEPv2
 """
 from __future__ import print_function
-import sys
+
 import datetime
+import sys
+
 from pyiem.util import get_dbconn
 
 ISUAG = get_dbconn("isuag")

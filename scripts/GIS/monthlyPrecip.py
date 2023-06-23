@@ -2,10 +2,10 @@
   Generate a monthly shapefile of precipitation data
 """
 import datetime
-from collections import OrderedDict
-import shutil
 import os
+import shutil
 import sys
+from collections import OrderedDict
 
 import shapefile
 from pyiem.util import get_dbconn, logger

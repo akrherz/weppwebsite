@@ -3,7 +3,10 @@
 # Daryl Herzmann 2 Apr 2004
 # 12 Apr 2004	Fix my db hack. To make things a bit nicer...
 
-import pg, mx.DateTime, sys
+import sys
+
+import mx.DateTime
+import pg
 
 weppdb = pg.connect("wepp")
 weppdb.query("update iatwp SET truns = 0, eruns = 0, arunoff = 0, aloss = 0")

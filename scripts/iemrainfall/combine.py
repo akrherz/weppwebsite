@@ -1,7 +1,7 @@
 """Combine"""
 import datetime
-import sys
 import os
+import sys
 
 BASEDIR = "/mnt/idep/data/rainfall/product"
 TMP = "tmp"

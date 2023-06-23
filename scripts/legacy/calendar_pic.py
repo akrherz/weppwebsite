@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from PIL import Image, ImageDraw, ImageFont
 import mx.DateTime
+from PIL import Image, ImageDraw, ImageFont
 
 sts = mx.DateTime.DateTime(2007, 8, 1)
 ets = mx.DateTime.DateTime(2007, 9, 1)

@@ -2,7 +2,9 @@
 # Need something to cache the historical images
 # Daryl Herzmann 2 Oct 2004
 
-import mx.DateTime, os
+import os
+
+import mx.DateTime
 
 s = mx.DateTime.DateTime(2013, 6, 1)
 e = mx.DateTime.DateTime(2013, 6, 26)

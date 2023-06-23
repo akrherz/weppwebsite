@@ -2,7 +2,11 @@
 # Create the pickled iem_cligen files!
 # Daryl Herzmann 6 Jun 2004
 
-import pickle, mx.DateTime, pg, cliFile
+import pickle
+
+import cliFile
+import mx.DateTime
+import pg
 
 s = mx.DateTime.DateTime(1997, 1, 1)
 e = mx.DateTime.DateTime(2005, 1, 1)

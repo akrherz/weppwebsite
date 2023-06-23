@@ -2,7 +2,8 @@
 # This script will update the climate DB with new and exciting info!!
 # Daryl Herzmann 4 Mar 2003
 
-import pg, mx.DateTime
+import mx.DateTime
+import pg
 
 mydb = pg.connect("wepp")
 asosdb = pg.connect("asos", "10.10.10.10", 5432)

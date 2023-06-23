@@ -2,13 +2,13 @@
 """
 
 # Python imports
-import cliFile
 import datetime
+import sys
+
+import cliRecord
+import editclifile
 import psycopg2
 import psycopg2.extras
-import sys
-import editclifile
-import cliRecord
 
 WEPP = psycopg2.connect(database="wepp", host="iemdb")
 wcursor = WEPP.cursor(cursor_factory=psycopg2.extras.DictCursor)

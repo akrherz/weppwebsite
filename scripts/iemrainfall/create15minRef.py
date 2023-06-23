@@ -1,9 +1,10 @@
 """Do Things"""
 from __future__ import print_function
-import os
-import sys
-import shutil
+
 import datetime
+import os
+import shutil
+import sys
 
 TMP = "tmp"
 

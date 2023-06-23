@@ -3,7 +3,9 @@
 # Daryl Herzmann 21 Jan 2003
 #  20 Feb 2003:	Insert this information into the spatial DB as well
 
-import shapelib, dbflib, pg
+import dbflib
+import pg
+import shapelib
 
 mydb = pg.connect("wepp")
 

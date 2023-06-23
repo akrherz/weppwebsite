@@ -1,15 +1,16 @@
 """
 Explore mapping IDEPv1 data direct from the database with matplotlib
 """
-from pyiem.plot import MapPlot, maue, james2
-from shapely.wkb import loads
-import psycopg2
 import sys
-import numpy as np
-from matplotlib.patches import Polygon
-from matplotlib.collections import PatchCollection
-import matplotlib.colors as mpcolors
+
 import matplotlib.cm as cm
+import matplotlib.colors as mpcolors
+import numpy as np
+import psycopg2
+from matplotlib.collections import PatchCollection
+from matplotlib.patches import Polygon
+from pyiem.plot import MapPlot
+from shapely.wkb import loads
 
 DBCONN = psycopg2.connect(
     database="wepp", host="mesonet.agron.iastate.edu", user="nobody"

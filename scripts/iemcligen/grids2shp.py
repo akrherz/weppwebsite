@@ -2,17 +2,17 @@
  Convert the 15 minute rainfall product into various other forms
 """
 import datetime
-import sys
 import os
-import subprocess
 import shutil
+import subprocess
+import sys
 from io import BytesIO
 
+import numpy as np
 import pytz
 import shapefile
-import numpy as np
 from pyiem.datatypes import distance
-from pyiem.util import utc, ncopen, logger
+from pyiem.util import logger, ncopen, utc
 
 LOG = logger()
 TMPFN = "/tmp/idep_rainfall.sql"
