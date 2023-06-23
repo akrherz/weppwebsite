@@ -3,8 +3,6 @@
  if data is not found from the ISUAG network, then the previous year's value
  is used.  Lame yes, but will be improved with IDEPv2
 """
-from __future__ import print_function
-
 import datetime
 import sys
 
@@ -54,13 +52,10 @@ def process(ts):
         # convert mj to langleys
         rad = row[0] * 23.9
         # Crude bounds
-        if rad < 0.01 or rad > 800:
+        if rad < 0.01 or rad > 900:
             print(
-                (
-                    "IDEPv1 updateSolar.py FAIL sector: %s "
-                    "station: %s rad: %.1f"
-                )
-                % (sector, st, rad)
+                f"IDEPv1 updateSolar.py FAIL sector: {sector} "
+                f"station: {st} rad: {rad:.1f}"
             )
             continue
         wcursor.execute(
