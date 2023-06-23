@@ -3,12 +3,11 @@
 # 05 Mar 2003	Its alive, its alive!!
 # 		bpdata must be over 1 line long
 
-import re, mx.DateTime
+import re
 
 
 class cliRecord:
     def __init__(self, its):
-        ba = "Ha"
         self.ts = its
         self.npoints = 0
         self.high = -99  # C
@@ -55,19 +54,19 @@ class cliRecord:
         )
 
     def CLset(self, rs):
-        if rs["high"] != None:
+        if rs["high"] is not None:
             self.high = rs["high"]
         else:
             self.high = 100
-        if rs["low"] != None:
+        if rs["low"] is not None:
             self.low = rs["low"]
         else:
             self.low = 100
-        if rs["wvl"] != None:
+        if rs["wvl"] is not None:
             self.wvl = rs["wvl"]
-        if rs["rad"] != None:
+        if rs["rad"] is not None:
             self.rad = rs["rad"]
-        if rs["dewp"] != None:
+        if rs["dewp"] is not None:
             self.tdew = rs["dewp"]
         else:
             self.tdew = 100

@@ -4,7 +4,7 @@
 # from the ag climate network comes in...
 # 27 Apr 2004
 
-import pg, mx.DateTime
+import mx.DateTime
 from pyIEM import iemdb
 
 i = iemdb.iemdb()

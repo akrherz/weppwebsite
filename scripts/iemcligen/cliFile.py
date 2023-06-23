@@ -1,7 +1,10 @@
 # WEPP Climate File Class
 # Daryl Herzmann 05 Mar 2003
 
-import re, mx.DateTime, cliRecord
+import re
+
+import cliRecord
+import mx.DateTime
 
 
 class cliFile:

@@ -1,7 +1,8 @@
 """Legacy stuff is fun."""
-import sys
 import datetime
 import os
+import sys
+
 import numpy
 from pyiem.util import get_dbconn, ncopen
 
