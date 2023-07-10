@@ -1,14 +1,15 @@
-import psycopg2
 import datetime
+
 import numpy as np
+import psycopg2
 
 WEPP = psycopg2.connect(
     database="wepp", host="mesonet.agron.iastate.edu", user="nobody"
 )
 cursor = WEPP.cursor()
 
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 
 (fig, ax) = plt.subplots(1, 1)
 

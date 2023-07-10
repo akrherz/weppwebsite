@@ -37,8 +37,8 @@ for i, line in enumerate(open("/tmp/177144.wb")):
         )
         d2013.append(ts)
 
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 
 (fig, ax) = plt.subplots(1, 1)
 

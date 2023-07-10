@@ -1,10 +1,10 @@
 """
 """
-import psycopg2
-import os
-import re
 import datetime
+import os
 import sys
+
+import psycopg2
 
 WEPP = psycopg2.connect(database="wepp", host="iemdb")
 wcursor = WEPP.cursor()

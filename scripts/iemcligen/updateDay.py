@@ -1,7 +1,8 @@
 import datetime
 import sys
-from pyiem.util import get_dbconn
+
 from pyiem.network import Table as NetworkTable
+from pyiem.util import get_dbconn
 
 nt = NetworkTable(("IA_ASOS", "AWOS"))
 WEPP = get_dbconn("wepp")

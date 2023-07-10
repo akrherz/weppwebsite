@@ -1,9 +1,9 @@
-import netCDF4
 import datetime
-from pyiem.plot import MapPlot
-import numpy as np
+
 import matplotlib.pyplot as plt
-import subprocess
+import netCDF4
+import numpy as np
+from pyiem.plot import MapPlot
 
 maxi = np.zeros((134, 173), "f")
 sts = datetime.datetime(2010, 7, 22)

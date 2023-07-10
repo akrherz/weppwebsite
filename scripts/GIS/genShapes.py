@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # Need something to generate shapes!
 
-import wellknowntext, pg, shapelib
+import pg
+import shapelib
+import wellknowntext
 from Scientific.IO.ArrayIO import *
 
 mydb = pg.connect("wepp")

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # Pull out yearly precipitation
 
-import pg, dbflib, mx.DateTime, shutil, sys, Numeric
-from Scientific.IO.NetCDF import *
-from Scientific.IO.ArrayIO import *
+import shutil
+
+import dbflib
 from pyIEM import iemdb
+from Scientific.IO.ArrayIO import *
+from Scientific.IO.NetCDF import *
 
 i = iemdb.iemdb()
 wepp = i["wepp"]

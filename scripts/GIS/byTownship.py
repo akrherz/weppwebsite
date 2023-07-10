@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # Output by township
 
-import pg, shapelib, dbflib
-from pyIEM import wellknowntext, iemdb
+import dbflib
+import shapelib
+from pyIEM import iemdb, wellknowntext
 
 i = iemdb.iemdb()
 mydb = i["wepp"]

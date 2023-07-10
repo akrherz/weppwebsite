@@ -2,9 +2,8 @@
 
 import Ngl
 import Numeric
-from Scientific.IO.NetCDF import *
-
 from pyIEM import iemdb
+from Scientific.IO.NetCDF import *
 
 i = iemdb.iemdb()
 wepp = i["wepp"]

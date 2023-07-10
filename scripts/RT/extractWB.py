@@ -1,11 +1,10 @@
 """
 Extract the water balance
 """
-import sys
-import os
 import datetime
-import time
-import shutil
+import os
+import sys
+
 import psycopg2
 
 WEPP = psycopg2.connect(database="wepp", host="iemdb")
