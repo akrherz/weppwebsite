@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # Need something to generate shapes!
 
-import wellknowntext, pg, shapelib
-from Scientific.IO.ArrayIO import *
+import pg
+import shapelib
+import wellknowntext
+from Scientific.IO.ArrayIO import readFloatArray
 
 mydb = pg.connect("wepp")
 
 
 rs = mydb.query(
-    "SELECT hrap_i, transform(the_geom, 4326) as the_geom from hrap_utm ORDER by hrap_i ASC"
+    "SELECT hrap_i, transform(the_geom, 4326) as the_geom from "
+    "hrap_utm ORDER by hrap_i ASC"
 ).dictresult()
 
 shp = shapelib.create("hrap_polygon", shapelib.SHPT_POLYGON)

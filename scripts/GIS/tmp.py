@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # Pull out yearly precipitation
 
-import pg, dbflib, mx.DateTime, shutil, sys, Numeric
-from Scientific.IO.NetCDF import *
-from Scientific.IO.ArrayIO import *
+import shutil
+
+import dbflib
 from pyIEM import iemdb
 
 i = iemdb.iemdb()

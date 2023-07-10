@@ -1,9 +1,10 @@
+import os
+
 import iemdb
+import mx.DateTime
 
 WEPP = iemdb.connect("wepp")
 wcursor = WEPP.cursor()
-import mx.DateTime
-import os
 
 os.chdir("/mnt/idep/RT")
 sts = mx.DateTime.DateTime(2013, 1, 1)

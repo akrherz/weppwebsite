@@ -2,8 +2,14 @@
 # Need to generate a shapefile with hourly rainfall totals in it!
 # Daryl Herzmann 28 May 2004
 
-import pg, shapelib, dbflib, re, mx.DateTime, sys
-from Scientific.IO.ArrayIO import *
+import re
+import sys
+
+import dbflib
+import mx.DateTime
+import pg
+import shapelib
+from Scientific.IO.ArrayIO import readFloatArray
 
 mydb = pg.connect("wepp", "iemdb")
 
@@ -70,7 +76,7 @@ for i in range(24):
         t = f + t
         d = f + d
     hrap_i = 1
-    dbfkey = string.upper(now.strftime("R_%I%P"))
+    dbfkey = now.strftime("R_%I%P")
     for row in range(len(t)):
         for col in range(len(t[row])):
             if hrain.has_key(hrap_i):

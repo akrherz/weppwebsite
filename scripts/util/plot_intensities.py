@@ -1,9 +1,9 @@
-import netCDF4
 import datetime
-from pyiem.plot import MapPlot
-import numpy as np
+
 import matplotlib.pyplot as plt
-import subprocess
+import netCDF4
+import numpy as np
+from pyiem.plot import MapPlot
 
 maxi = np.zeros((134, 173), "f")
 sts = datetime.datetime(2010, 7, 22)
@@ -41,7 +41,10 @@ while now < ets:
 m = MapPlot(
     sector="iowa",
     title="%s IDEP Peak Rainfall Intensity" % (sts.year,),
-    subtitle="Based on 15 minute interval NEXRAD + NCEP Stage IV precipitation estimates",
+    subtitle=(
+        "Based on 15 minute interval "
+        "NEXRAD + NCEP Stage IV precipitation estimates"
+    ),
 )
 m.pcolormesh(lon, lat, maxi, np.arange(0, 6.1, 0.25), units="inch per hour")
 m.drawcounties()

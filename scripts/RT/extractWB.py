@@ -1,11 +1,10 @@
 """
 Extract the water balance
 """
-import sys
-import os
 import datetime
-import time
-import shutil
+import os
+import sys
+
 import psycopg2
 
 WEPP = psycopg2.connect(database="wepp", host="iemdb")
@@ -22,7 +21,10 @@ d = ets.strftime("%Y-%m-%d")
 
 # We need to look up soil depths!
 soil_depths = {}
-sql = "select c.id as id, n.soil_depth from combos c, nri n WHERE c.nri_id = n.id"
+sql = (
+    "select c.id as id, n.soil_depth from combos c, nri n "
+    "WHERE c.nri_id = n.id"
+)
 wcursor.execute(sql)
 for row in wcursor:
     soil_depths[int(row[0])] = row[1]
@@ -51,7 +53,12 @@ fp.close()
 os.system("psql -f wb.sql -h iemdb wepp")
 wcursor.execute("DELETE from waterbalance_by_twp WHERE valid = '%s'" % (d,))
 wcursor.execute(
-    "insert into waterbalance_by_twp (select '%s', model_twp, avg(vsm), stddev(vsm), 0, avg(s10cm), avg(s20cm), avg(et) from waterbalance, combos WHERE combos.id = waterbalance.run_id and waterbalance.valid = '%s' GROUP by model_twp)"
+    (
+        "insert into waterbalance_by_twp (select '%s', model_twp, "
+        "avg(vsm), stddev(vsm), 0, avg(s10cm), avg(s20cm), avg(et) from "
+        "waterbalance, combos WHERE combos.id = waterbalance.run_id and "
+        "waterbalance.valid = '%s' GROUP by model_twp)"
+    )
     % (d, d)
 )
 wcursor.execute("DELETE from waterbalance WHERE valid = '%s'" % (d,))

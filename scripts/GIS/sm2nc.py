@@ -2,9 +2,8 @@
 
 import Ngl
 import Numeric
-from Scientific.IO.NetCDF import *
-
 from pyIEM import iemdb
+from Scientific.IO.NetCDF import NetCDFFile
 
 i = iemdb.iemdb()
 wepp = i["wepp"]
@@ -16,7 +15,10 @@ s20cm = []
 vsm = []
 
 rs = wepp.query(
-    "select x(centroid(transform(the_geom,4326))), y(centroid(transform(the_geom,4326))), vsm, s10cm, s20cm from iatwp i, waterbalance_by_twp w WHERE i.model_twp = w.model_twp and w.valid = 'YESTERDAY'"
+    "select x(centroid(transform(the_geom,4326))), "
+    "y(centroid(transform(the_geom,4326))), vsm, s10cm, s20cm from iatwp i, "
+    "waterbalance_by_twp w WHERE i.model_twp = w.model_twp "
+    "and w.valid = 'YESTERDAY'"
 ).dictresult()
 
 for i in range(len(rs)):
