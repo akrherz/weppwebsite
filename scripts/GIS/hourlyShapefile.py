@@ -9,7 +9,7 @@ import dbflib
 import mx.DateTime
 import pg
 import shapelib
-from Scientific.IO.ArrayIO import *
+from Scientific.IO.ArrayIO import readFloatArray
 
 mydb = pg.connect("wepp", "iemdb")
 
@@ -76,7 +76,7 @@ for i in range(24):
         t = f + t
         d = f + d
     hrap_i = 1
-    dbfkey = string.upper(now.strftime("R_%I%P"))
+    dbfkey = now.strftime("R_%I%P")
     for row in range(len(t)):
         for col in range(len(t[row])):
             if hrain.has_key(hrap_i):

@@ -1,5 +1,8 @@
 import datetime
 
+import iemplot
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 import numpy as np
 import psycopg2
 
@@ -8,8 +11,6 @@ WEPP = psycopg2.connect(
 )
 cursor = WEPP.cursor()
 
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
 
 (fig, ax) = plt.subplots(1, 1)
 
@@ -48,12 +49,13 @@ ax.plot(x2, np.average(d2, 0), lw=2, c="k", label="Avg", zorder=3)
 ax.grid(True)
 ax.set_ylabel("Root Zone Volumetric Soil Moisture [%]")
 ax.set_title(
-    "Iowa Daily Erosion Project (WEPP Model) Volumetric Soil Moisture\n(1997-2013) Iowa Areal Averaged Root Zone Soil Moisture"
+    "Iowa Daily Erosion Project (WEPP Model) "
+    "Volumetric Soil Moisture\n(1997-2013) "
+    "Iowa Areal Averaged Root Zone Soil Moisture"
 )
 ax.legend(ncol=2, loc=3)
 ax.xaxis.set_major_formatter(mdates.DateFormatter("%-d\n%b"))
 
 fig.savefig("test.ps")
-import iemplot
 
 iemplot.makefeature("test")

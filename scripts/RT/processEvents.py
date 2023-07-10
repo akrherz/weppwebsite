@@ -49,7 +49,7 @@ for filename in files:
             ts = datetime.datetime(
                 int(tokens[2]) + 1996, int(tokens[1]), int(tokens[0])
             )
-        except:
+        except Exception:
             print(
                 "processEvents file: %s line:%s tokens:%s"
                 % (filename, linenum, tokens)

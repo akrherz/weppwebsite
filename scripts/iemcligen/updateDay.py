@@ -45,9 +45,11 @@ wvl = row[0]
 
 for station in targets.keys():
     sql = """SELECT avg(max_tmpf) as high, avg(min_tmpf) as low 
-        from summary_%s s, stations t WHERE (t.network ~* 'ASOS' or t.network ~* 'AWOS') 
+        from summary_%s s, stations t WHERE
+        (t.network ~* 'ASOS' or t.network ~* 'AWOS') 
         and day = '%s' and ST_distance(t.geom, 'SRID=4326;POINT(%s %s)') < 2.5 
-        and max_tmpf > -90 and min_tmpf < 90 and max_dwpf > -90 and min_dwpf < 90
+        and max_tmpf > -90 and min_tmpf < 90 and max_dwpf > -90 and
+        min_dwpf < 90
         and t.iemid = s.iemid
         """ % (
         ts.year,

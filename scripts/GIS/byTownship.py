@@ -29,7 +29,7 @@ dbf.add_field("RUNOFF", dbflib.FTDouble, 8, 4)
 dbf.add_field("PRECIP", dbflib.FTDouble, 8, 4)
 
 for i in range(len(rs)):
-    l = float(rs[i]["loss"])
+    ll = float(rs[i]["loss"])
     r = float(rs[i]["runoff"])
     p = float(rs[i]["rainfall"])
     m = rs[i]["model_twp"]
@@ -37,4 +37,4 @@ for i in range(len(rs)):
     f = wellknowntext.convert_well_known_text(twp[m])
     obj = shapelib.SHPObject(shapelib.SHPT_POLYGON, 1, f)
     shp.write_object(-1, obj)
-    dbf.write_record(i, (l, r, p))
+    dbf.write_record(i, (ll, r, p))

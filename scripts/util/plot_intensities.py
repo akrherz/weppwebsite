@@ -41,7 +41,10 @@ while now < ets:
 m = MapPlot(
     sector="iowa",
     title="%s IDEP Peak Rainfall Intensity" % (sts.year,),
-    subtitle="Based on 15 minute interval NEXRAD + NCEP Stage IV precipitation estimates",
+    subtitle=(
+        "Based on 15 minute interval "
+        "NEXRAD + NCEP Stage IV precipitation estimates"
+    ),
 )
 m.pcolormesh(lon, lat, maxi, np.arange(0, 6.1, 0.25), units="inch per hour")
 m.drawcounties()

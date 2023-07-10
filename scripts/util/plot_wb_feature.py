@@ -7,6 +7,10 @@
 """
 import datetime
 
+import iemplot
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+
 d2012 = []
 t2012 = []
 d2013 = []
@@ -37,8 +41,6 @@ for i, line in enumerate(open("/tmp/177144.wb")):
         )
         d2013.append(ts)
 
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
 
 (fig, ax) = plt.subplots(1, 1)
 
@@ -50,11 +52,11 @@ ax.legend(loc=3)
 ax.grid(True)
 ax.xaxis.set_major_formatter(mdates.DateFormatter("%-d\n%B"))
 ax.set_title(
-    "Iowa Daily Erosion Project Modelled Soil Moisture\nCorn/Soy Rotation on Clarion Soil near Rockwell City"
+    "Iowa Daily Erosion Project Modelled Soil Moisture\n"
+    "Corn/Soy Rotation on Clarion Soil near Rockwell City"
 )
 ax.set_ylabel("Root Zone (0 to 1.5m depth) Soil Moisture [%]")
 
 fig.savefig("test.ps")
-import iemplot
 
 iemplot.makefeature("test")

@@ -4,18 +4,24 @@
 
 import mx.DateTime
 from pyIEM import iemdb
+
 i = iemdb.iemdb()
-mydb = i['wepp']
+mydb = i["wepp"]
 
 s = mx.DateTime.DateTime(2008, 1, 1)
 e = mx.DateTime.DateTime(2009, 1, 1)
 
 now = s
 
-while (now < e):
-  day = now.strftime("%Y-%m-%d")
-  print day
-  for i in range(1,10):
-    mydb.query("INSERT into climate_sectors(sector, day) VALUES \
-     ("+ str(i) +", '"+ day +"') ")
-  now = now + mx.DateTime.RelativeDateTime(days=+1)
+while now < e:
+    day = now.strftime("%Y-%m-%d")
+    for i in range(1, 10):
+        mydb.query(
+            "INSERT into climate_sectors(sector, day) VALUES \
+     ("
+            + str(i)
+            + ", '"
+            + day
+            + "') "
+        )
+    now = now + mx.DateTime.RelativeDateTime(days=+1)

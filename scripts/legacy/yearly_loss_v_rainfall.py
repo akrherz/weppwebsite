@@ -1,10 +1,10 @@
 import iemdb
+import matplotlib.pyplot as plt
 import numpy
 
 WEPP = iemdb.connect("wepp", bypass=True)
 wcursor = WEPP.cursor()
 
-import matplotlib.pyplot as plt
 
 fig = plt.figure()
 ax = fig.add_subplot(111)

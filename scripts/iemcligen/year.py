@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 
-from Scientific.IO.NetCDF import *
+import os
+import sys
+
+import dbflib
+import mx.DateTime
+import Numeric
+import shapelib
 
 # from Scientific.IO.FortranFormat import *
-from Scientific.IO.ArrayIO import *
-import mx.DateTime, shapelib, dbflib, sys, os, Numeric
+from Scientific.IO.ArrayIO import readFloatArray
+from Scientific.IO.NetCDF import NetCDFFile
 
 
 def createNETCDF(s):
@@ -38,7 +44,7 @@ def createNETCDF(s):
 
 
 def createSQLFILE(s):
-    e = s + mx.DateTime.RelativeDateTime(day=1, months=+1)
+    s + mx.DateTime.RelativeDateTime(day=1, months=+1)
     sql = open("rainfall.sql", "w")
     if updateMonthly:
         sql.write(
@@ -84,7 +90,6 @@ def main(_YEAR, _MONTH, _DAY):
     while now < e:
         gts = now.gmtime()
         fp = gts.strftime("product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat")
-        print "Processing: %s" % (fp,)
         nc_tm[i] = i * 15
         t = readFloatArray(fp)
         t.savespace(1)
@@ -156,13 +161,6 @@ def main(_YEAR, _MONTH, _DAY):
     )
 
 
-# 	sql.write("DELETE from yearly_rainfall WHERE valid = '%s-01-01';\n" \
-# 		% (s.year) )
-# 	sql.write("INSERT into yearly_rainfall (hrap_i, valid, rainfall,\
-# 		peak_15min, hr_cnt) \
-# 		SELECT hrap_i, '%s-01-01', sum(rainfall), max(peak_15min), sum(hr_cnt) \
-# 		from monthly_rainfall_%s GROUP by hrap_i;\n" % (s.year, s.year) )
-
 if __name__ == "__main__":
     if len(sys.argv) >= 4:
         _YEAR = int(sys.argv[1])
@@ -182,7 +180,6 @@ if __name__ == "__main__":
     interval = mx.DateTime.RelativeDateTime(days=+1)
     now = s
     while now < e:
-        print now
         main(now.year, now.month, now.day)
         os.system("psql -f rainfall.sql wepp")
         now += interval
