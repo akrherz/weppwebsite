@@ -31,7 +31,8 @@ cursor.execute(
 
     --- select ST_Transform(the_geom,4326), total from 
     ---
-    ---(SELECT model_twp, sum(avg_loss) * 4.463 as total from results_by_twp WHERE
+    ---(SELECT model_twp, sum(avg_loss) * 4.463 as total from results_by_twp
+    ---WHERE
     ---valid between '%s-01-01' and '%s-01-01' GROUP by model_twp) as foo
     ---
     ---JOIN iatwp t on (t.model_twp = foo.model_twp) ORDER by total DESC

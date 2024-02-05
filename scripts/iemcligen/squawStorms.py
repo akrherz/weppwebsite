@@ -80,7 +80,8 @@ def enterStorms(ts):
             row = scursor.fetchone()
             sid = row[0]
 
-            sql = """INSERT into storms(id, name, created, edited, notes) VALUES 
+            sql = """INSERT into storms(id, name, created, edited, notes)
+            VALUES 
                     (%s, '%s', now(), now(), 'From squawStorms.py %s')""" % (
                 sid,
                 sname,
@@ -88,7 +89,8 @@ def enterStorms(ts):
             )
             scursor.execute(sql)
             for j in range(13):
-                sql = """INSERT into events(storm_id, basin_id, precip, onset, duration)
+                sql = """INSERT into events(storm_id, basin_id, precip, onset,
+                duration)
                     VALUES (%s, %s, 0, '1980-01-01', 0)""" % (
                     sid,
                     j,
@@ -109,7 +111,8 @@ def enterStorms(ts):
             duration = endhr - starthr
             sts = ts + datetime.timedelta(hours=starthr)
             sts = sts.replace(minute=0)
-            sql = """UPDATE events SET precip = %.2f, onset = '%s', duration = %s 
+            sql = """UPDATE events SET precip = %.2f, onset = '%s',
+            duration = %s 
                     WHERE storm_id = %s and basin_id = %s""" % (
                 rain,
                 sts.strftime("%Y-%m-%d %H:%M"),

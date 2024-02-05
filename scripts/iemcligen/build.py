@@ -143,7 +143,7 @@ def main():
         cr.CLset(cl[mgtzone][0])
         cf.editDay(ts, cr)
         cf.write()
-        # 		os.system("/home/ldm/bin/pqinsert clifiles/%s.dat" % (hrap_i,) )
+        # 	os.system("/home/ldm/bin/pqinsert clifiles/%s.dat" % (hrap_i,) )
         # if (insertJobQueue):
         # 	mydb.query("INSERT into job_queue (combo_id) \
         #     SELECT id from combos WHERE hrap_i = %s " % (hrap_i,) )

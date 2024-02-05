@@ -22,7 +22,7 @@ while now < ets:
     if row[0] != 1579:
         print(now, row)
         os.system(
-            "python /mesonet/www/apps/weppwebsite/scripts/RT/processEvents.py %s"
+            "python /opt/weppwebsite/scripts/RT/processEvents.py %s"
             % (now.strftime("%Y %m %d"),)
         )
         os.system("psql -h iemdb -f insert.sql wepp")
