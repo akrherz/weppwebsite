@@ -43,7 +43,7 @@ print()
 
 # Maybe our data is already cached, lets hope so!
 if os.path.isfile(fp + ".zip"):
-    print(open(fp + ".zip", "r").read()),
+    (print(open(fp + ".zip", "r").read()),)
     sys.exit(0)
 
 
@@ -169,7 +169,7 @@ z.write(fp + ".prj")
 z.write(fp + ".txt")
 z.close()
 
-print(open(fp + ".zip", "r").read()),
+(print(open(fp + ".zip", "r").read()),)
 
 os.remove(fp + ".shp")
 os.remove(fp + ".shx")
