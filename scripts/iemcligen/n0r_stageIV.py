@@ -38,14 +38,12 @@ while now < ets:
     dbz = (val - 6) * 5.0
     if dbz > -25:
         rain += 0.036 * (10 ** (0.0625 * dbz)) / 12.0  # mm/hr in mm/5min
-    # print "   %s,%.1f,%.1f" %(now.strftime("%Y-%m-%d %H:%M"), val, (val -7) * 5.0)
 
     if now.minute % 15 == 0:
         fRef = now.strftime(
             "../data/rainfall/product/%Y/%Y%m%d/IA%Y%m%d_%H%M.dat"
         )
         f = readFloatArray(fRef)
-        #     print 'PRODUCT %5.2f NEXRAD %5.2f' % ( f[row][col] / 25.4 , rain / 25.4)
         ptotal += f[row][col] / 25.4
         ntotal += rain / 25.4
         rain = 0

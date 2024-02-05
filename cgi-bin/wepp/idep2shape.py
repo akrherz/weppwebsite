@@ -44,7 +44,7 @@ print()
 
 # Maybe our data is already cached, lets hope so!
 if os.path.isfile(fp + ".zip"):
-    print(open(fp + ".zip", "r").read()),
+    (print(open(fp + ".zip", "r").read()),)
     sys.exit(0)
 
 
@@ -64,9 +64,7 @@ for row in wcursor:
 
 # Now, lets figure out what data we want
 sql = """SELECT *
-        from results_by_twp WHERE valid = '%s'""" % (
-    ts.strftime("%Y-%m-%d"),
-)
+        from results_by_twp WHERE valid = '%s'""" % (ts.strftime("%Y-%m-%d"),)
 day1 = ts.strftime("%Y%m%d")
 day2 = ts.strftime("%Y%m%d")
 if interval is not None:
@@ -169,7 +167,7 @@ z.write(fp + ".prj")
 z.write(fp + ".txt")
 z.close()
 
-print(open(fp + ".zip", "r").read()),
+(print(open(fp + ".zip", "r").read()),)
 
 os.remove(fp + ".shp")
 os.remove(fp + ".shx")

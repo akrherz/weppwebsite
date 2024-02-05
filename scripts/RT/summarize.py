@@ -220,8 +220,9 @@ def main(year, month, day):
         % (ts.year, ts.month)
     )
 
-    sql = """insert into results_twp_month (model_twp, valid, avg_loss, avg_runoff,
-    min_loss, max_loss, min_runoff, max_runoff, ve_runoff, ve_loss) 
+    sql = """insert into results_twp_month (model_twp, valid, avg_loss,
+    avg_runoff,
+    min_loss, max_loss, min_runoff, max_runoff, ve_runoff, ve_loss)
      select model_twp, '%s', 
      sum(avg_loss), 
      sum(avg_runoff), 
