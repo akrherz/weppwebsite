@@ -1,6 +1,7 @@
 """
 Explore mapping IDEPv1 data direct from the database with matplotlib
 """
+
 import sys
 
 import matplotlib.cm as cm

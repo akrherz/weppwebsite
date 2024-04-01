@@ -1,6 +1,7 @@
 """
-  Generate a monthly shapefile of precipitation data
+Generate a monthly shapefile of precipitation data
 """
+
 import datetime
 import os
 import shutil

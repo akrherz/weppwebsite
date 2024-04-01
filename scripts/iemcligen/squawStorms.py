@@ -1,4 +1,5 @@
 """Legacy stuff is fun."""
+
 import datetime
 import os
 import sys
