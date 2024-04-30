@@ -7,7 +7,7 @@ is used.  Lame yes, but will be improved with IDEPv2
 import datetime
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import get_dbconn
 
 ISUAG = get_dbconn("isuag")
 icursor = ISUAG.cursor()
@@ -16,7 +16,7 @@ wcursor = WEPP.cursor()
 
 
 cref = {
-    1: ["DONI4", "SBEI4"],
+    1: ["SBEI4", "DONI4"],
     2: ["KNAI4"],
     3: ["NASI4"],
     4: ["CNAI4"],
