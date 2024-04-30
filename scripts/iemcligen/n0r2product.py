@@ -5,6 +5,7 @@ Steps :
   2. Sum up our three 5minute bins to generate precip
   3. remap back to HRAP Grid (for now)
 """
+
 import os
 
 import iemdb

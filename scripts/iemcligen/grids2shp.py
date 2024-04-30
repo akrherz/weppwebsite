@@ -1,6 +1,7 @@
 """
- Convert the 15 minute rainfall product into various other forms
+Convert the 15 minute rainfall product into various other forms
 """
+
 import datetime
 import os
 import shutil

@@ -1,10 +1,11 @@
 """
-  $tsw[] = $parts[5] / $soildepth * 100;
-  $t10sw[] = $parts[6] / 100 * 100;
-  $t20sw[] = $parts[7] / 100 * 100;
-  $et[] = floatval($parts[8]);
-  soildepth 1524
+$tsw[] = $parts[5] / $soildepth * 100;
+$t10sw[] = $parts[6] / 100 * 100;
+$t20sw[] = $parts[7] / 100 * 100;
+$et[] = floatval($parts[8]);
+soildepth 1524
 """
+
 import datetime
 
 import iemplot

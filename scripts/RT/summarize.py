@@ -1,7 +1,8 @@
 """
- Previous processing has left our 'results' table in the database with the 
- individual erosion data.  This script summarizes this for a particular date
+Previous processing has left our 'results' table in the database with the
+individual erosion data.  This script summarizes this for a particular date
 """
+
 import datetime
 import sys
 
