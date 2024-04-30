@@ -1,8 +1,9 @@
 """
- A straight copy of ISUAG solar radiation data to IDEPv1 climate sector data,
- if data is not found from the ISUAG network, then the previous year's value
- is used.  Lame yes, but will be improved with IDEPv2
+A straight copy of ISUAG solar radiation data to IDEPv1 climate sector data,
+if data is not found from the ISUAG network, then the previous year's value
+is used.  Lame yes, but will be improved with IDEPv2
 """
+
 import datetime
 import sys
 

@@ -1,6 +1,7 @@
 """
- Class for Wepp runs
+Class for Wepp runs
 """
+
 import datetime
 import os
 

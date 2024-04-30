@@ -1,5 +1,5 @@
-""" Something to edit Cli Files, not necessarily create them!
-"""
+"""Something to edit Cli Files, not necessarily create them!"""
+
 import datetime
 import fcntl
 
