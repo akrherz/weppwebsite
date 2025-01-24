@@ -1,7 +1,5 @@
 """Make life easier?"""
 
-from __future__ import print_function
-
 import datetime
 import sys
 

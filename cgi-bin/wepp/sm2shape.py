@@ -52,8 +52,7 @@ if os.path.isfile(fp + ".zip"):
 twp = {}
 
 sql = (
-    "SELECT ST_astext(ST_transform(the_geom,4326)) as tg, model_twp "
-    "from iatwp"
+    "SELECT ST_astext(ST_transform(the_geom,4326)) as tg, model_twp from iatwp"
 )
 if form.has_key("point"):
     sql = """SELECT ST_astext(ST_transform(ST_centroid(the_geom),4326)) as tg,
