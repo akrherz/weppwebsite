@@ -59,7 +59,7 @@ def main(argv):
         if not os.path.isfile("%s/HRAP_RAIN_%s" % (TMP, fbin[k])):
             shutil.copy("lib/empty.hrap", "%s/HRAP_RAIN_%s" % (TMP, fbin[k]))
         os.system(
-            ("bin/createHRAP lib/K%s.txt %s/%s_RAIN_%s.dat " "%s/HRAP_RAIN_%s")
+            ("bin/createHRAP lib/K%s.txt %s/%s_RAIN_%s.dat %s/HRAP_RAIN_%s")
             % (rad, TMP, rad, fbin[k], TMP, fbin[k])
         )
 
