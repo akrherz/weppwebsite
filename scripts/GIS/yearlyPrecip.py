@@ -2,8 +2,6 @@
 Generate summary shapefile of yearly precip, include monthly totals as attribs
 """
 
-from __future__ import print_function
-
 import datetime
 import os
 import shutil
@@ -13,7 +11,7 @@ from collections import OrderedDict
 import netCDF4
 import numpy
 import shapefile
-from pyiem.util import get_dbconn
+from pyiem.database import get_dbconn
 
 BASEDIR = "/mnt/idep/data/rainfall"
 
