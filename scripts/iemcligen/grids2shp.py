@@ -239,8 +239,8 @@ def main(argv):
     stdout = proc.stdout.read()
     if stderr != b"":
         LOG.info(TMPFN)
-        LOG.info(stderr.encode("ascii"))
-        LOG.info(stdout.encode("ascii"))
+        LOG.info(stderr.decode("ascii", "ignore"))
+        LOG.info(stdout.decode("ascii", "ignore"))
     os.unlink(TMPFN)
 
 
