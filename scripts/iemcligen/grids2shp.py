@@ -2,11 +2,11 @@
 Convert the 15 minute rainfall product into various other forms
 """
 
-import datetime
 import os
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timedelta
 from io import BytesIO
 
 import numpy as np
@@ -51,14 +51,11 @@ def create_netcdf(s):
     return nc, r1d, r15m, tm
 
 
-def create_sql(s):
+def create_sql(s: datetime):
     """Create the SQL file for this date"""
     sql = open(TMPFN, "w")
     sql.write(
-        """
-    DELETE from monthly_rainfall_%s WHERE valid = '%s-01';
-    """
-        % (s.year, s.strftime("%Y-%m"))
+        f"DELETE from monthly_rainfall_{s:%Y} WHERE valid = '{s:%Y-%m}-01';\n"
     )
 
     sql.write(
@@ -94,14 +91,14 @@ def workflow(year, month, day):
     sts = utc()
     sts = sts.astimezone(pytz.timezone("America/Chicago"))
     sts = sts.replace(year=year, month=month, day=day, hour=0, minute=15)
-    ets = sts + datetime.timedelta(days=1)
+    ets = sts + timedelta(days=1)
 
     nc, nc_r1d, nc_r15m, nc_tm = create_netcdf(sts)
     sql = create_sql(sts)
     rows = 134
     cols = 173
     rain15 = np.zeros((96, rows, cols), float)
-    interval = datetime.timedelta(minutes=+15)
+    interval = timedelta(minutes=+15)
     now = sts
     i = 0
     while now < ets:
@@ -168,8 +165,8 @@ def workflow(year, month, day):
     shutil.copyfile(dbffn, storagedir + "/" + dbffn)
     os.unlink(dbffn)
 
-    sql.write("\.\n")
-    nextmonth = sts.replace(day=1) + datetime.timedelta(days=35)
+    sql.write("\\.\n")
+    nextmonth = sts.replace(day=1) + timedelta(days=35)
     em = nextmonth.replace(day=1)
     sql.write(
         """
@@ -225,7 +222,7 @@ def main(argv):
         day = int(argv[3])
     else:
         # Run for yesterday
-        ts = datetime.datetime.now() - datetime.timedelta(days=1)
+        ts = datetime.now() - timedelta(days=1)
         year, month, day = ts.year, ts.month, ts.day
 
     workflow(year, month, day)
