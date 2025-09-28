@@ -5,7 +5,8 @@ import os
 import sys
 
 import numpy
-from pyiem.util import get_dbconn, ncopen
+from pyiem.database import get_dbconn
+from pyiem.util import ncopen
 
 SQUAW = get_dbconn("squaw")
 scursor = SQUAW.cursor()
