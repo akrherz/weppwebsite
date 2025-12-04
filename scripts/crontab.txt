@@ -14,7 +14,7 @@ S=/mesonet/www/apps/weppwebsite/scripts
 
 ###
 # Run the Realtime model!
-55 1 * * * cd $S; sh MASTER.sh
+55 1 * * * cd $S; sh MAIN.sh
 
 ###
 # Update climate databases
