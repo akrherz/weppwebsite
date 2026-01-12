@@ -33,10 +33,7 @@ class WeppThread(threading.Thread):
         self.dbconn = pg.connect("wepp", "iemdb")
         good = True
         while good:
-            sts = mx.DateTime.now()
             good = self.chunk()
-            ets = mx.DateTime.now()
-            (ets - sts).seconds
 
     def chunk(self):
         # First, lets request a request ID from the server

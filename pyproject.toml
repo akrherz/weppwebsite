@@ -4,8 +4,10 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = [
+    "B",
     "E",
     "F",
     "I",
+    # "U",
 ]
 

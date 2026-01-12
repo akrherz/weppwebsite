@@ -64,9 +64,9 @@ interval = mx.DateTime.RelativeDateTime(minutes=+15)
 now = day
 
 d = 0
-for i in range(24):
+for _i in range(24):
     t = 0
-    for j in range(4):
+    for _j in range(4):
         now += interval
         gts = now.gmtime()
         fp = gts.strftime(
