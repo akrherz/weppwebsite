@@ -4,16 +4,10 @@ if data is not found from the ISUAG network, then the previous year's value
 is used.  Lame yes, but will be improved with IDEPv2
 """
 
-import datetime
 import sys
+from datetime import datetime, timedelta
 
 from pyiem.database import get_dbconn
-
-ISUAG = get_dbconn("isuag")
-icursor = ISUAG.cursor()
-WEPP = get_dbconn("wepp")
-wcursor = WEPP.cursor()
-
 
 cref = {
     1: ["SBEI4", "DONI4"],
@@ -29,18 +23,17 @@ cref = {
 
 
 # c80 is solar rad
-def process(ts):
+def process(ts, icursor, wcursor):
+    """Process."""
     for sector in cref.keys():
         day = ts.strftime("%Y-%m-%d")
         for st in cref[sector]:
             sql = """SELECT slrkj_tot_qc / 1000. from sm_daily
-              WHERE valid = '%s' and station = '%s' and
+              WHERE valid = %s and station = %s and
               slrkj_tot_qc is not null
-              """ % (
-                day,
-                st,
-            )
-            icursor.execute(sql)
+              """
+            args = (day, st)
+            icursor.execute(sql, args)
             if icursor.rowcount == 1:
                 break
         if icursor.rowcount == 0:
@@ -56,7 +49,7 @@ def process(ts):
         if rad < 0.01 or rad > 900:
             print(
                 f"IDEPv1 updateSolar.py FAIL sector: {sector} "
-                f"station: {st} rad: {rad:.1f}"
+                f"station: {st} rad: {rad:.1f} langleys"
             )
             continue
         wcursor.execute(
@@ -66,14 +59,22 @@ def process(ts):
         )
 
 
-if __name__ == "__main__":
-    ts = datetime.datetime.now() - datetime.timedelta(days=1)
-    if len(sys.argv) == 4:
-        ts = datetime.datetime(
-            int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
-        )
-    process(ts)
+def main(argv):
+    """Go Main Go."""
+    ISUAG = get_dbconn("isuag")
+    icursor = ISUAG.cursor()
+    WEPP = get_dbconn("wepp")
+    wcursor = WEPP.cursor()
+
+    ts = datetime.now() - timedelta(days=1)
+    if len(argv) == 4:
+        ts = datetime(int(argv[1]), int(argv[2]), int(argv[3]))
+    process(ts, icursor, wcursor)
 
     wcursor.close()
     WEPP.commit()
     WEPP.close()
+
+
+if __name__ == "__main__":
+    main(sys.argv)
