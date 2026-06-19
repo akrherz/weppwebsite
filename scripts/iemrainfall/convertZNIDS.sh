@@ -1,5 +1,5 @@
 
-NIDS="/mesonet/data/nexrad/NIDS/"
+NIDS="/data/gempak/nexrad/NIDS/"
 
 if [ -z $5 ]
 then
